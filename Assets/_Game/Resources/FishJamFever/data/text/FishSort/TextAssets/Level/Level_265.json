@@ -1,0 +1,294 @@
+{
+  "levelId": 265,
+  "countdownTargetProgress": "",
+  "bubbles": [
+    {
+      "BubbleID": 1,
+      "BubbleType": 5,
+      "FishStr": "10,61,20,45,23",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 2,
+      "BubbleType": 2,
+      "FishStr": "33,44",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 3,
+      "BubbleType": 5,
+      "FishStr": "22,52,13,65,74",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 4,
+      "BubbleType": 5,
+      "FishStr": "75,82,93,10,20",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 5,
+      "BubbleType": 4,
+      "FishStr": "52,22,61,93",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 6,
+      "BubbleType": 4,
+      "FishStr": "33,44,52,20",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 7,
+      "BubbleType": 5,
+      "FishStr": "13,44,33,65,75",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 8,
+      "BubbleType": 5,
+      "FishStr": "13,93,23,82,65",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 9,
+      "BubbleType": 3,
+      "FishStr": "13,22,93",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 10,
+      "BubbleType": 5,
+      "FishStr": "75,82,61,20,23",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 11,
+      "BubbleType": 2,
+      "FishStr": "23,65",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 12,
+      "BubbleType": 3,
+      "FishStr": "52,22,33",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 13,
+      "BubbleType": 4,
+      "FishStr": "45,23,10,61",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 14,
+      "BubbleType": 5,
+      "FishStr": "10,75,82,61,44",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 15,
+      "BubbleType": 5,
+      "FishStr": "65,22,82,33,45",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 16,
+      "BubbleType": 3,
+      "FishStr": "74,45,13",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 17,
+      "BubbleType": 3,
+      "FishStr": "20,74,61",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 18,
+      "BubbleType": 2,
+      "FishStr": "13,33",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 19,
+      "BubbleType": 4,
+      "FishStr": "10,23,33,20",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 20,
+      "BubbleType": 3,
+      "FishStr": "52,61,22",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 21,
+      "BubbleType": 5,
+      "FishStr": "13,93,23,75,52",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 22,
+      "BubbleType": 4,
+      "FishStr": "61,44,52,33",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 23,
+      "BubbleType": 3,
+      "FishStr": "10,20,74",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 24,
+      "BubbleType": 2,
+      "FishStr": "82,45",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 25,
+      "BubbleType": 2,
+      "FishStr": "13,23",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 26,
+      "BubbleType": 5,
+      "FishStr": "52,22,44,33,75",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 27,
+      "BubbleType": 3,
+      "FishStr": "13,74,93",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 28,
+      "BubbleType": 5,
+      "FishStr": "74,10,52,61,23",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 29,
+      "BubbleType": 3,
+      "FishStr": "44,20,22",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 30,
+      "BubbleType": 4,
+      "FishStr": "45,20,65,10",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 31,
+      "BubbleType": 3,
+      "FishStr": "45,10,22",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 32,
+      "BubbleType": 4,
+      "FishStr": "45,45,44,44",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    }
+  ]
+}

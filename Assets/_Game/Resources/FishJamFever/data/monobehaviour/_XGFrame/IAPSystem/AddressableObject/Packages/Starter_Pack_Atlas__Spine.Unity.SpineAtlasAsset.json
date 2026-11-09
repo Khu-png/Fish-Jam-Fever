@@ -1,0 +1,22 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": -5525067123657202301
+ },
+ "m_Name": "Starter_Pack_Atlas",
+ "atlasFile": {
+  "m_FileID": 0,
+  "m_PathID": 4335198904032920406
+ },
+ "materials": [
+  {
+   "m_FileID": 0,
+   "m_PathID": 4517103157847873801
+  }
+ ]
+}

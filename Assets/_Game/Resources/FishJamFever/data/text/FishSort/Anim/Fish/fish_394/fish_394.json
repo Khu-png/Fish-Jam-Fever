@@ -1,0 +1,238 @@
+{
+"skeleton": {
+	"hash": "GTNtUh7TLF0",
+	"spine": "4.0.64",
+	"x": -137.42,
+	"y": -103.88,
+	"width": 258,
+	"height": 196,
+	"images": "./images/",
+	"audio": "D:/XGame/Job/FishSort/Animation/Animation/fish_final/fish_394"
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "all_fish_394", "parent": "root" },
+	{ "name": "base", "parent": "all_fish_394", "x": 19.72, "y": 32.52 },
+	{ "name": "nipper2", "parent": "base", "length": 57.89, "rotation": -129.16, "x": -93.76, "y": -11.58 },
+	{ "name": "nipper1", "parent": "base", "length": 60.47, "rotation": -121.79, "x": -0.36, "y": -35.48 },
+	{ "name": "foot1", "parent": "base", "length": 52.11, "rotation": -57.19, "x": 18.1, "y": -50.32 },
+	{ "name": "foot2", "parent": "base", "length": 46.63, "rotation": -42.48, "x": 57.92, "y": -44.53 },
+	{ "name": "eye1", "parent": "base", "x": -107.98, "y": 7.24 },
+	{ "name": "eye3", "parent": "base", "x": -74.88, "y": -1.52 }
+],
+"slots": [
+	{ "name": "nipper2", "bone": "nipper2", "attachment": "nipper2" },
+	{ "name": "eye4", "bone": "base", "attachment": "eye4" },
+	{ "name": "eye3", "bone": "eye3", "attachment": "eye3" },
+	{ "name": "eye2", "bone": "base", "attachment": "eye2" },
+	{ "name": "eye1", "bone": "eye1", "attachment": "eye1" },
+	{ "name": "base", "bone": "base", "attachment": "base" },
+	{ "name": "foot2", "bone": "foot2", "attachment": "foot2" },
+	{ "name": "foot1", "bone": "foot1", "attachment": "foot1" },
+	{ "name": "nipper1", "bone": "nipper1", "attachment": "nipper1" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"base": {
+				"base": { "x": -10.13, "y": -4.91, "width": 212, "height": 129 }
+			},
+			"eye1": {
+				"eye1": { "x": 1.85, "y": 0.35, "width": 22, "height": 32 }
+			},
+			"eye2": {
+				"eye2": { "x": -99.63, "y": 9.59, "width": 37, "height": 46 }
+			},
+			"eye3": {
+				"eye3": { "x": 3.25, "y": -0.38, "width": 23, "height": 31 }
+			},
+			"eye4": {
+				"eye4": { "x": -64.13, "y": -0.41, "width": 44, "height": 50 }
+			},
+			"foot1": {
+				"foot1": { "x": 41.04, "y": -2.94, "rotation": 57.19, "width": 60, "height": 84 }
+			},
+			"foot2": {
+				"foot2": { "x": 30.22, "y": -10.13, "rotation": 42.48, "width": 55, "height": 74 }
+			},
+			"nipper1": {
+				"nipper1": { "x": 60.64, "y": -6.86, "rotation": 121.79, "width": 102, "height": 106 }
+			},
+			"nipper2": {
+				"nipper2": { "x": 46.95, "y": 9.38, "rotation": 129.16, "width": 82, "height": 91 }
+			}
+		}
+	}
+],
+"animations": {
+	"standby_1": {
+		"bones": {
+			"nipper1": {
+				"rotate": [
+					{
+						"value": 1.12,
+						"curve": [ 0.044, 0.46, 0.089, 0 ]
+					},
+					{
+						"time": 0.1333,
+						"curve": [ 0.411, 0, 0.689, 15.15 ]
+					},
+					{
+						"time": 0.9667,
+						"value": 15.15,
+						"curve": [ 1.244, 15.15, 1.522, 0 ]
+					},
+					{
+						"time": 1.8,
+						"curve": [ 2.078, 0, 2.356, 15.15 ]
+					},
+					{
+						"time": 2.6333,
+						"value": 15.15,
+						"curve": [ 2.867, 15.15, 3.1, 4.54 ]
+					},
+					{ "time": 3.3333, "value": 1.12 }
+				]
+			},
+			"foot1": {
+				"rotate": [
+					{
+						"value": 5.36,
+						"curve": [ 0.089, 2.29, 0.178, 0 ]
+					},
+					{
+						"time": 0.2667,
+						"curve": [ 0.544, 0, 0.822, 22.06 ]
+					},
+					{
+						"time": 1.1,
+						"value": 22.06,
+						"curve": [ 1.378, 22.06, 1.656, 0 ]
+					},
+					{
+						"time": 1.9333,
+						"curve": [ 2.211, 0, 2.489, 22.06 ]
+					},
+					{
+						"time": 2.7667,
+						"value": 22.06,
+						"curve": [ 2.956, 22.06, 3.144, 11.89 ]
+					},
+					{ "time": 3.3333, "value": 5.36 }
+				]
+			},
+			"foot2": {
+				"rotate": [
+					{
+						"value": 10.37,
+						"curve": [ 0.133, 5.09, 0.267, 0 ]
+					},
+					{
+						"time": 0.4,
+						"curve": [ 0.678, 0, 0.956, 22.06 ]
+					},
+					{
+						"time": 1.2333,
+						"value": 22.06,
+						"curve": [ 1.511, 22.06, 1.789, 0 ]
+					},
+					{
+						"time": 2.0667,
+						"curve": [ 2.344, 0, 2.622, 22.06 ]
+					},
+					{
+						"time": 2.9,
+						"value": 22.06,
+						"curve": [ 3.044, 22.06, 3.189, 16.1 ]
+					},
+					{ "time": 3.3333, "value": 10.37 }
+				]
+			},
+			"nipper2": {
+				"rotate": [
+					{
+						"value": -1.84,
+						"curve": [ 0.044, -0.76, 0.089, 0 ]
+					},
+					{
+						"time": 0.1333,
+						"curve": [ 0.411, 0, 0.689, -24.98 ]
+					},
+					{
+						"time": 0.9667,
+						"value": -24.98,
+						"curve": [ 1.244, -24.98, 1.522, 0 ]
+					},
+					{
+						"time": 1.8,
+						"curve": [ 2.078, 0, 2.356, -24.98 ]
+					},
+					{
+						"time": 2.6333,
+						"value": -24.98,
+						"curve": [ 2.867, -24.98, 3.1, -7.48 ]
+					},
+					{ "time": 3.3333, "value": -1.84 }
+				]
+			},
+			"all_fish_394": {
+				"scale": [
+					{
+						"curve": [ 0.278, 1, 0.556, 1.05, 0.278, 1, 0.556, 1.05 ]
+					},
+					{
+						"time": 0.8333,
+						"x": 1.05,
+						"y": 1.05,
+						"curve": [ 1.111, 1.05, 1.389, 1, 1.111, 1.05, 1.389, 1 ]
+					},
+					{
+						"time": 1.6667,
+						"curve": [ 1.944, 1, 2.222, 1.05, 1.944, 1, 2.222, 1.05 ]
+					},
+					{
+						"time": 2.5,
+						"x": 1.05,
+						"y": 1.05,
+						"curve": [ 2.778, 1.05, 3.056, 1, 2.778, 1.05, 3.056, 1 ]
+					},
+					{ "time": 3.3333 }
+				]
+			},
+			"eye1": {
+				"translate": [
+					{
+						"time": 0.6667,
+						"curve": [ 0.711, 0, 0.756, 11.13, 0.711, 0, 0.756, -4.84 ]
+					},
+					{ "time": 0.8, "x": 11.13, "y": -4.84, "curve": "stepped" },
+					{
+						"time": 1.9333,
+						"x": 11.13,
+						"y": -4.84,
+						"curve": [ 1.989, 11.13, 2.044, 0, 1.989, -4.84, 2.044, 0 ]
+					},
+					{ "time": 2.1 }
+				]
+			},
+			"eye3": {
+				"translate": [
+					{
+						"time": 0.6667,
+						"curve": [ 0.711, 0, 0.756, 11.13, 0.711, 0, 0.756, -4.84 ]
+					},
+					{ "time": 0.8, "x": 11.13, "y": -4.84, "curve": "stepped" },
+					{
+						"time": 1.9333,
+						"x": 11.13,
+						"y": -4.84,
+						"curve": [ 1.989, 11.13, 2.044, 0, 1.989, -4.84, 2.044, 0 ]
+					},
+					{ "time": 2.1 }
+				]
+			}
+		}
+	}
+}
+}

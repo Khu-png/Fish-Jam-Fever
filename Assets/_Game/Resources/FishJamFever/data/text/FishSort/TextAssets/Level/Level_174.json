@@ -1,0 +1,375 @@
+{
+  "levelId": 174,
+  "countdownTargetProgress": "",
+  "bubbles": [
+    {
+      "BubbleID": 1,
+      "BubbleType": 5,
+      "FishStr": "32,32,74,28,7",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 2,
+      "BubbleType": 5,
+      "FishStr": "32,42,42,61,13",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 3,
+      "BubbleType": 5,
+      "FishStr": "13,13,61,7,74",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 4,
+      "BubbleType": 5,
+      "FishStr": "",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false,
+      "Obstacle2Count": 5,
+      "IceFishStr": "0,0,0,0,0",
+      "BindFishStr": "0,0,0,0,0",
+      "LockFishStr": "0,0,0,0,0",
+      "KeyFishStr": "0,0,0,0,0",
+      "UnKnowFishStr": "0,0,0,0,0"
+    },
+    {
+      "BubbleID": 5,
+      "BubbleType": 5,
+      "FishStr": "28,28,61,74,7",
+      "IsFrozen": false,
+      "IsUnknown": true,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 6,
+      "BubbleType": 3,
+      "FishStr": "42,13,82",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 7,
+      "BubbleType": 3,
+      "FishStr": "28,69,69",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 8,
+      "BubbleType": 5,
+      "FishStr": "69,32,74,7,81",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 9,
+      "BubbleType": 5,
+      "FishStr": "95,95,42,61,13",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 10,
+      "BubbleType": 3,
+      "FishStr": "32,61,81",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 11,
+      "BubbleType": 4,
+      "FishStr": "7,7,42,28",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 12,
+      "BubbleType": 3,
+      "FishStr": "95,74,82",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 13,
+      "BubbleType": 3,
+      "FishStr": "61,61,74",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 14,
+      "BubbleType": 4,
+      "FishStr": "7,61,28,42",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 15,
+      "BubbleType": 4,
+      "FishStr": "81,81,82,32",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 16,
+      "BubbleType": 3,
+      "FishStr": "13,28,82",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 17,
+      "BubbleType": 4,
+      "FishStr": "11,11,74,58",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 18,
+      "BubbleType": 4,
+      "FishStr": "81,11,21,39",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 19,
+      "BubbleType": 5,
+      "FishStr": "42,95,69,32,13",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 20,
+      "BubbleType": 3,
+      "FishStr": "7,28,82",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 21,
+      "BubbleType": 4,
+      "FishStr": "",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false,
+      "Obstacle2Count": 6,
+      "IceFishStr": "0,0,0,0",
+      "BindFishStr": "0,0,0,0",
+      "LockFishStr": "0,0,0,0",
+      "KeyFishStr": "0,0,0,0",
+      "UnKnowFishStr": "0,0,0,0"
+    },
+    {
+      "BubbleID": 22,
+      "BubbleType": 3,
+      "FishStr": "58,74,39",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 23,
+      "BubbleType": 1,
+      "FishStr": "21",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 24,
+      "BubbleType": 5,
+      "FishStr": "69,95,42,13,32",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 25,
+      "BubbleType": 5,
+      "FishStr": "7,28,61,81,82",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 26,
+      "BubbleType": 4,
+      "FishStr": "58,39,74,21",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 27,
+      "BubbleType": 4,
+      "FishStr": "13,42,95,69",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 28,
+      "BubbleType": 4,
+      "FishStr": "",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false,
+      "Obstacle2Count": 4,
+      "IceFishStr": "0,0,0,0",
+      "BindFishStr": "0,0,0,0",
+      "LockFishStr": "0,0,0,0",
+      "KeyFishStr": "0,0,0,0",
+      "UnKnowFishStr": "0,0,0,0"
+    },
+    {
+      "BubbleID": 29,
+      "BubbleType": 4,
+      "FishStr": "32,11,7,61",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 30,
+      "BubbleType": 5,
+      "FishStr": "81,28,82,58,74",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 31,
+      "BubbleType": 5,
+      "FishStr": "39,21,69,95,13",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 32,
+      "BubbleType": 4,
+      "FishStr": "42,32,7,11",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 33,
+      "BubbleType": 3,
+      "FishStr": "74,95,69",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 34,
+      "BubbleType": 4,
+      "FishStr": "95,58,69,74",
+      "IsFrozen": false,
+      "IsUnknown": true,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 35,
+      "BubbleType": 5,
+      "FishStr": "61,28,81,58,82",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 36,
+      "BubbleType": 3,
+      "FishStr": "13,39,21",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 37,
+      "BubbleType": 5,
+      "FishStr": "32,42,7,11,82",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 38,
+      "BubbleType": 3,
+      "FishStr": "61,81,28",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    },
+    {
+      "BubbleID": 39,
+      "BubbleType": 5,
+      "FishStr": "21,39,13,32,42",
+      "IsFrozen": false,
+      "IsUnknown": false,
+      "LockCount": 0,
+      "IsKey": false
+    }
+  ]
+}

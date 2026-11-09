@@ -1,0 +1,16 @@
+fish_167.png
+size:300,168
+filter:Linear,Linear
+base
+bounds:0,0,167,251
+offsets:0,4,167,255
+rotate:90
+eye
+bounds:252,84,30,36
+offsets:1,1,32,38
+eyeball
+bounds:252,121,45,46
+offsets:1,1,47,48
+fin
+bounds:252,52,28,31
+offsets:1,1,30,33

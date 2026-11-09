@@ -1,0 +1,14 @@
+fish_120.png
+size:308,204
+filter:Linear,Linear
+base
+bounds:0,0,257,201
+eye
+bounds:258,54,36,40
+offsets:1,1,38,42
+eyeball
+bounds:258,95,49,51
+offsets:1,1,51,53
+fin
+bounds:258,147,48,54
+offsets:1,1,50,56

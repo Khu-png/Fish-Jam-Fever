@@ -1,0 +1,28 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": 4318889662400784699
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": 8073140391158009578
+ },
+ "m_Name": "",
+ "m_GradientMode": 0,
+ "m_GradientDirection": 0,
+ "m_ColorMode": 2,
+ "m_FirstColor": {
+  "r": 1.0,
+  "g": 1.0,
+  "b": 1.0,
+  "a": 1.0
+ },
+ "m_SecondColor": {
+  "r": 0.9725490808486938,
+  "g": 0.917647123336792,
+  "b": 0.7333333492279053,
+  "a": 1.0
+ },
+ "m_UseGraphicAlpha": 1
+}

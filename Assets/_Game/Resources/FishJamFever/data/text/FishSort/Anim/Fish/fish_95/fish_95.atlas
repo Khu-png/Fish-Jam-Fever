@@ -1,0 +1,13 @@
+fish_95.png
+size:300,180
+filter:Linear,Linear
+base
+bounds:0,0,238,178
+offsets:0,8,238,186
+eye1
+bounds:239,40,25,27
+eye2
+bounds:239,113,60,65
+fin1
+bounds:239,68,48,44
+offsets:0,0,48,46

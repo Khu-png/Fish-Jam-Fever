@@ -1,0 +1,17 @@
+fish_98.png
+size:300,152
+filter:Linear,Linear
+1
+bounds:242,90,61,55
+offsets:1,1,63,57
+rotate:90
+2
+bounds:242,27,21,26
+offsets:1,1,23,28
+rotate:90
+3
+bounds:0,0,241,151
+4
+bounds:242,49,40,35
+offsets:1,1,42,37
+rotate:90

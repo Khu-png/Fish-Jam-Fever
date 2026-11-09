@@ -1,0 +1,14 @@
+fish_219.png
+size:320,224
+filter:Linear,Linear
+1
+bounds:256,157,66,63
+offsets:1,1,68,65
+rotate:90
+2
+bounds:256,49,38,45
+3
+bounds:0,0,255,223
+4
+bounds:256,95,61,59
+rotate:90

@@ -1,0 +1,13 @@
+fish_375.png
+size:320,216
+filter:Linear,Linear
+1
+bounds:256,152,64,63
+rotate:90
+2
+bounds:256,42,33,38
+3
+bounds:0,0,255,216
+4
+bounds:256,81,70,50
+rotate:90

@@ -1,0 +1,15 @@
+fish_165.png
+size:312,212
+filter:Linear,Linear
+1
+bounds:265,111,41,44
+offsets:1,1,43,46
+2
+bounds:265,78,26,32
+offsets:1,1,28,34
+3
+bounds:0,0,264,212
+4
+bounds:265,156,56,46
+offsets:1,1,58,48
+rotate:90

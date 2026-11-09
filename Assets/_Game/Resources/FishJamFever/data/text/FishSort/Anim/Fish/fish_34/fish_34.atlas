@@ -1,0 +1,15 @@
+fish_34.png
+size:308,308
+filter:Linear,Linear
+1
+bounds:256,201,49,49
+offsets:1,1,51,51
+2
+bounds:256,170,30,28
+offsets:1,1,32,30
+rotate:90
+3
+bounds:0,100,255,206
+4
+bounds:256,251,50,55
+offsets:1,1,52,57

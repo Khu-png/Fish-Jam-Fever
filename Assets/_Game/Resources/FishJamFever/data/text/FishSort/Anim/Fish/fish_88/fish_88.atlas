@@ -1,0 +1,11 @@
+fish_88.png
+size:264,148
+filter:Linear,Linear
+base
+bounds:0,0,227,147
+eye
+bounds:228,79,21,28
+offsets:1,1,23,30
+eyeball
+bounds:228,108,36,39
+offsets:1,1,38,41

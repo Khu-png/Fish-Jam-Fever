@@ -1,0 +1,22 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": -5525067123657202301
+ },
+ "m_Name": "fish_376_Atlas",
+ "atlasFile": {
+  "m_FileID": 0,
+  "m_PathID": -6408248542318848663
+ },
+ "materials": [
+  {
+   "m_FileID": 0,
+   "m_PathID": 5599384870991006061
+  }
+ ]
+}

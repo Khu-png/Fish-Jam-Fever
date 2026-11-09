@@ -1,0 +1,15 @@
+fish_182.png
+size:296,216
+filter:Linear,Linear
+base
+bounds:0,0,248,216
+offsets:0,0,248,236
+eye
+bounds:249,71,30,38
+offsets:1,1,32,40
+eyeball
+bounds:249,162,46,54
+offsets:1,1,48,56
+fin
+bounds:249,110,45,51
+offsets:1,1,47,53

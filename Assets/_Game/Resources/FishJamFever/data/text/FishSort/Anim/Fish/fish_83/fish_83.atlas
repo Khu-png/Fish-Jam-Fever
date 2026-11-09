@@ -1,0 +1,12 @@
+fish_83.png
+size:284,156
+filter:Linear,Linear
+base
+bounds:0,0,240,156
+eye1
+bounds:241,31,25,28
+eye2
+bounds:241,60,36,34
+fin1
+bounds:241,95,61,41
+rotate:90

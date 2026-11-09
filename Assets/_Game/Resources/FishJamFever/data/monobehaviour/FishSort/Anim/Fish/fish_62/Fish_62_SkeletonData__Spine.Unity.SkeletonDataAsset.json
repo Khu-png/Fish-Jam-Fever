@@ -1,0 +1,48 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": -6887505452609033796
+ },
+ "m_Name": "Fish_62_SkeletonData",
+ "atlasAssets": [
+  {
+   "m_FileID": 0,
+   "m_PathID": -8544506900472200048
+  }
+ ],
+ "scale": 0.01080000028014183,
+ "skeletonJSON": {
+  "m_FileID": 0,
+  "m_PathID": -4801523591103316758
+ },
+ "isUpgradingBlendModeMaterials": 0,
+ "blendModeMaterials": {
+  "requiresBlendModeMaterials": 1,
+  "applyAdditiveMaterial": 1,
+  "additiveMaterials": [
+   {
+    "pageName": "fish_62.png",
+    "material": {
+     "m_FileID": 0,
+     "m_PathID": 5924006838667709956
+    }
+   }
+  ],
+  "multiplyMaterials": [],
+  "screenMaterials": []
+ },
+ "skeletonDataModifiers": [],
+ "fromAnimation": [],
+ "toAnimation": [],
+ "duration": [],
+ "defaultMix": 0.20000000298023224,
+ "controller": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ }
+}

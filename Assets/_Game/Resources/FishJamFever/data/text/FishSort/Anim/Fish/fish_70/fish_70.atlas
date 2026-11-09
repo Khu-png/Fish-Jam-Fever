@@ -1,0 +1,14 @@
+fish_70.png
+size:296,188
+filter:Linear,Linear
+eye
+bounds:242,65,28,34
+offsets:1,1,30,36
+eye_BG
+bounds:242,135,51,51
+offsets:1,1,53,53
+fin
+bounds:242,100,51,34
+offsets:1,1,53,36
+fish_70
+bounds:0,0,241,186

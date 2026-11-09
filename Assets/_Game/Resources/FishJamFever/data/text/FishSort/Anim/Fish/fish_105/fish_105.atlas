@@ -1,0 +1,15 @@
+fish_105.png
+size:292,204
+filter:Linear,Linear
+base
+bounds:0,0,253,202
+eye
+bounds:254,62,23,29
+offsets:1,1,25,31
+eyeball
+bounds:254,92,36,38
+offsets:1,1,38,40
+fin
+bounds:254,131,71,35
+offsets:1,1,73,37
+rotate:90

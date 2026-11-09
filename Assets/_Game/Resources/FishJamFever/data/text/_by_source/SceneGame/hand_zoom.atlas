@@ -1,0 +1,27 @@
+hand_zoom.png
+size:1132,212
+filter:Linear,Linear
+Circle
+bounds:478,14,195,195
+offsets:31,30,256,256
+Ellipse 1
+bounds:834,18,102,104
+offsets:1,1,104,106
+Ellipse 2
+bounds:675,43,166,157
+offsets:1,1,168,159
+rotate:90
+arrowL
+bounds:938,18,95,104
+offsets:1,1,97,107
+arrowR
+bounds:1035,19,94,103
+offsets:1,2,97,107
+hand
+bounds:0,0,209,246
+rotate:90
+hand_finger
+bounds:248,21,188,228
+rotate:90
+xuanzhuan
+bounds:834,124,288,85

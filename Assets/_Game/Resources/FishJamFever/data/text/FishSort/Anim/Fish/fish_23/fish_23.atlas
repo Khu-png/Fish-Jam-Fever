@@ -1,0 +1,16 @@
+fish_23.png
+size:304,244
+filter:Linear,Linear
+1
+bounds:259,143,45,45
+offsets:1,1,47,47
+2
+bounds:259,111,27,31
+offsets:1,1,29,33
+3
+bounds:0,0,258,242
+offsets:0,5,258,247
+4
+bounds:259,189,53,40
+offsets:1,1,55,42
+rotate:90

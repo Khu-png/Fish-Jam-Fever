@@ -1,0 +1,14 @@
+fish_278.png
+size:312,212
+filter:Linear,Linear
+1
+bounds:251,150,60,62
+offsets:1,1,62,64
+2
+bounds:251,67,29,40
+offsets:2,1,32,42
+3
+bounds:0,0,250,212
+4
+bounds:251,108,49,41
+offsets:1,1,51,43

@@ -1,0 +1,44 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": -1313650424925050537
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": 5140638530179501215
+ },
+ "m_Name": "",
+ "isCache": 0,
+ "ButtonClose": {
+  "m_FileID": 0,
+  "m_PathID": 7929252936563239255
+ },
+ "animType": 2,
+ "mainPopUp": {
+  "m_FileID": 0,
+  "m_PathID": -2694417452402595497
+ },
+ "timeShow": 0.0,
+ "fadeBG": {
+  "m_FileID": 0,
+  "m_PathID": -3306129814627866281
+ },
+ "showPosition": 4,
+ "showType": 1,
+ "showAction": 0,
+ "freePacks": [
+  {
+   "m_FileID": 0,
+   "m_PathID": 2894026812871354711
+  }
+ ],
+ "paidPack": {
+  "m_FileID": 0,
+  "m_PathID": 4542294849590995287
+ },
+ "timeText": {
+  "m_FileID": 0,
+  "m_PathID": -4932227626840348329
+ }
+}

@@ -1,0 +1,14 @@
+fish_352.png
+size:324,216
+filter:Linear,Linear
+1
+bounds:255,149,67,67
+offsets:1,1,69,69
+2
+bounds:255,35,32,34
+3
+bounds:0,0,254,216
+offsets:0,21,254,251
+5
+bounds:255,70,78,38
+rotate:90

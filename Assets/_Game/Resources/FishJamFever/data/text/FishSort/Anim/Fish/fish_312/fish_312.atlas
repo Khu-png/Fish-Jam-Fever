@@ -1,0 +1,12 @@
+fish_312.png
+size:300,300
+filter:Linear,Linear
+base
+bounds:0,66,241,233
+eye1
+bounds:242,142,27,33
+eye2
+bounds:242,241,57,58
+fin1
+bounds:242,176,64,40
+rotate:90

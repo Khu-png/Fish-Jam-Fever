@@ -1,0 +1,29 @@
+[
+  {
+    "minSpent": 0.0,
+    "maxSpent": 4.0,
+    "idAddSlot": 100,
+    "idHand": 200,
+    "idClear": 300,
+    "idShuffle": 400,
+    "idTier": 1
+  },
+  {
+    "minSpent": 4.0,
+    "maxSpent": 10.0,
+    "idAddSlot": 104,
+    "idHand": 204,
+    "idClear": 304,
+    "idShuffle": 404,
+    "idTier": 2
+  },
+  {
+    "minSpent": 10.0,
+    "maxSpent": 999999.0,
+    "idAddSlot": 108,
+    "idHand": 208,
+    "idClear": 308,
+    "idShuffle": 408,
+    "idTier": 3
+  }
+]

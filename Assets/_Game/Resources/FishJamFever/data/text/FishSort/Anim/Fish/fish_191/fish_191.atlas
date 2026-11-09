@@ -1,0 +1,15 @@
+fish_191.png
+size:296,232
+filter:Linear,Linear
+base
+bounds:0,0,229,245
+rotate:90
+eye1
+bounds:246,89,31,41
+offsets:1,1,33,43
+eye2
+bounds:246,173,48,56
+offsets:1,1,50,58
+fin
+bounds:246,131,42,41
+offsets:1,1,44,43

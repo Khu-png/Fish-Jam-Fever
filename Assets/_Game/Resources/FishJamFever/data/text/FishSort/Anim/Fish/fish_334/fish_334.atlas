@@ -1,0 +1,16 @@
+fish_334.png
+size:320,212
+filter:Linear,Linear
+1
+bounds:263,153,57,55
+offsets:1,1,59,57
+rotate:90
+2
+bounds:263,71,24,28
+offsets:1,2,27,31
+3
+bounds:0,0,262,210
+4
+bounds:263,100,52,44
+offsets:1,1,54,46
+rotate:90

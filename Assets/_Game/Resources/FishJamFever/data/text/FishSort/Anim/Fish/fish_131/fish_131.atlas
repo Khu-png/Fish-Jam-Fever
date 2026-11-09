@@ -1,0 +1,16 @@
+fish_131.png
+size:316,216
+filter:Linear,Linear
+1
+bounds:256,104,44,49
+offsets:1,1,46,51
+2
+bounds:256,65,34,38
+offsets:1,1,36,40
+3
+bounds:0,0,255,215
+offsets:0,15,255,248
+4
+bounds:256,154,61,58
+offsets:1,1,63,60
+rotate:90

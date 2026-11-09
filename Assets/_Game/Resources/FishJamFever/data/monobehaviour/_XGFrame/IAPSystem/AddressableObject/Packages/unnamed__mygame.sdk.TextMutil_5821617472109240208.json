@@ -1,0 +1,22 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": 4937001544466980752
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": -3998615450161766415
+ },
+ "m_Name": "",
+ "key": "_free",
+ "typeText": 0,
+ "stateCap": 0,
+ "isView": 0,
+ "setOnStart": 1,
+ "setOnAwake": 0,
+ "stateFormat": 0,
+ "objectFormat": "",
+ "sizeRate": 1.0,
+ "isChangeOffset": 1
+}

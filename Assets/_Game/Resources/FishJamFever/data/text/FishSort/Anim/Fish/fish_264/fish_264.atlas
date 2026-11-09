@@ -1,0 +1,16 @@
+fish_264.png
+size:312,176
+filter:Linear,Linear
+1
+bounds:248,41,44,48
+offsets:1,1,46,50
+2
+bounds:248,10,26,30
+offsets:1,1,28,32
+3
+bounds:0,0,247,175
+offsets:0,3,247,178
+4
+bounds:248,90,85,64
+offsets:1,1,87,66
+rotate:90

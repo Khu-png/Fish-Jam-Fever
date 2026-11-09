@@ -1,0 +1,23 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": -5133880143325222569
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": -6897789749617840157
+ },
+ "m_Name": "",
+ "m_EffectColor": {
+  "r": 0.3843137323856354,
+  "g": 0.14509804546833038,
+  "b": 0.18039216101169586,
+  "a": 1.0
+ },
+ "m_EffectDistance": {
+  "x": -1.0,
+  "y": -4.0
+ },
+ "m_UseGraphicAlpha": 1
+}

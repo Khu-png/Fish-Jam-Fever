@@ -1,0 +1,15 @@
+fish_150.png
+size:308,188
+filter:Linear,Linear
+1
+bounds:252,126,55,60
+offsets:1,1,57,62
+2
+bounds:252,27,35,41
+offsets:1,1,37,43
+3
+bounds:0,0,251,186
+4
+bounds:252,69,56,49
+offsets:1,1,58,51
+rotate:90

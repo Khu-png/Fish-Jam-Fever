@@ -1,0 +1,17 @@
+fish_111.png
+size:304,204
+filter:Linear,Linear
+base
+bounds:0,0,252,204
+offsets:0,23,252,227
+eye
+bounds:253,65,29,33
+offsets:1,1,31,35
+eyeball
+bounds:253,99,45,43
+offsets:1,1,47,45
+rotate:90
+fin
+bounds:253,145,59,50
+offsets:1,1,61,52
+rotate:90

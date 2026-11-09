@@ -1,0 +1,28 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": -1646064608767418480
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": -3618264075823733687
+ },
+ "m_Name": "",
+ "buyButton": {
+  "m_FileID": 0,
+  "m_PathID": 7000330766573658000
+ },
+ "priceText": {
+  "m_FileID": 0,
+  "m_PathID": -5586187812955791472
+ },
+ "listItemDisplay": {
+  "m_FileID": 0,
+  "m_PathID": -7684131870789116016
+ },
+ "lockIcon": {
+  "m_FileID": 0,
+  "m_PathID": 233039456793878416
+ }
+}

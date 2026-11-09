@@ -1,0 +1,247 @@
+{
+  "default": {
+    "sub": [],
+    "non_consum": [
+      {
+        "id": "remove_ads",
+        "pkg": "com.fish.jam.fever.remove.ads",
+        "price": "$7.99",
+        "receiver": {
+          "removeads": 1
+        }
+      }
+    ],
+    "consum": [
+      {
+        "id": "remove_ads_pack",
+        "pkg": "com.fish.jam.fever.remove.ads.pack",
+        "price": "$11.99",
+        "receiver": {
+          "removeads": 1
+        }
+      },
+      {
+        "id": "special_pack",
+        "pkg": "com.fish.jam.fever.special.pack",
+        "price": "$4.99",
+        "receiver": {}
+      },
+      {
+        "id": "starter_pack",
+        "pkg": "com.fish.jam.fever.starter.pack",
+        "price": "$4.99",
+        "receiver": {}
+      },
+      {
+        "id": "gold_1",
+        "pkg": "com.fish.jam.fever.gold_1",
+        "price": "$1.99",
+        "receiver": {}
+      },
+      {
+        "id": "gold_2",
+        "pkg": "com.fish.jam.fever.gold_2",
+        "price": "$7.99",
+        "receiver": {}
+      },
+      {
+        "id": "gold_3",
+        "pkg": "com.fish.jam.fever.gold_3",
+        "price": "$14.99",
+        "receiver": {}
+      },
+      {
+        "id": "gold_4",
+        "pkg": "com.fish.jam.fever.gold_4",
+        "price": "$29.99",
+        "receiver": {}
+      },
+      {
+        "id": "gold_5",
+        "pkg": "com.fish.jam.fever.gold_5",
+        "price": "$54.99",
+        "receiver": {}
+      },
+      {
+        "id": "gold_6",
+        "pkg": "com.fish.jam.fever.gold_6",
+        "price": "$99.99",
+        "receiver": {}
+      },
+      {
+        "id": "big_bundle",
+        "pkg": "com.fish.jam.fever.big_bundle",
+        "price": "$19.99",
+        "receiver": {}
+      },
+      {
+        "id": "great_bundle",
+        "pkg": "com.fish.jam.fever.great_bundle",
+        "price": "$36.99",
+        "receiver": {}
+      },
+      {
+        "id": "ultra_bundle",
+        "pkg": "com.fish.jam.fever.ultra_bundle",
+        "price": "$39.99",
+        "receiver": {}
+      },
+      {
+        "id": "superior_bundle",
+        "pkg": "com.fish.jam.fever.superior_bundle",
+        "price": "$79.99",
+        "receiver": {}
+      },
+      {
+        "id": "legendary_bundle",
+        "pkg": "com.fish.jam.fever.legendary_bundle",
+        "price": "$99.99",
+        "receiver": {}
+      },
+      {
+        "id": "small_bundle",
+        "pkg": "com.fish.jam.fever.small_bundle",
+        "price": "$9.99",
+        "receiver": {}
+      },
+      {
+        "id": "screw_favor",
+        "pkg": "com.fish.jam.fever.screw_favor",
+        "price": "$4.99",
+        "receiver": {}
+      },
+      {
+        "id": "fail_offer",
+        "pkg": "com.fish.jam.fever.fail_offer",
+        "price": "$4.99",
+        "receiver": {}
+      },
+      {
+        "id": "bonus_pack_1plus1",
+        "pkg": "com.fish.jam.fever.bonus_pack_1plus1",
+        "price": "$4.99",
+        "receiver": {}
+      },
+      {
+        "id": "bonus_pack_1plus5",
+        "pkg": "com.fish.jam.fever.bonus_pack_1plus5",
+        "price": "$7.99",
+        "receiver": {}
+      },
+      {
+        "id": "booster_pack",
+        "pkg": "booster_pack",
+        "price": "$0",
+        "receiver": {}
+      },
+      {
+        "id": "golden_power_tier_1",
+        "pkg": "com.fish.jam.fever.golden_power_tier_1",
+        "price": "$5.99",
+        "receiver": {}
+      },
+      {
+        "id": "golden_power_tier_2",
+        "pkg": "com.fish.jam.fever.golden_power_tier_2",
+        "price": "$15.99",
+        "receiver": {}
+      },
+      {
+        "id": "golden_power_tier_3",
+        "pkg": "com.fish.jam.fever.golden_power_tier_3",
+        "price": "$25.99",
+        "receiver": {}
+      },
+      {
+        "id": "rescue_booster_tier_1",
+        "pkg": "com.fish.jam.fever.rescue_booster_tier_1",
+        "price": "$2.99",
+        "receiver": {}
+      },
+      {
+        "id": "rescue_booster_tier_2",
+        "pkg": "com.fish.jam.fever.rescue_booster_tier_2",
+        "price": "$7.99",
+        "receiver": {}
+      },
+      {
+        "id": "rescue_booster_tier_3",
+        "pkg": "com.fish.jam.fever.rescue_booster_tier_3",
+        "price": "$11.99",
+        "receiver": {}
+      },
+      {
+        "id": "riches_offer",
+        "pkg": "com.fish.jam.fever.riches_offer",
+        "price": "$2.99",
+        "receiver": {}
+      },
+      {
+        "id": "weekend_deal_1",
+        "pkg": "com.fish.jam.fever.weekend_deal_1",
+        "price": "$2.99",
+        "receiver": {}
+      },
+      {
+        "id": "weekend_deal_2",
+        "pkg": "com.fish.jam.fever.weekend_deal_2",
+        "price": "$5.99",
+        "receiver": {}
+      },
+      {
+        "id": "weekend_deal_3",
+        "pkg": "com.fish.jam.fever.weekend_deal_3",
+        "price": "$8.99",
+        "receiver": {}
+      },
+      {
+        "id": "weekend_deal_4",
+        "pkg": "com.fish.jam.fever.weekend_deal_4",
+        "price": "$16.99",
+        "receiver": {}
+      },
+      {
+        "id": "weekend_deal_5",
+        "pkg": "com.fish.jam.fever.weekend_deal_5",
+        "price": "$22.99",
+        "receiver": {}
+      },
+      {
+        "id": "weekend_deal_6",
+        "pkg": "com.fish.jam.fever.weekend_deal_6",
+        "price": "$35.99",
+        "receiver": {}
+      },
+      {
+        "id": "weekend_deal_7",
+        "pkg": "com.fish.jam.fever.weekend_deal_7",
+        "price": "$49.99",
+        "receiver": {}
+      },
+      {
+        "id": "rescue_add_target_booster",
+        "pkg": "com.fish.jam.fever.rescue_add_target_booster",
+        "price": "$5.99",
+        "receiver": {}
+      },
+      {
+        "id": "rescue_booster_collect",
+        "pkg": "com.fish.jam.fever.rescue_booster_collect",
+        "price": "$5.99",
+        "receiver": {}
+      },
+      {
+        "id": "rescue_booster_refresh",
+        "pkg": "com.fish.jam.fever.rescue_booster_refresh",
+        "price": "$5.99",
+        "receiver": {}
+      },
+      {
+        "id": "rescue_booster_clear",
+        "pkg": "com.fish.jam.fever.rescue_booster_clear",
+        "price": "$5.99",
+        "receiver": {}
+      }
+    ]
+  }
+}

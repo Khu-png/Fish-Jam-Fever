@@ -1,0 +1,176 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": 1636033227981338316
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": 8508202270839652925
+ },
+ "m_Name": "",
+ "isCache": 0,
+ "ButtonClose": {
+  "m_FileID": 0,
+  "m_PathID": 5678769373978113740
+ },
+ "animType": 2,
+ "mainPopUp": {
+  "m_FileID": 0,
+  "m_PathID": -2948828017450600756
+ },
+ "timeShow": 0.0,
+ "fadeBG": {
+  "m_FileID": 0,
+  "m_PathID": 6155573039766976204
+ },
+ "showPosition": 0,
+ "showType": 0,
+ "showAction": 0,
+ "bundlePack": {
+  "m_FileID": 0,
+  "m_PathID": -189477582173817140
+ },
+ "skeletonGraphic": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "animIn": "open",
+ "animIdle": "idle",
+ "timeObject": {
+  "m_FileID": 0,
+  "m_PathID": -6934326679535077684
+ },
+ "removeAdsTag": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "timeText": {
+  "m_FileID": 0,
+  "m_PathID": -4092902617615943988
+ },
+ "removeAdsTimeDes": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "backGroundBundleImg": {
+  "m_FileID": 0,
+  "m_PathID": -6314373204441811252
+ },
+ "headerImg": {
+  "m_FileID": 0,
+  "m_PathID": 2471675975561721548
+ },
+ "backgroundPopupImg": {
+  "m_FileID": 0,
+  "m_PathID": -2977572953119312180
+ },
+ "backgroundTimeImg": {
+  "m_FileID": 0,
+  "m_PathID": -3566809093913233716
+ },
+ "textOutlines": [
+  {
+   "m_FileID": 0,
+   "m_PathID": -2441642941971810612
+  },
+  {
+   "m_FileID": 0,
+   "m_PathID": -6707565713128212788
+  },
+  {
+   "m_FileID": 0,
+   "m_PathID": 215643321517815500
+  },
+  {
+   "m_FileID": 0,
+   "m_PathID": 7334105716731688652
+  }
+ ],
+ "uiComponentRefs": [
+  {
+   "gameObject": {
+    "m_FileID": 0,
+    "m_PathID": 5904411346759005900
+   },
+   "backGroundBundleSprite": {
+    "m_FileID": 0,
+    "m_PathID": 1364980457385591394
+   },
+   "headerSprite": {
+    "m_FileID": 0,
+    "m_PathID": -6151824534805813506
+   },
+   "backgroundPopupSprite": {
+    "m_FileID": 0,
+    "m_PathID": 0
+   },
+   "backgroundTimeSprite": {
+    "m_FileID": 0,
+    "m_PathID": -2205066770033689497
+   },
+   "outlineColor": {
+    "r": 0.037602368742227554,
+    "g": 0.09480547159910202,
+    "b": 0.6132075786590576,
+    "a": 1.0
+   }
+  },
+  {
+   "gameObject": {
+    "m_FileID": 0,
+    "m_PathID": -7281657802676291892
+   },
+   "backGroundBundleSprite": {
+    "m_FileID": 0,
+    "m_PathID": -4140249620328687154
+   },
+   "headerSprite": {
+    "m_FileID": 0,
+    "m_PathID": -6595836696624140785
+   },
+   "backgroundPopupSprite": {
+    "m_FileID": 0,
+    "m_PathID": 0
+   },
+   "backgroundTimeSprite": {
+    "m_FileID": 0,
+    "m_PathID": 8477462131755783971
+   },
+   "outlineColor": {
+    "r": 0.24705882370471954,
+    "g": 0.0,
+    "b": 0.45098039507865906,
+    "a": 1.0
+   }
+  },
+  {
+   "gameObject": {
+    "m_FileID": 0,
+    "m_PathID": -5466098893288163636
+   },
+   "backGroundBundleSprite": {
+    "m_FileID": 0,
+    "m_PathID": 936578170669190199
+   },
+   "headerSprite": {
+    "m_FileID": 0,
+    "m_PathID": 1287357659116415857
+   },
+   "backgroundPopupSprite": {
+    "m_FileID": 0,
+    "m_PathID": -4365270994675764160
+   },
+   "backgroundTimeSprite": {
+    "m_FileID": 0,
+    "m_PathID": 7492823645203496838
+   },
+   "outlineColor": {
+    "r": 0.4745098054409027,
+    "g": 0.11764705926179886,
+    "b": 0.10196078568696976,
+    "a": 1.0
+   }
+  }
+ ]
+}

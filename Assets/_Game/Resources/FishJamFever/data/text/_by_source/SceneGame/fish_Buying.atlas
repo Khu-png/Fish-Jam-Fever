@@ -1,0 +1,114 @@
+fish_Buying.png
+size:964,628
+filter:Linear,Linear
+22
+bounds:281,130,139,128
+offsets:2,2,144,132
+Body
+bounds:0,310,290,318
+Eye_L
+bounds:898,42,57,64
+offsets:0,0,57,65
+Eye_L1
+bounds:245,2,54,63
+offsets:1,1,56,65
+rotate:90
+Eye_R
+bounds:454,0,81,84
+offsets:0,1,82,86
+rotate:90
+Eye_R1
+bounds:539,1,80,84
+offsets:1,1,82,86
+rotate:90
+Layer 1
+bounds:291,407,346,221
+offsets:1,1,349,231
+Layer 10
+bounds:132,39,112,74
+offsets:4,5,120,83
+Layer 11
+bounds:610,91,94,78
+offsets:1,1,96,80
+Layer 12
+bounds:827,188,54,131
+rotate:90
+Layer 13
+bounds:388,0,86,65
+offsets:0,0,91,65
+rotate:90
+Layer 14
+bounds:705,91,78,61
+offsets:0,6,79,67
+rotate:90
+Layer 15
+bounds:309,11,50,45
+offsets:2,1,53,47
+Layer 16
+bounds:767,78,74,95
+Layer 17
+bounds:897,107,80,50
+offsets:24,3,104,53
+rotate:90
+Layer 18
+bounds:518,170,105,88
+offsets:0,3,105,91
+Layer 19
+bounds:842,92,54,95
+offsets:1,1,57,97
+Layer 2
+bounds:730,174,96,82
+offsets:1,2,98,85
+Layer 3
+bounds:177,199,103,110
+offsets:4,8,114,124
+Layer 4
+bounds:421,154,96,104
+offsets:4,10,107,122
+Layer 5
+bounds:624,14,92,76
+offsets:1,1,94,78
+Layer 6
+bounds:518,82,91,87
+offsets:1,1,93,89
+Layer 6 copy 2
+bounds:421,87,96,66
+offsets:1,1,98,68
+Layer 7
+bounds:281,57,106,72
+offsets:1,1,108,74
+Layer 7 copy
+bounds:177,114,103,84
+offsets:1,1,105,86
+Layer 8
+bounds:0,19,99,131
+offsets:5,6,109,141
+rotate:90
+Layer 9
+bounds:717,0,77,70
+offsets:1,1,79,72
+rotate:90
+Mouth
+bounds:854,13,78,43
+offsets:1,1,80,45
+rotate:90
+Mouth_1
+bounds:788,8,69,65
+offsets:1,1,71,67
+rotate:90
+Tail
+bounds:638,257,146,203
+rotate:90
+Vay_R
+bounds:624,170,105,86
+lap
+bounds:638,404,325,224
+offsets:0,2,325,226
+shadow
+bounds:0,119,176,190
+offsets:9,5,194,203
+trc
+bounds:291,259,346,147
+offsets:1,1,348,149
+vay_l
+bounds:842,243,120,160

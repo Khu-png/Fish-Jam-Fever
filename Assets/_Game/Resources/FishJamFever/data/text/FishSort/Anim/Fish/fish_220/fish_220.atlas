@@ -1,0 +1,14 @@
+fish_220.png
+size:296,228
+filter:Linear,Linear
+1
+bounds:248,167,48,58
+offsets:1,1,50,60
+2
+bounds:248,64,31,37
+3
+bounds:248,102,64,46
+offsets:1,0,65,46
+rotate:90
+4
+bounds:0,0,247,225

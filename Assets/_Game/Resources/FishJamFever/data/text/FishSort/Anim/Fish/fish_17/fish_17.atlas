@@ -1,0 +1,15 @@
+fish_17.png
+size:300,232
+filter:Linear,Linear
+eye
+bounds:256,114,21,25
+offsets:1,1,23,27
+eye_BG
+bounds:256,140,42,42
+offsets:1,1,44,44
+fin
+bounds:256,183,47,42
+offsets:1,1,49,44
+rotate:90
+fish_18
+bounds:0,0,255,230

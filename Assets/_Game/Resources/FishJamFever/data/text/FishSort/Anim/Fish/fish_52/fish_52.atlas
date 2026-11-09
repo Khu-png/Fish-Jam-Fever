@@ -1,0 +1,15 @@
+fish_52.png
+size:296,180
+filter:Linear,Linear
+Eye
+bounds:254,58,27,30
+offsets:1,1,29,32
+Eye_whirte
+bounds:254,139,39,39
+offsets:1,1,41,41
+Fin
+bounds:254,89,49,38
+offsets:1,1,51,40
+rotate:90
+Fish_body
+bounds:0,0,253,178

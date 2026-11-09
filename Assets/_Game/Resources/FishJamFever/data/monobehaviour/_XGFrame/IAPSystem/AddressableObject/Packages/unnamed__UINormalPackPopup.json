@@ -1,0 +1,56 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": -3526006390626443128
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": 6488284845008070549
+ },
+ "m_Name": "",
+ "isCache": 0,
+ "ButtonClose": {
+  "m_FileID": 0,
+  "m_PathID": 1170911233137189000
+ },
+ "animType": 2,
+ "mainPopUp": {
+  "m_FileID": 0,
+  "m_PathID": 3653391012880261256
+ },
+ "timeShow": 0.0,
+ "fadeBG": {
+  "m_FileID": 0,
+  "m_PathID": 2843808969106792584
+ },
+ "showPosition": 0,
+ "showType": 0,
+ "showAction": 0,
+ "bundlePack": {
+  "m_FileID": 0,
+  "m_PathID": 695513971443245192
+ },
+ "skeletonGraphic": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "animIn": "open",
+ "animIdle": "idle",
+ "timeObject": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "removeAdsTag": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "timeText": {
+  "m_FileID": 0,
+  "m_PathID": -4785467133635977080
+ },
+ "removeAdsTimeDes": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ }
+}

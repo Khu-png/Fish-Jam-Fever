@@ -1,0 +1,14 @@
+fish_69.png
+size:284,224
+filter:Linear,Linear
+eye
+bounds:240,107,25,29
+offsets:1,1,27,31
+eye_bg
+bounds:240,137,40,40
+offsets:1,1,42,42
+fin
+bounds:240,178,43,43
+offsets:1,1,45,45
+fish
+bounds:0,0,239,221

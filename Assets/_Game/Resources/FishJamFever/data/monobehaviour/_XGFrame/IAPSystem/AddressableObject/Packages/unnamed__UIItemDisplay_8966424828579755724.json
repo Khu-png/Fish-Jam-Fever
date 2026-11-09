@@ -1,0 +1,29 @@
+{
+ "m_GameObject": {
+  "m_FileID": 0,
+  "m_PathID": 966363467053086412
+ },
+ "m_Enabled": 1,
+ "m_Script": {
+  "m_FileID": 0,
+  "m_PathID": -9189884510028036970
+ },
+ "m_Name": "",
+ "iconImage": {
+  "m_FileID": 0,
+  "m_PathID": 7325590693652543180
+ },
+ "amountText": {
+  "m_FileID": 0,
+  "m_PathID": -2090830846006511924
+ },
+ "heartDisplay": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "heartText": {
+  "m_FileID": 0,
+  "m_PathID": 0
+ },
+ "prefix": ""
+}

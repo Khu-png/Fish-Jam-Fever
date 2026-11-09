@@ -1,0 +1,14 @@
+fish_97.png
+size:312,168
+filter:Linear,Linear
+1
+bounds:0,0,241,168
+2
+bounds:242,0,28,36
+offsets:1,2,30,40
+3
+bounds:242,37,40,60
+offsets:1,1,42,62
+4
+bounds:242,98,68,70
+offsets:1,1,70,72

@@ -1,0 +1,14 @@
+fish_112.png
+size:320,212
+filter:Linear,Linear
+base
+bounds:0,0,252,211
+eye
+bounds:253,50,31,41
+offsets:1,1,33,43
+eyeball
+bounds:253,92,41,46
+offsets:1,1,43,48
+fin
+bounds:253,139,66,72
+offsets:1,1,68,74

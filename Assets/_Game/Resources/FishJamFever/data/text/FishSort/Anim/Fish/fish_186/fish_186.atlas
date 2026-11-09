@@ -1,0 +1,39 @@
+fish_186.png
+size:616,152
+filter:Linear,Linear
+base
+bounds:0,2,148,191
+rotate:90
+eye1
+bounds:221,7,27,30
+offsets:1,1,29,32
+eye2
+bounds:377,3,99,55
+offsets:1,1,101,57
+eye3
+bounds:192,7,28,30
+offsets:1,1,30,32
+fin1
+bounds:267,3,55,109
+offsets:1,1,57,111
+rotate:90
+fin2
+bounds:192,38,112,74
+offsets:1,1,114,76
+rotate:90
+tentacle 1
+bounds:533,12,81,47
+tentacle 2
+bounds:441,82,110,68
+tentacle 3
+bounds:477,0,81,55
+offsets:0,0,81,56
+rotate:90
+tentacle 4
+bounds:552,60,90,53
+rotate:90
+tentacle 5
+bounds:267,59,91,86
+rotate:90
+tentacle 6
+bounds:354,59,86,91

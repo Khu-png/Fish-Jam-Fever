@@ -1,0 +1,14 @@
+fish_76.png
+size:264,164
+filter:Linear,Linear
+base
+bounds:0,0,209,163
+offsets:0,1,209,164
+eye
+bounds:210,38,23,29
+eyeball
+bounds:210,68,41,40
+rotate:90
+fin
+bounds:210,110,53,52
+rotate:90

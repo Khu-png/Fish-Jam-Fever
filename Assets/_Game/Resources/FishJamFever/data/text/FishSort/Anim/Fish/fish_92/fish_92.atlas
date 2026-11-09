@@ -1,0 +1,14 @@
+fish_92.png
+size:332,244
+filter:Linear,Linear
+base
+bounds:0,0,248,242
+offsets:0,12,248,254
+eye1
+bounds:249,53,29,34
+eye2
+bounds:249,155,87,82
+rotate:90
+fin1
+bounds:249,88,66,39
+rotate:90

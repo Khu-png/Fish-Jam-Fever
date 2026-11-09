@@ -1,0 +1,17 @@
+fish_96.png
+size:360,196
+filter:Linear,Linear
+Body
+bounds:0,10,229,185
+offsets:4,4,233,189
+Body_1
+bounds:230,45,150,128
+offsets:0,0,167,149
+rotate:90
+Eye_L
+bounds:317,25,19,22
+rotate:90
+Eye_R
+bounds:340,22,18,22
+eye
+bounds:230,0,86,44
