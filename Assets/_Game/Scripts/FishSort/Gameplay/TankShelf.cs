@@ -113,6 +113,16 @@ namespace FishSort
             return slots[goal.SlotIndex].GetIconPosition(iconIndex);
         }
 
+        public Vector3 GetWaterPosition(TankGoal goal, int iconIndex)
+        {
+            return slots[goal.SlotIndex].GetWaterPosition(iconIndex);
+        }
+
+        public void Splash(TankGoal goal, int iconIndex)
+        {
+            if (goal.IsShown) slots[goal.SlotIndex].Splash(iconIndex);
+        }
+
         // Fish arrived at its spot. If the tank is still animating in, it waits there.
         public void Land(TankGoal goal, Fish fish, int iconIndex)
         {

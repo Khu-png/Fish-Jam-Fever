@@ -52,6 +52,8 @@ namespace FishSort
                 int column = Mathf.Clamp(data[i].column, 0, level.Columns - 1);
                 float diameter = config.BubbleDiameter(fishInBubble, levelFishTotal);
                 float x = -config.fieldHalfWidth + cellWidth * (column + HALF) + RandomRange(rng, config.spawnJitter);
+                float visibleHalfWidth = config.fieldHalfWidth - diameter * HALF - 0.04f;
+                x = Mathf.Clamp(x, -visibleHalfWidth, visibleHalfWidth);
                 float y = columnTop[column] + diameter * HALF;
                 columnTop[column] += diameter;
 

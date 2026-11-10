@@ -37,6 +37,11 @@ public class UIManager : Singleton<UIManager>
     //canvas chua dung cac canvas con, nen la mot canvas - root de chua cac canvas nay
     public Transform CanvasParentTF;
 
+    void Awake()
+    {
+        RegisterSingleton(this);
+    }
+
     #region Canvas
 
     //open UI
@@ -90,7 +95,6 @@ public class UIManager : Singleton<UIManager>
     //lay component cua UI hien tai
     public T GetUI<T>() where T : UICanvas
     {
-        //Debug.LogError(typeof(T));
         if (!IsLoaded<T>())
         {
             UICanvas canvas = Instantiate(GetUIPrefab<T>(), CanvasParentTF);
@@ -119,11 +123,6 @@ public class UIManager : Singleton<UIManager>
     {
         if (!uiCanvasPrefab.ContainsKey(typeof(T)))
         {
-            //if (uiResources == null)
-            //{
-            //    uiResources = Resources.LoadAll<UICanvas>("UI/");
-            //}
-
             for (int i = 0; i < uiResources.Length; i++)
             {
                 if (uiResources[i] is T)

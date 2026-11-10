@@ -16,15 +16,33 @@ namespace FishSort
         [SerializeField] private SpriteRenderer badgeFishRenderer;
         [SerializeField] private TextMeshPro badgeCountText;
         [SerializeField] private FishSortConfig config;
+        [SerializeField] private TankWaterSplash waterSplash;
 
         private readonly List<Fish> heldFish = new List<Fish>();
         private Vector3 tankRestPosition;
+        private Vector3 badgeRestScale = Vector3.one;
         private Coroutine badgeRoutine;
         private bool isInitialized;
+
+        private void Awake()
+        {
+            CacheRest();
+        }
 
         public Vector3 GetIconPosition(int iconIndex)
         {
             return iconPoints[iconIndex].position;
+        }
+
+        public Vector3 GetWaterPosition(int iconIndex)
+        {
+            float localX = tankRoot.InverseTransformPoint(iconPoints[iconIndex].position).x;
+            return waterSplash.SurfacePosition(localX);
+        }
+
+        public void Splash(int iconIndex)
+        {
+            waterSplash.Play(GetWaterPosition(iconIndex));
         }
 
         public void ResetView()
@@ -33,9 +51,10 @@ namespace FishSort
             StopAllCoroutines();
             badgeRoutine = null;
             heldFish.Clear();
+            waterSplash.Clear();
             tankRoot.localPosition = tankRestPosition;
             tankRoot.localScale = Vector3.one;
-            badgeTransform.localScale = Vector3.one;
+            badgeTransform.localScale = badgeRestScale;
             SetFlash(0f);
         }
 
@@ -49,6 +68,9 @@ namespace FishSort
         {
             badgeRoot.SetActive(true);
             badgeFishRenderer.sprite = fishSprite;
+            // Catalog sprites have different native widths; keep every goal inside its badge.
+            float spriteWidth = fishSprite.bounds.size.x;
+            badgeFishRenderer.transform.localScale = Vector3.one * (0.62f / spriteWidth);
             badgeCountText.text = string.Format(FishSortConst.FORMAT_PROGRESS, landed, capacity);
             if (punch)
             {
@@ -123,6 +145,7 @@ namespace FishSort
             if (!isInitialized)
             {
                 tankRestPosition = tankRoot.localPosition;
+                badgeRestScale = badgeTransform.localScale;
                 isInitialized = true;
             }
         }
@@ -139,11 +162,11 @@ namespace FishSort
             {
                 elapsed += Time.deltaTime;
                 float bump = Ease.Punch(Mathf.Clamp01(elapsed / config.badgePunchDuration));
-                badgeTransform.localScale = Vector3.one * Mathf.Lerp(1f, config.badgePunchScale, bump);
+                badgeTransform.localScale = badgeRestScale * Mathf.Lerp(1f, config.badgePunchScale, bump);
                 yield return null;
             }
 
-            badgeTransform.localScale = Vector3.one;
+            badgeTransform.localScale = badgeRestScale;
             badgeRoutine = null;
         }
     }

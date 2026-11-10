@@ -36,6 +36,19 @@ namespace FishSort
         public int presettleSteps = 360;
         public Color frozenFishTint = new Color(0.8f, 0.9f, 1f, 1f);
 
+        [Header("Underwater idle motion")]
+        public bool animateUnderwater = true;
+        public float fishSwimRadius = 0.018f;
+        public float fishBobHeight = 0.014f;
+        public float fishSwimSpeed = 1.6f;
+        public float fishIdleTilt = 3f;
+        public float fishBreathing = 0.018f;
+        public float bubbleGravityScale = 0.25f;
+        public float bubbleWaterDamping = 0.9f;
+        public float bubbleCurrentForce = 0.12f;
+        public float bubbleIdleStretch = 0.012f;
+        public float bubbleReactionStretch = 0.045f;
+
         [Header("Pick")]
         // Extra reach around the finger; total reach = pickRadius + fish collider radius.
         public float pickRadius = 0.12f;
@@ -53,8 +66,9 @@ namespace FishSort
         public float flyArcRatio = 0.55f;
         public float flyArcLift = 0.3f;
         public float flyTiltDegrees = 12f;
-        public float tankIconWidth = 0.42f;
-        public float trayFishWidth = 0.62f;
+        public float tankIconWidth = 0.39f;
+        public float trayFishWidth = 0.32f;
+        public float trayFishHeight = 0.25f;
         public float traySlideDuration = 0.2f;
 
         [Header("Tank")]

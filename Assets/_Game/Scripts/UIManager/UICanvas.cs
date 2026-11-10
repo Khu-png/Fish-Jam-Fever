@@ -10,8 +10,6 @@ public class UICanvas : MonoBehaviour
     public bool IsWidescreenProcessing = false;
 
     protected RectTransform m_RectTransform;
-    private Animator m_Animator;
-    private float m_OffsetY = 0;
 
     private void Start()
     {
@@ -22,8 +20,8 @@ public class UICanvas : MonoBehaviour
     //khoi tao gia tri canvas
     protected void OnInit()
     {
-        m_RectTransform = GetComponent<RectTransform>();
-        m_Animator = GetComponent<Animator>();
+        // A UI canvas object always carries a RectTransform as its transform.
+        m_RectTransform = (RectTransform)transform;
 
         // xu ly tai tho
         float ratio = (float)Screen.height / (float)Screen.width;
@@ -37,7 +35,6 @@ public class UICanvas : MonoBehaviour
                 m_RectTransform.offsetMax = rightTop;
                 leftBottom.y = 0f;
                 m_RectTransform.offsetMin = leftBottom;
-                m_OffsetY = 100f;
             }
         }
 
@@ -109,8 +106,13 @@ public class UICanvas : MonoBehaviour
     //dong canvas sau mot khoang thoi gian delay
     public virtual void Close(float delayTime)
     {
-        Debug.Log("Close");
-        Invoke(nameof(CloseDirectly), delayTime);
+        StartCoroutine(CloseAfterDelay(delayTime));
+    }
+
+    private IEnumerator CloseAfterDelay(float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+        CloseDirectly();
     }
 
 

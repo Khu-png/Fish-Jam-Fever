@@ -4,6 +4,8 @@ namespace FishSort
     public static class FishSortConst
     {
         public const int SORT_FISH_IN_TANK = 3;
+        public const int SORT_TANK_GLASS = 4;
+        public const int SORT_TRAY_GLASS = 56;
         public const int SORT_FISH_IN_BUBBLE = 10;
         public const int SORT_FISH_HIGHLIGHT = 40;
         public const int SORT_GLOW_OFFSET = -1;

@@ -9,18 +9,12 @@ public static class ParticlePool
 
     private static Transform root;
 
-    public static Transform Root
-    {
-        get
-        {
-            if (root == null)
-            {
-                PoolControler controler = GameObject.FindObjectOfType<PoolControler>();
-                root = controler != null ? controler.transform : new GameObject("ParticlePool").transform;
-            }
+    // Set once by PoolControler.Awake: the pool container that parents every VFX pool.
+    public static Transform Root => root;
 
-            return root;
-        }
+    public static void SetRoot(Transform poolRoot)
+    {
+        root = poolRoot;
     }
 
     /// <summary>
@@ -150,14 +144,6 @@ public static class ParticlePool
 
     static public void Play(ParticleSystem prefab, Vector3 pos, Quaternion rot)
     {
-#if UNITY_EDITOR
-        if (prefab == null)
-        {
-            Debug.LogError(prefab.name + " is null!");
-            return;
-        }
-#endif
-
         if (!pools.ContainsKey(prefab.GetInstanceID()))
         {
             Transform newRoot = new GameObject("VFX_" + prefab.name).transform;
@@ -170,13 +156,6 @@ public static class ParticlePool
 
     static public void Play(ParticleType particleType, Vector3 pos, Quaternion rot)
     {
-#if UNITY_EDITOR
-        if (!shortcuts.ContainsKey(particleType))
-        {
-            Debug.LogError(particleType + " is nees install at pool container!!!");
-        }
-#endif
-
         Play(shortcuts[particleType], pos, rot);
     }
 

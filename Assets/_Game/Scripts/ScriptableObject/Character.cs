@@ -16,7 +16,7 @@ namespace Scriptable
         public void ChangeColor(ColorType colorType)
         {
             color = colorType;
-            meshRenderer.material = colorData.GetMat(colorType);
+            meshRenderer.sharedMaterial = colorData.GetMat(colorType);
         }
     }
 

@@ -15,8 +15,24 @@ public class GameManager : Singleton<GameManager>
 
     public static bool IsState(GameState state) => gameState == state;
 
-    private void Awake()
+    // Win/lose are decided here: gameplay reports the result, GameManager moves the game to Finish and opens the result UI.
+    public void OnWin()
     {
+        LevelManager.Ins.CompleteLevel();
+        ChangeState(GameState.Finish);
+        UIManager.Ins.OpenUI<FishSort.UIWin>();
+    }
+
+    public void OnLose(float progress)
+    {
+        ChangeState(GameState.Finish);
+        UIManager.Ins.OpenUI<FishSort.UILose>().SetProgress(progress);
+    }
+
+    void Awake()
+    {
+        RegisterSingleton(this);
+
         // Project uses the Input System only (legacy UnityEngine.Input throws).
         // Multi-touch is handled by reading Pointer.current (primary touch) in FishPicker.
         //target frame rate ve 60 fps

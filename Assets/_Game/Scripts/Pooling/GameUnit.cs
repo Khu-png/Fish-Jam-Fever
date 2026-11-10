@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameUnit : MonoBehaviour
@@ -10,7 +8,6 @@ public class GameUnit : MonoBehaviour
     {
         get
         {
-            //tf = tf ?? gameObject.transform;
             if (tf == null)
             {
                 tf = transform;
@@ -23,12 +20,12 @@ public class GameUnit : MonoBehaviour
 
     public void OnDespawn(float delay)
     {
-        Invoke(nameof(OnDespawn), delay);
+        StartCoroutine(DespawnAfterDelay(delay));
     }
 
-    private void OnDespawn()
+    private IEnumerator DespawnAfterDelay(float delay)
     {
+        yield return new WaitForSeconds(delay);
         HBPool.Despawn(this);
     }
-
 }

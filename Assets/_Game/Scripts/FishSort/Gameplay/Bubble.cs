@@ -28,6 +28,49 @@ namespace FishSort
         private int initialCount;
         private float fullDiameter;
         private float targetDiameter;
+        private float waterPhase;
+        private float lastDisturbance = float.NegativeInfinity;
+        private bool isPopping;
+        private Vector3 shellRestScale;
+        private Quaternion shellRestRotation;
+
+        private void Awake()
+        {
+            shellRestScale = shellRenderer.transform.localScale;
+            shellRestRotation = shellRenderer.transform.localRotation;
+            waterPhase = Mathf.Repeat(GetInstanceID() * 0.754878f, Mathf.PI * 2f);
+        }
+
+        private void FixedUpdate()
+        {
+            if (!config.animateUnderwater || isPopping || FishCount == 0 || IsFrozen || !body.simulated) return;
+            float t = Time.time * 0.65f + waterPhase;
+            Vector2 current = new Vector2(Mathf.Sin(t), Mathf.Cos(t * 0.8f) * 0.25f);
+            body.AddForce(current * (config.bubbleCurrentForce * body.mass));
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (!isPopping && collision.relativeVelocity.sqrMagnitude > 0.04f)
+                lastDisturbance = Time.time;
+        }
+
+        private void AnimateShell()
+        {
+            float stretch = 0f;
+            float tilt = 0f;
+            if (config.animateUnderwater && !IsFrozen)
+            {
+                float t = Time.time * 1.1f + waterPhase;
+                stretch = Mathf.Sin(t) * config.bubbleIdleStretch;
+                float reactionAge = Time.time - lastDisturbance;
+                if (reactionAge < 0.6f)
+                    stretch += Mathf.Sin(reactionAge * 25f) * (1f - reactionAge / 0.6f) * config.bubbleReactionStretch;
+                tilt = Mathf.Sin(t * 0.7f) * 1.5f;
+            }
+            shellRenderer.transform.localScale = Vector3.Scale(shellRestScale, new Vector3(1f + stretch, 1f - stretch, 1f));
+            shellRenderer.transform.localRotation = shellRestRotation * Quaternion.Euler(0f, 0f, tilt);
+        }
 
         public bool IsFrozen => ice.IsActive;
         public int FishCount => fishes.Count;
@@ -38,6 +81,12 @@ namespace FishSort
             StopAllCoroutines();
             fishes.Clear();
             initialCount = 0;
+            isPopping = false;
+            lastDisturbance = float.NegativeInfinity;
+            shellRenderer.transform.localScale = shellRestScale;
+            shellRenderer.transform.localRotation = shellRestRotation;
+            body.gravityScale = config.bubbleGravityScale;
+            body.linearDamping = config.bubbleWaterDamping;
             fullDiameter = diameter;
             targetDiameter = diameter;
             TF.position = position;
@@ -60,6 +109,7 @@ namespace FishSort
         public void RemoveFish(Fish fish)
         {
             fishes.Remove(fish);
+            lastDisturbance = Time.time;
             float fill = initialCount > 0 ? (float)fishes.Count / initialCount : 0f;
             targetDiameter = fullDiameter * Mathf.Lerp(config.bubbleMinScale, 1f, fill);
         }
@@ -92,12 +142,15 @@ namespace FishSort
 
         public void Pop()
         {
+            isPopping = true;
             body.simulated = false;
             StartCoroutine(PopRoutine());
         }
 
         private void Update()
         {
+            if (isPopping) return;
+            AnimateShell();
             float current = TF.localScale.x;
             if (Mathf.Abs(current - targetDiameter) > SCALE_EPSILON)
             {

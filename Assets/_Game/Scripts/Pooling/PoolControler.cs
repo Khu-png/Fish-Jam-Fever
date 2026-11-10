@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -17,8 +15,10 @@ public class PoolControler : MonoBehaviour
     public ParticleAmount[] Particle;
 
 
-    public void Awake()
+    void Awake()
     {
+        ParticlePool.SetRoot(transform);
+
         for (int i = 0; i < PoolNoneRoot.Count; i++)
         {
             HBPool.Preload(PoolNoneRoot[i], 0, transform);

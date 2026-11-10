@@ -9,12 +9,20 @@ namespace FishSort
     public sealed class FishPicker : MonoBehaviour
     {
         [SerializeField] private Camera gameCamera;
-        [SerializeField] private BubbleField field;
-        [SerializeField] private TankShelf shelf;
         [SerializeField] private FishSortConfig config;
+
+        // Filled by Bind() once the GameplayWorld prefab has been spawned.
+        private BubbleField field;
+        private TankShelf shelf;
 
         private Fish highlighted;
         private bool isHolding;
+
+        public void Bind(GameplayWorld world)
+        {
+            field = world.Field;
+            shelf = world.Shelf;
+        }
 
         private void Update()
         {

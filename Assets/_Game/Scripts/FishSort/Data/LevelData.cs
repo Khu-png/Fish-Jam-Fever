@@ -100,6 +100,7 @@ namespace FishSort
             return true;
         }
 
+#if UNITY_EDITOR
         [ContextMenu("Validate")]
         private void ValidateFromMenu()
         {
@@ -113,5 +114,6 @@ namespace FishSort
                 Debug.LogError($"{name}: {error}", this);
             }
         }
+#endif
     }
 }

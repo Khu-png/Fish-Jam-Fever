@@ -78,7 +78,7 @@ public static class HBPool
 
     public static void Preload(GameUnit prefab, int amount, Transform parent = null)
     {
-        if (prefab != null && !poolInstance.ContainsKey(prefab.poolType))
+        if (!poolInstance.ContainsKey(prefab.poolType))
         {
             poolInstance.Add(prefab.poolType, new Pool(prefab, amount, parent));
         }

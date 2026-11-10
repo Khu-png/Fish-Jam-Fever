@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 
 public enum SoundID
@@ -27,44 +25,27 @@ public enum FxID
 
 public class SoundManager : Singleton<SoundManager>
 {
-    // TODO: Add UserData when persistent audio settings are implemented.
-    // [SerializeField] UserData userData;
-
     private const float DEFAULT_PITCH = 1f;
-
-    private AudioSource soundSource;
-    private AudioSource[] fxSource = new AudioSource[Utilities.GetEnumCount<FxID>()];
+    private const float MUSIC_START_DELAY = 1f;
 
     [SerializeField] private AudioClip[] soundAus;
     [SerializeField] private AudioClip[] fxAus;
 
-    private bool isLoaded = false;
-    private int indexSound;
+    private AudioSource soundSource;
+    private AudioSource[] fxSource = new AudioSource[Utilities.GetEnumCount<FxID>()];
 
-    public void Awake()
+    void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-
+        RegisterSingleton(this);
         soundSource = gameObject.AddComponent<AudioSource>();
         soundSource.loop = true;
+        CreateFxSources();
     }
 
-    private void Start()
+    void Start()
     {
-        Invoke(nameof(OnLoad), 1);
+        StartCoroutine(PlayMusicAfterDelay());
     }
-
-    private void OnLoad()
-    {
-        if (soundAus.Length > 0)
-        {
-            isLoaded = true;
-
-            indexSound = Random.Range(0, soundAus.Length);
-            PlaySound((SoundID)indexSound);
-        }
-    }
-
 
     public void PlaySound(SoundID ID)
     {
@@ -77,7 +58,7 @@ public class SoundManager : Singleton<SoundManager>
         PlayFx(ID, DEFAULT_PITCH);
     }
 
-    // Plays a one-shot effect. Missing clips are skipped so placeholder builds stay silent instead of erroring.
+    // Plays a one-shot effect. Clips are optional while art/audio is placeholder: an unassigned slot stays silent.
     public void PlayFx(FxID ID, float pitch)
     {
         int index = (int)ID;
@@ -86,21 +67,29 @@ public class SoundManager : Singleton<SoundManager>
             return;
         }
 
-        if (fxSource[index] == null)
-        {
-            fxSource[index] = new GameObject(ID.ToString()).AddComponent<AudioSource>();
-            fxSource[index].playOnAwake = false;
-            fxSource[index].loop = false;
-            fxSource[index].transform.SetParent(transform);
-        }
-
         fxSource[index].pitch = pitch;
         fxSource[index].PlayOneShot(fxAus[index]);
     }
 
-    public void ChangeSound(SoundID ID, float time)
+    private IEnumerator PlayMusicAfterDelay()
     {
-        
+        yield return new WaitForSeconds(MUSIC_START_DELAY);
+        // Background music is optional: no clips assigned means no music.
+        if (soundAus.Length > 0)
+        {
+            PlaySound((SoundID)Random.Range(0, soundAus.Length));
+        }
     }
 
+    private void CreateFxSources()
+    {
+        for (int i = 0; i < fxSource.Length; i++)
+        {
+            AudioSource source = new GameObject(((FxID)i).ToString()).AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.loop = false;
+            source.transform.SetParent(transform);
+            fxSource[i] = source;
+        }
+    }
 }

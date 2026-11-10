@@ -18,9 +18,10 @@ namespace FishSort
         [SerializeField] private RectTransform tutorialHand;
         [SerializeField] private GameObject tipRoot;
         [SerializeField] private TextMeshProUGUI tipText;
-        // Booster buttons are placeholders until boosters are designed (design doc: "bổ sung sau").
+        // Booster buttons are placeholders until boosters are designed (design doc: "bá»• sung sau").
         [SerializeField] private Button[] boosterButtons;
         [SerializeField] private GameObject toastRoot;
+        [SerializeField] private TextMeshProUGUI fishProgressText;
 
         private const float TOAST_DURATION = 1.4f;
 
@@ -56,6 +57,12 @@ namespace FishSort
         public void SetLevel(int levelNumber)
         {
             levelLabel.text = string.Format(FishSortConst.FORMAT_LEVEL, levelNumber);
+        }
+
+        // Fish counter in the HUD ("placed/total"), updated by GameplayController.
+        public void SetFishProgress(int placed, int total)
+        {
+            fishProgressText.text = string.Format(FishSortConst.FORMAT_PROGRESS, placed, total);
         }
 
         public void SetWarning(bool isOn)

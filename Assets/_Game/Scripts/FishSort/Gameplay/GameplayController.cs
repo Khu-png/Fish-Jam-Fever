@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 namespace FishSort
@@ -10,12 +9,13 @@ namespace FishSort
     {
         [SerializeField] private FishSortConfig config;
         [SerializeField] private Camera gameCamera;
-        [SerializeField] private BubbleField field;
-        [SerializeField] private TankShelf shelf;
-        [SerializeField] private WaitingTray tray;
-        [SerializeField] private ComboCounter combo;
-        [SerializeField] private Transform flightRoot;
-        [SerializeField] private TextMeshPro progressText;
+
+        // Filled by Bind() once the GameplayWorld prefab has been spawned.
+        private Transform flightRoot;
+        private BubbleField field;
+        private TankShelf shelf;
+        private WaitingTray tray;
+        private ComboCounter combo;
 
         private int totalFish;
         private int collectedFish;
@@ -28,16 +28,39 @@ namespace FishSort
         public bool IsInputEnabled => !isOver && GameManager.IsState(GameState.GamePlay);
         public float Progress => totalFish > 0 ? (float)collectedFish / totalFish : 0f;
 
-        private void Awake()
+        void Awake()
         {
+            RegisterSingleton(this);
+        }
+
+        public void Bind(GameplayWorld world)
+        {
+            Unbind();
+            world.Initialize(gameCamera);
+            // Fish in flight are parented to the world so they hide together with it.
+            flightRoot = world.transform;
+            field = world.Field;
+            shelf = world.Shelf;
+            tray = world.Tray;
+            combo = world.Combo;
             shelf.GoalCreated += HandleGoalCreated;
             shelf.FishPlaced += HandleFishPlaced;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-            shelf.GoalCreated -= HandleGoalCreated;
-            shelf.FishPlaced -= HandleFishPlaced;
+            Unbind();
+            base.OnDestroy();
+        }
+
+        private void Unbind()
+        {
+            // shelf is null until the first Bind(); that is the unbound state, not a missing reference.
+            if (shelf != null)
+            {
+                shelf.GoalCreated -= HandleGoalCreated;
+                shelf.FishPlaced -= HandleFishPlaced;
+            }
         }
 
         public void StartLevel(LevelData level, int number)
@@ -102,15 +125,17 @@ namespace FishSort
         {
             collectedFish++;
             int iconIndex = shelf.Reserve(goal);
-            Vector3 target = shelf.GetIconPosition(goal, iconIndex);
-            fish.FlyTo(() => target, config.flyToTankDuration, config.tankIconWidth,
-                arrived => shelf.Land(goal, arrived, iconIndex));
+            fish.FlyIntoTank(() => shelf.GetIconPosition(goal, iconIndex),
+                () => shelf.GetWaterPosition(goal, iconIndex), config.flyToTankDuration,
+                config.tankIconWidth,
+                () => shelf.Splash(goal, iconIndex), arrived => shelf.Land(goal, arrived, iconIndex));
         }
 
         private void SendToTray(Fish fish)
         {
             tray.Add(fish);
-            fish.FlyTo(() => tray.GetTargetFor(fish), config.flyToTrayDuration, config.trayFishWidth, tray.OnFishArrived);
+            fish.FlyTo(() => tray.GetTargetFor(fish), config.flyToTrayDuration,
+                fish.ScaleToFit(config.trayFishWidth, config.trayFishHeight), tray.OnFishArrived, FishSortConst.SORT_FISH_IN_TRAY);
             if (tray.IsFull)
             {
                 StartCoroutine(LoseRoutine());
@@ -154,7 +179,7 @@ namespace FishSort
             }
 
             yield return new WaitForSeconds(config.winDelay);
-            LevelManager.Ins.OnWin();
+            GameManager.Ins.OnWin();
         }
 
         private IEnumerator LoseRoutine()
@@ -162,7 +187,7 @@ namespace FishSort
             isOver = true;
             SetTrayWarning(false);
             yield return new WaitForSeconds(config.loseDelay);
-            LevelManager.Ins.OnLose(Progress);
+            GameManager.Ins.OnLose(Progress);
         }
 
         private void SetTrayWarning(bool isOn)
@@ -186,7 +211,7 @@ namespace FishSort
 
         private void UpdateProgress()
         {
-            progressText.text = string.Format(FishSortConst.FORMAT_PROGRESS, placedFish, totalFish);
+            UIManager.Ins.GetUI<UIGameplay>().SetFishProgress(placedFish, totalFish);
         }
 
         private IEnumerator TutorialRoutine()
