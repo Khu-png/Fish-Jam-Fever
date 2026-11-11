@@ -14,7 +14,7 @@ namespace FishJam.UI
     /// Lay HUD: UIManager.Instance.GetUI&lt;GamePlay&gt;(). PlayingState mo/dong HUD.
     /// Dat doi tuong gameplay (ke be, khay cho, ca) vao 'gameplayLayer' – nam giua nen va HUD.
     /// </summary>
-    public class GamePlay : UICanvas
+    public class GamePlay : SkinCanvas
     {
         [Header("HUD")]
         public TextMeshProUGUI levelLabel;
@@ -55,16 +55,16 @@ namespace FishJam.UI
         }
 
         /// <summary>Moi lan vao man / choi lai: dat level, reset combo, an chu khen + canh bao.</summary>
-        public override void SetUp()
+        public override void Setup()
         {
-            base.SetUp();
-            if (GameManager.Exists) SetLevel(GameManager.Instance.CurrentLevel);
+            base.Setup();
+            SetLevel(FishSort.PlayerData.Level);
             ResetCombo();
             ResetVisuals();
         }
 
         /// <summary>Nut banh rang: mo popup Cai dat (che do InGame, game dung).</summary>
-        public void SettingButton() { UIManager.Instance.Open<Setting>(); }
+        public void SettingButton() { UIManager.Ins.OpenUI<Setting>(); }
 
         void ResetVisuals()
         {

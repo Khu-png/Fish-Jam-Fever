@@ -12,7 +12,7 @@ namespace FishJam.UI
     /// Nut xu (600) / Revive (quang cao – chua co SDK, coi nhu xem xong) -> dong popup, phat Revive.Revived (gameplay mo them be).
     /// Nut X -> mo popup Lose. Mo popup -> Time.timeScale = 0.
     /// </summary>
-    public class Revive : UICanvas
+    public class Revive : SkinCanvas
     {
         public int cost = 600;
         public TMP_Text progressLabel;
@@ -32,9 +32,9 @@ namespace FishJam.UI
             adButton.onClick.AddListener(AdButton);
         }
 
-        public override void SetUp()
+        public override void Setup()
         {
-            base.SetUp();
+            base.Setup();
             isClicked = false;
             Time.timeScale = 0f;
         }
@@ -63,7 +63,7 @@ namespace FishJam.UI
         {
             if (isClicked) return; isClicked = true;
             CloseDirectly();
-            UIManager.Instance.Open<Lose>();
+            UIManager.Ins.OpenUI<Lose>();
         }
 
         void DoRevive()

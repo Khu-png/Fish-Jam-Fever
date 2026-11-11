@@ -12,7 +12,7 @@ namespace FishJam.UI
     ///  - con lai           -> Menu  : Music/Sound/Vibration + Language, Support, Version
     /// Moi duong dong deu qua CloseDirectly() -> tra Time.timeScale = 1.
     /// </summary>
-    public class Setting : UICanvas
+    public class Setting : SkinCanvas
     {
         public enum Mode { Menu, InGame }
         public Mode mode = Mode.Menu;
@@ -68,14 +68,18 @@ namespace FishJam.UI
         void OnDisable() { GameSettings.Changed -= Refresh; IsShowing = false; }
         void OnValidate() { ApplyMode(); }
 
-        public override void SetUp()
+        public override void Setup()
         {
-            base.SetUp();
+            base.Setup();
             isClicked = false;
-            mode = GameManager.Instance.GetCurrentState() is PlayingState ? Mode.InGame : Mode.Menu;
+            mode = GameManager.IsState(GameState.GamePlay) ? Mode.InGame : Mode.Menu;
             ApplyMode();
             Refresh();
-            if (mode == Mode.InGame) Time.timeScale = 0f;
+            if (mode == Mode.InGame)
+            {
+                Time.timeScale = 0f;
+                GameManager.ChangeState(GameState.Setting);
+            }
         }
 
         public override void Open()
@@ -94,7 +98,7 @@ namespace FishJam.UI
         {
             if (isClicked) return; isClicked = true;
             CloseDirectly();
-            GameManager.Instance.ChangeState(MainMenuState.Instance);
+            LevelManager.Ins.OnHome();
         }
 
         /// <summary>Nut Retry: choi lai level hien tai.</summary>
@@ -102,7 +106,7 @@ namespace FishJam.UI
         {
             if (isClicked) return; isClicked = true;
             CloseDirectly();
-            GameManager.Instance.ReplayLevel();
+            LevelManager.Ins.OnRetry();
         }
 
         /// <summary>Moi duong dong deu qua day: tra thoi gian ve binh thuong (quen la game dung hinh mai mai).</summary>
@@ -110,6 +114,11 @@ namespace FishJam.UI
         {
             Time.timeScale = 1f;
             IsShowing = false;
+            if (GameManager.IsState(GameState.Setting))
+            {
+                GameManager.ChangeState(GameState.GamePlay);
+            }
+
             if (anim != null) { StopCoroutine(anim); anim = null; }
             if (dim) dim.alpha = 1;
             if (panel) panel.localScale = Vector3.one;

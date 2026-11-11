@@ -20,13 +20,13 @@ public class GameManager : Singleton<GameManager>
     {
         LevelManager.Ins.CompleteLevel();
         ChangeState(GameState.Finish);
-        UIManager.Ins.OpenUI<FishSort.UIWin>();
+        UIManager.Ins.OpenUI<FishJam.UI.Win>();
     }
 
     public void OnLose(float progress)
     {
         ChangeState(GameState.Finish);
-        UIManager.Ins.OpenUI<FishSort.UILose>().SetProgress(progress);
+        UIManager.Ins.OpenUI<FishJam.UI.Lose>();
     }
 
     void Awake()
@@ -52,6 +52,6 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         ChangeState(GameState.MainMenu);
-        UIManager.Ins.OpenUI<FishSort.UIMainMenu>();
+        UIManager.Ins.OpenUI<FishJam.UI.MainMenu>();
     }
 }

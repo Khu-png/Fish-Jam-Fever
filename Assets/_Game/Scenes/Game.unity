@@ -305,10 +305,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   uiResources:
-  - {fileID: 3330085708765236734, guid: fba57110060316646ad41706896a9542, type: 3}
   - {fileID: 7977789301416656834, guid: 425b2fc2bde320d4a826b79c6a1e9d9f, type: 3}
-  - {fileID: 5380657812144963620, guid: bccb8e66c1a4a7d409b2b2a8dc04bbb5, type: 3}
-  - {fileID: 5025194104329968353, guid: 04bb2185c2e5fd54692e446f89239cc7, type: 3}
+  - {fileID: 8199272846553036133, guid: 0a0b31abe9131c14c905d8886a67de4e, type: 3}
+  - {fileID: 1165614294641753426, guid: 0bbc0e0ef3482534abb6626dcc543efb, type: 3}
+  - {fileID: 8008109499650838282, guid: 8c9d4632635bf5e45824f19251b3bec6, type: 3}
+  - {fileID: 134691013906405970, guid: 2b76278008e181747b0b2edde76329d7, type: 3}
+  - {fileID: 6112661437351089737, guid: 96d098406974ab54e8663a73180f67c0, type: 3}
+  - {fileID: 7799903662049356571, guid: 797bdd1bcbd8b3d448511d8f7edd5af7, type: 3}
   - {fileID: 4813271499282904324, guid: d7a251e54189eec4495bedb57a2bc16f, type: 3}
   CanvasParentTF: {fileID: 1635524636}
 --- !u!1 &297840276

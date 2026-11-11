@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace FishJam.UI
 {
     /// <summary>Man Thua (Resources/UI/Canvas_Lose, sortingOrder 20): YOU LOSE + ca khoc (Spine), nut Retry va Home.</summary>
-    public class Lose : UICanvas
+    public class Lose : SkinCanvas
     {
         public Button retryButton, homeButton;
         bool isClicked;
@@ -16,20 +16,20 @@ namespace FishJam.UI
             homeButton.onClick.AddListener(HomeButton);
         }
 
-        public override void SetUp() { base.SetUp(); isClicked = false; Time.timeScale = 0f; }
+        public override void Setup() { base.Setup(); isClicked = false; Time.timeScale = 0f; }
 
         public void RetryButton()
         {
             if (isClicked) return; isClicked = true;
             CloseDirectly();
-            GameManager.Instance.ReplayLevel();
+            LevelManager.Ins.OnRetry();
         }
 
         public void HomeButton()
         {
             if (isClicked) return; isClicked = true;
             CloseDirectly();
-            GameManager.Instance.ChangeState(MainMenuState.Instance);
+            LevelManager.Ins.OnHome();
         }
 
         public override void CloseDirectly() { Time.timeScale = 1f; base.CloseDirectly(); }

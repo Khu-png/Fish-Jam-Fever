@@ -60,7 +60,7 @@ public class LevelManager : Singleton<LevelManager>
         world.gameObject.SetActive(false);
         GameManager.ChangeState(GameState.MainMenu);
         UIManager.Ins.CloseAll();
-        UIManager.Ins.OpenUI<UIMainMenu>();
+        UIManager.Ins.OpenUI<FishJam.UI.MainMenu>();
     }
 
     private LevelData GetLevelData(int levelNumber)

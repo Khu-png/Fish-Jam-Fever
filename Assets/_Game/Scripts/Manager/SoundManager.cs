@@ -42,8 +42,24 @@ public class SoundManager : Singleton<SoundManager>
         CreateFxSources();
     }
 
+    void OnEnable()
+    {
+        FishJam.UI.GameSettings.Changed += ApplyMusicSetting;
+    }
+
+    void OnDisable()
+    {
+        FishJam.UI.GameSettings.Changed -= ApplyMusicSetting;
+    }
+
+    private void ApplyMusicSetting()
+    {
+        soundSource.mute = !FishJam.UI.GameSettings.Music;
+    }
+
     void Start()
     {
+        ApplyMusicSetting();
         StartCoroutine(PlayMusicAfterDelay());
     }
 

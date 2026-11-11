@@ -12,7 +12,7 @@ namespace FishJam.UI
     /// Ruong mo (event Spine "Open" trong anim Opening) -> phan thuong nhay ra tu mieng ruong roi roi xuong cho cua no -> hien Claim.
     /// Claim -> xu (prefab FlyCoin) bay ve o xu -> hien "Tap to continue" -> sang level ke tiep.
     /// </summary>
-    public class Win : UICanvas
+    public class Win : SkinCanvas
     {
         public int reward = 30;
         public RectTransform ray;
@@ -55,9 +55,9 @@ namespace FishJam.UI
             rewardRestPos = rewardGroup.anchoredPosition;
         }
 
-        public override void SetUp()
+        public override void Setup()
         {
-            base.SetUp();
+            base.Setup();
             isClicked = false; rewardShown = false;
             Time.timeScale = 0f;
             rewardGroup.gameObject.SetActive(false);
@@ -172,8 +172,8 @@ namespace FishJam.UI
         {
             if (isClicked) return; isClicked = true;
             CloseDirectly();
-            GameManager.Instance.CurrentLevel++;
-            GameManager.Instance.ReplayLevel();
+            // the level was already advanced when the win was reported
+            LevelManager.Ins.OnNextLevel();
         }
 
         public override void CloseDirectly()

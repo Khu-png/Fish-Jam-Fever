@@ -13,7 +13,18 @@ namespace FishJam.UI
         public static event Action Changed;
 
         public static bool Music { get => Get(KMusic); set => Set(KMusic, value); }
-        public static bool Sound { get => Get(KSound); set => Set(KSound, value); }
+        public static bool Sound
+        {
+            get => FishSort.PlayerData.SoundOn;
+            set
+            {
+                if (FishSort.PlayerData.SoundOn != value)
+                {
+                    FishSort.PlayerData.SoundOn = value;
+                    Changed?.Invoke();
+                }
+            }
+        }
         public static bool Vibration { get => Get(KVibe); set => Set(KVibe, value); }
 
         /// <summary>Rung nhe (chi khi bat Vibration, tren dien thoai).</summary>

@@ -36,7 +36,11 @@ namespace FishSort
 
         private void Awake()
         {
-            settingsButton.onClick.AddListener(OnSettingsClicked);
+            if (settingsButton != null)
+            {
+                settingsButton.onClick.AddListener(OnSettingsClicked);
+            }
+
             for (int i = 0; i < boosterButtons.Length; i++)
             {
                 boosterButtons[i].onClick.AddListener(BoosterListener(i));
@@ -54,21 +58,30 @@ namespace FishSort
         public override void Open()
         {
             base.Open();
+            // The level badge, fish count, settings button and warning frame come from Quan's HUD (Canvas_GamePlay).
+            UIManager.Ins.OpenUI<FishJam.UI.GamePlay>();
             SetWarning(false);
             HideTutorialHand();
             HideTip();
             toastRoot.SetActive(false);
         }
 
+        public override void CloseDirectly()
+        {
+            UIManager.Ins.CloseUI<FishJam.UI.GamePlay>();
+            base.CloseDirectly();
+        }
+
         public void SetLevel(int levelNumber)
         {
-            levelLabel.text = string.Format(FishSortConst.FORMAT_LEVEL, levelNumber);
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetLevel(levelNumber);
         }
 
         // Fish counter in the HUD ("placed/total"), updated by GameplayController.
         public void SetFishProgress(int placed, int total)
         {
             fishProgressText.text = string.Format(FishSortConst.FORMAT_PROGRESS, placed, total);
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetFishCount(placed, total);
         }
 
         public void SetFishCounterVisible(bool isVisible)
@@ -78,8 +91,9 @@ namespace FishSort
 
         public void SetWarning(bool isOn)
         {
-            isWarningOn = isOn;
-            warningRoot.SetActive(isOn);
+            isWarningOn = false;
+            warningRoot.SetActive(false);
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetWarning(isOn);
         }
 
         // uiCamera = the camera of the Screen Space - Camera canvas (prefabs cannot reference scene cameras).
@@ -109,7 +123,7 @@ namespace FishSort
         private void OnSettingsClicked()
         {
             SoundManager.Ins.PlayFx(FxID.Button);
-            UIManager.Ins.OpenUI<UISettings>().SetInGame(true);
+            UIManager.Ins.OpenUI<FishJam.UI.Setting>();
         }
 
         private UnityEngine.Events.UnityAction BoosterListener(int index)
