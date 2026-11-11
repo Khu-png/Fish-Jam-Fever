@@ -7,6 +7,7 @@ namespace FishSort
     public sealed class WaitingTray : MonoBehaviour
     {
         [SerializeField] private Transform[] slotPoints;
+        [SerializeField] private WaterSurface[] waterSurfaces;
         [SerializeField] private FishSortConfig config;
 
         private readonly List<Fish> items = new List<Fish>();
@@ -45,6 +46,8 @@ namespace FishSort
 
         public void OnWaterEntry(Fish fish)
         {
+            int index = items.IndexOf(fish);
+            if (index >= 0) waterSurfaces[index].React(fish.TF.position);
             ParticlePool.Play(ParticleType.TrayWaterBubbles, fish.TF.position, Quaternion.identity);
         }
 
@@ -66,6 +69,20 @@ namespace FishSort
             }
 
             Relayout();
+        }
+
+        public int SlotCount => slotPoints.Length;
+
+        public Vector3 GetSlotPosition(int slot)
+        {
+            return slotPoints[slot].position;
+        }
+
+        // Empties the tray: every fish goes to output (they stay where they are for the caller to animate).
+        public void TakeAll(List<Fish> output)
+        {
+            output.AddRange(items);
+            items.Clear();
         }
 
         private void Relayout()

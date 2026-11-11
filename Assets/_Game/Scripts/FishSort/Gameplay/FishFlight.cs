@@ -4,34 +4,38 @@ using UnityEngine;
 
 namespace FishSort
 {
-    // Flight half of Fish: pick anticipation, arcs into tanks / tray, tray slides.
+    // Flight half of Fish: pick anticipation, one continuous path into a tank / the tray, tray slides.
     public sealed partial class Fish
     {
-        private const float HALF_CHANCE = 0.5f;
         private const float TRAY_SURFACE_OFFSET = 0.13f;
-        private const float TRAY_ENTRY_ARC_HEIGHT = 0.35f;
-        private const float TANK_ENTRY_ARC_HEIGHT = 0.65f;
-        private const float ARRIVAL_SORT_PROGRESS = 0.85f;
-        private const float AIR_TIME_RATIO = 0.62f;
-        private const float MIN_TAKEOFF_LIFT = 0.6f;
-        private const float TAKEOFF_LIFT_RATIO = 0.5f;
-        private const float MIN_DIRECTION_SQR = 0.000001f;
-        private const float FACE_LEFT_DEGREES = 180f;
-        private const float MAX_DIVE_TILT = 55f;
-        private const float TURN_SPEED_DEGREES = 280f;
-        private const float AIR_SCALE_RATIO = 0.65f;
-        private const float MIN_DIVE_DURATION = 0.08f;
-        private const float PICK_GLOW_ALPHA = 0.65f;
+        private const float HALF = 0.5f;
+        // A quadratic corner of this length (per unit radius) has the same speed as the straight parts around it.
+        private const float CORNER_LENGTH_RATIO = 2f;
         private const float QUADRATIC_WEIGHT = 2f;
-        private const float CUBIC_WEIGHT = 3f;
+        private const float MIN_DIRECTION_SQR = 0.000001f;
+        private const float MAX_PITCH_DEGREES = 80f;
+        private const float FLIP_DEADZONE = 0.05f;
+        private const float HORIZONTAL_EPSILON = 0.0001f;
+        private const float TURN_SMOOTH_TIME = 0.08f;
+        private const float PICK_GLOW_ALPHA = 0.65f;
 
-        public void FlyTo(Func<Vector3> target, float duration, float endWidth, Action<Fish> onArrive,
-            int arrivalSortingOrder = FishSortConst.SORT_FISH_FLIGHT)
+        // Where the corner sits (above the water, towards the side the fish comes from) and how round it is.
+        private readonly struct FlightShape
         {
-            StopIdleMotion();
-            StopMove();
-            moveRoutine = StartCoroutine(FlyRoutine(target, duration, endWidth, onArrive, arrivalSortingOrder));
+            public readonly float apexHeight;
+            public readonly float sideOffset;
+            public readonly float cornerRadius;
+
+            public FlightShape(float apexHeight, float sideOffset, float cornerRadius)
+            {
+                this.apexHeight = apexHeight;
+                this.sideOffset = sideOffset;
+                this.cornerRadius = cornerRadius;
+            }
         }
+
+        private static readonly FlightShape TankShape = new FlightShape(0.65f, 0.45f, 0.3f);
+        private static readonly FlightShape TrayShape = new FlightShape(0.4f, 0.25f, 0.2f);
 
         public void FlyIntoTank(Func<Vector3> target, Func<Vector3> surface,
             float duration, float endWidth, Action onWaterEntry, Action<Fish> onArrive)
@@ -39,7 +43,7 @@ namespace FishSort
             StopIdleMotion();
             StopMove();
             moveRoutine = StartCoroutine(WaterEntryRoutine(target, surface, duration, endWidth, onWaterEntry, onArrive,
-                FishSortConst.SORT_FISH_IN_TANK, TANK_ENTRY_ARC_HEIGHT));
+                FishSortConst.SORT_FISH_IN_TANK, TankShape));
         }
 
         public void FlyIntoTray(Func<Vector3> target, float duration, float endScale,
@@ -48,7 +52,39 @@ namespace FishSort
             StopIdleMotion();
             StopMove();
             moveRoutine = StartCoroutine(WaterEntryRoutine(target, () => target() + Vector3.up * TRAY_SURFACE_OFFSET,
-                duration, endScale, onWaterEntry, onArrive, FishSortConst.SORT_FISH_IN_TRAY, TRAY_ENTRY_ARC_HEIGHT));
+                duration, endScale, onWaterEntry, onArrive, FishSortConst.SORT_FISH_IN_TRAY, TrayShape));
+        }
+
+        // Fishing rod: the fish (already out of its bubble) flies to a spot around the hook tip, outlined in white,
+        // and then hangs from the tip.
+        public void FlyToHook(Transform hookTip, Vector3 offset, float duration)
+        {
+            StopIdleMotion();
+            StopMove();
+            moveRoutine = StartCoroutine(HookRoutine(hookTip, offset, duration));
+        }
+
+        private IEnumerator HookRoutine(Transform hookTip, Vector3 offset, float duration)
+        {
+            IsFlying = true;
+            ShowOutline(config.highlightColor);
+            glowRenderer.maskInteraction = SpriteMaskInteraction.None;
+            glowRenderer.sortingOrder = FishSortConst.SORT_FISH_FLIGHT + FishSortConst.SORT_GLOW_OFFSET;
+            bodyRenderer.sortingOrder = FishSortConst.SORT_FISH_FLIGHT;
+            bodyRenderer.maskInteraction = SpriteMaskInteraction.None;
+            Vector3 start = TF.position;
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float eased = Ease.InOutSine(Mathf.Clamp01(elapsed / duration));
+                TF.position = Vector3.Lerp(start, hookTip.position + offset, eased);
+                yield return null;
+            }
+
+            TF.SetParent(hookTip, true);
+            TF.position = hookTip.position + offset;
+            moveRoutine = null;
         }
 
         // Short slide used when tray items shift left.
@@ -70,110 +106,51 @@ namespace FishSort
             }
         }
 
-        private IEnumerator FlyRoutine(Func<Vector3> target, float duration, float endWidth, Action<Fish> onArrive, int arrivalSortingOrder)
+        // Reference-game path: a nearly straight climb to a point above the container, one small rounded
+        // corner there, then a straight drop through the surface to the resting spot. The whole trip uses a
+        // single ease, so the fish speeds up gently, never stops on the way, and glides to a halt at the end.
+        private IEnumerator WaterEntryRoutine(Func<Vector3> target, Func<Vector3> surface,
+            float duration, float endWidth, Action onWaterEntry, Action<Fish> onArrive,
+            int arrivalSortingOrder, FlightShape shape)
         {
             IsFlying = true;
+            float facing = FaceDestination(surface().x - TF.position.x);
             yield return AnticipatePick();
             SetTrail(true);
             bodyRenderer.sortingOrder = FishSortConst.SORT_FISH_FLIGHT;
             bodyRenderer.maskInteraction = SpriteMaskInteraction.None;
             Vector3 start = TF.position;
             float startWidth = TF.localScale.x;
-            float side = UnityEngine.Random.value < HALF_CHANCE ? -1f : 1f;
+            // The apex sits on the side the fish comes from, so the climb and the drop never overlap.
+            Vector3 apexOffset = new Vector3(-facing * shape.sideOffset, shape.apexHeight, 0f);
+            bool hasEntered = false;
+            float enteredAt = 0f;
+            float angleVelocity = 0f;
+            Vector3 previous = start;
             float elapsed = 0f;
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsed / duration);
-                float e = Ease.InOutCubic(t);
-                if (t >= ARRIVAL_SORT_PROGRESS)
+                float eased = Ease.InOutSine(Mathf.Clamp01(elapsed / duration));
+                Vector3 position = PathPoint(start, surface() + apexOffset, target(), shape.cornerRadius, eased);
+                if (!hasEntered && position.y < previous.y && position.y <= surface().y)
                 {
-                    bodyRenderer.sortingOrder = arrivalSortingOrder;
-                    if (arrivalSortingOrder == FishSortConst.SORT_FISH_IN_TRAY)
-                    {
-                        bodyRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-                    }
+                    hasEntered = true;
+                    enteredAt = eased;
+                    EnterWater(arrivalSortingOrder, onWaterEntry);
                 }
 
-                Vector3 end = target();
-                Vector3 control = new Vector3(
-                    start.x + side * config.flySideOffset,
-                    start.y + (end.y - start.y) * config.flyArcRatio + config.flyArcLift,
-                    start.z);
-                float u = 1f - e;
-                TF.position = u * u * start + QUADRATIC_WEIGHT * u * e * control + e * e * end;
-                TF.localScale = Vector3.one * Mathf.Lerp(startWidth, endWidth, e);
-                TF.rotation = Quaternion.Euler(0f, 0f, Mathf.Sin(t * Mathf.PI) * side * -config.flyTiltDegrees);
-                yield return null;
-            }
-
-            TF.position = target();
-            TF.rotation = Quaternion.identity;
-            IsFlying = false;
-            SetTrail(false);
-            moveRoutine = null;
-            onArrive?.Invoke(this);
-        }
-
-        // Arc to the water surface (splash there), then dive to the resting spot inside the container.
-        private IEnumerator WaterEntryRoutine(Func<Vector3> target, Func<Vector3> surface,
-            float duration, float endWidth, Action onWaterEntry, Action<Fish> onArrive,
-            int arrivalSortingOrder, float entryArcHeight)
-        {
-            IsFlying = true;
-            yield return AnticipatePick();
-            SetTrail(true);
-            bodyRenderer.sortingOrder = FishSortConst.SORT_FISH_FLIGHT;
-            bodyRenderer.maskInteraction = SpriteMaskInteraction.None;
-            Vector3 start = TF.position;
-            float startWidth = TF.localScale.x;
-            float airDuration = duration * AIR_TIME_RATIO;
-            float elapsed = 0f;
-            Vector3 previous = start;
-            while (elapsed < airDuration)
-            {
-                elapsed += Time.deltaTime;
-                float t = Ease.InOutCubic(Mathf.Clamp01(elapsed / airDuration));
-                Vector3 water = surface();
-                Vector3 controlA = start + Vector3.up * Mathf.Max(MIN_TAKEOFF_LIFT, (water.y - start.y) * TAKEOFF_LIFT_RATIO);
-                Vector3 controlB = water + Vector3.up * entryArcHeight;
-                float u = 1f - t;
-                Vector3 position = u * u * u * start + CUBIC_WEIGHT * u * u * t * controlA
-                    + CUBIC_WEIGHT * u * t * t * controlB + t * t * t * water;
-                Vector3 direction = position - previous;
-                if (direction.sqrMagnitude > MIN_DIRECTION_SQR)
-                {
-                    float angle = Mathf.DeltaAngle(0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - FACE_LEFT_DEGREES);
-                    angle = Mathf.Clamp(angle, -MAX_DIVE_TILT, MAX_DIVE_TILT);
-                    TF.rotation = Quaternion.Euler(0f, 0f,
-                        Mathf.MoveTowardsAngle(TF.eulerAngles.z, angle, TURN_SPEED_DEGREES * Time.deltaTime));
-                }
-
+                float levelBlend = hasEntered ? Mathf.SmoothStep(0f, 1f, (eased - enteredAt) / (1f - enteredAt)) : 0f;
+                SteerTowards(position - previous, facing, levelBlend, ref angleVelocity);
                 TF.position = position;
-                TF.localScale = Vector3.one * Mathf.Lerp(startWidth, endWidth, t * AIR_SCALE_RATIO);
+                TF.localScale = Vector3.one * Mathf.Lerp(startWidth, endWidth, eased);
                 previous = position;
                 yield return null;
             }
 
-            // The splash is synchronized to crossing the surface, before settling inside.
-            Vector3 entry = surface();
-            TF.position = entry;
-            SetTrail(false);
-            bodyRenderer.sortingOrder = arrivalSortingOrder;
-            bodyRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-            onWaterEntry?.Invoke();
-            float entryAngle = TF.eulerAngles.z;
-            float entryWidth = TF.localScale.x;
-            float diveDuration = Mathf.Max(MIN_DIVE_DURATION, duration - airDuration);
-            elapsed = 0f;
-            while (elapsed < diveDuration)
+            if (!hasEntered)
             {
-                elapsed += Time.deltaTime;
-                float t = Ease.InOutCubic(Mathf.Clamp01(elapsed / diveDuration));
-                TF.position = Vector3.Lerp(entry, target(), t);
-                TF.rotation = Quaternion.Euler(0f, 0f, Mathf.LerpAngle(entryAngle, 0f, t));
-                TF.localScale = Vector3.one * Mathf.Lerp(entryWidth, endWidth, t);
-                yield return null;
+                EnterWater(arrivalSortingOrder, onWaterEntry);
             }
 
             TF.position = target();
@@ -183,7 +160,80 @@ namespace FishSort
             onArrive?.Invoke(this);
         }
 
-        // Tap feedback: quick scale punch with a fading glow before the fish leaves.
+        // Point at eased progress 0..1 on: straight line start -> corner entry, rounded corner around the apex,
+        // straight line corner exit -> end. Each part gets a share of the trip proportional to its length; the
+        // corner is a quadratic curve whose length is set so its speed matches the straight parts.
+        private static Vector3 PathPoint(Vector3 start, Vector3 apex, Vector3 end, float cornerRadius, float progress)
+        {
+            float radius = Mathf.Min(cornerRadius, Vector3.Distance(start, apex) * HALF, Vector3.Distance(end, apex) * HALF);
+            Vector3 cornerIn = apex + (start - apex).normalized * radius;
+            Vector3 cornerOut = apex + (end - apex).normalized * radius;
+            float climb = Vector3.Distance(start, cornerIn);
+            float corner = radius * CORNER_LENGTH_RATIO;
+            float drop = Vector3.Distance(cornerOut, end);
+            float total = climb + corner + drop;
+            float climbShare = climb / total;
+            float cornerShare = corner / total;
+            Vector3 point;
+            if (progress < climbShare)
+            {
+                point = Vector3.Lerp(start, cornerIn, progress / climbShare);
+            }
+            else if (progress < climbShare + cornerShare)
+            {
+                point = QuadraticBezier(cornerIn, apex, cornerOut, (progress - climbShare) / cornerShare);
+            }
+            else
+            {
+                point = Vector3.Lerp(cornerOut, end, (progress - climbShare - cornerShare) / (1f - climbShare - cornerShare));
+            }
+
+            return point;
+        }
+
+        private static Vector3 QuadraticBezier(Vector3 a, Vector3 b, Vector3 c, float t)
+        {
+            float u = 1f - t;
+            return u * u * a + QUADRATIC_WEIGHT * u * t * b + t * t * c;
+        }
+
+        // The fish turns to face the side it is heading to (flipX, no negative scale). Sprites face left,
+        // so facing left = -1 and right = +1. The facing is kept for the whole flight.
+        private float FaceDestination(float horizontalDistance)
+        {
+            if (Mathf.Abs(horizontalDistance) > FLIP_DEADZONE)
+            {
+                bodyRenderer.flipX = horizontalDistance > 0f;
+            }
+
+            return bodyRenderer.flipX ? 1f : -1f;
+        }
+
+        // Swim head first: the nose follows the path (up while climbing, level in the glide, steeply down
+        // while diving), then levels out over the last part of the dive as the fish settles.
+        private void SteerTowards(Vector3 step, float facing, float levelBlend, ref float angleVelocity)
+        {
+            float targetAngle = 0f;
+            if (step.sqrMagnitude > MIN_DIRECTION_SQR)
+            {
+                float pitch = Mathf.Atan2(step.y, Mathf.Abs(step.x) + HORIZONTAL_EPSILON) * Mathf.Rad2Deg;
+                targetAngle = Mathf.Clamp(pitch, -MAX_PITCH_DEGREES, MAX_PITCH_DEGREES) * facing * (1f - levelBlend);
+            }
+
+            float angle = Mathf.SmoothDampAngle(TF.eulerAngles.z, targetAngle, ref angleVelocity, TURN_SMOOTH_TIME);
+            TF.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
+
+        // Crossing the surface: become part of the container (sorting, mask), end the trail, tell the splash.
+        private void EnterWater(int arrivalSortingOrder, Action onWaterEntry)
+        {
+            SetTrail(false);
+            bodyRenderer.sortingOrder = arrivalSortingOrder;
+            bodyRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+            onWaterEntry?.Invoke();
+        }
+
+        // Tap feedback: quick scale punch with a fading outline before the fish leaves.
         private IEnumerator AnticipatePick()
         {
             Vector3 startScale = TF.localScale;

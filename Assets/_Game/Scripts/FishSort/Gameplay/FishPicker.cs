@@ -13,6 +13,7 @@ namespace FishSort
 
         // Filled by Bind() once the GameplayWorld prefab has been spawned.
         private BubbleField field;
+        private FishJar jar;
         private TankShelf shelf;
 
         private Fish highlighted;
@@ -21,7 +22,15 @@ namespace FishSort
         public void Bind(GameplayWorld world)
         {
             field = world.Field;
+            jar = world.Jar;
             shelf = world.Shelf;
+        }
+
+        // The jar is drawn above the field, so its fish win when both are under the finger.
+        private Fish FindFishNear(Vector2 worldPoint)
+        {
+            Fish found = jar.IsOpen ? jar.FindFishNear(worldPoint) : null;
+            return found != null ? found : field.FindFishNear(worldPoint);
         }
 
         private void Update()
@@ -51,13 +60,13 @@ namespace FishSort
             Vector2 worldPoint = ToWorld(pointer.position.ReadValue());
             if (pointer.press.isPressed)
             {
-                SetHighlight(field.FindFishNear(worldPoint));
+                SetHighlight(FindFishNear(worldPoint));
             }
 
             if (pointer.press.wasReleasedThisFrame)
             {
                 // A very fast tap can press and release in one frame: look up the fish at release.
-                Fish chosen = highlighted != null ? highlighted : field.FindFishNear(worldPoint);
+                Fish chosen = highlighted != null ? highlighted : FindFishNear(worldPoint);
                 CancelHold();
                 if (chosen != null)
                 {

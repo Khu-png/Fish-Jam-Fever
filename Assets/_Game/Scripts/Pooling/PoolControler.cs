@@ -74,6 +74,10 @@ public enum ParticleType
     TankWaterBubbles = 23,
     TrayWaterBubbles = 24,
     FishPick = 25,
+    TankBubbleBurst = 26,
+    TankBubblePop = 27,
+    IceBreak = 28,
+    IceCrack = 29,
 }
 
 public enum PoolType

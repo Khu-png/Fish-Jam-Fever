@@ -8,6 +8,8 @@ namespace FishSort
     // Visuals of one open tank slot: glass, 3 fish icon points, goal badge, complete/enter animations.
     public sealed class TankSlotView : MonoBehaviour
     {
+        // The pop effect is built for a bubble of diameter 1; a tank is about this much wider.
+        private const float TANK_POP_SCALE = 1.2f;
         private const float BADGE_FISH_MAX_WIDTH = 0.54f;
         private const float BADGE_FISH_MAX_HEIGHT = 0.40f;
         // The hanging loops sit above the plate, so its visual center is below the sprite pivot.
@@ -115,6 +117,9 @@ namespace FishSort
                 yield return null;
             }
 
+            // The tank pops away like a bubble, plus a burst of colourful bubbles and stars.
+            ParticlePool.Play(ParticleType.TankBubblePop, tankRoot.position, Quaternion.identity, TANK_POP_SCALE);
+            ParticlePool.Play(ParticleType.TankBubbleBurst, tankRoot.position, Quaternion.identity);
             elapsed = 0f;
             Vector3 risePosition = tankRestPosition + Vector3.up * config.tankLeaveRise;
             Vector3 leaveStartScale = tankRoot.localScale;

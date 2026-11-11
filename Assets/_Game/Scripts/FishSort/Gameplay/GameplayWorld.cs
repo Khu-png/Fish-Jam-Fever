@@ -10,12 +10,18 @@ namespace FishSort
         [SerializeField] private TankShelf shelf;
         [SerializeField] private WaitingTray tray;
         [SerializeField] private ComboCounter combo;
+        [SerializeField] private FishingRod rod;
+        [SerializeField] private CannonBooster cannon;
+        [SerializeField] private FishJar jar;
         [SerializeField] private ScreenEdgeAnchor[] edgeAnchors;
 
         public BubbleField Field => field;
         public TankShelf Shelf => shelf;
         public WaitingTray Tray => tray;
         public ComboCounter Combo => combo;
+        public FishingRod Rod => rod;
+        public CannonBooster Cannon => cannon;
+        public FishJar Jar => jar;
 
         // A prefab cannot reference the scene camera, so the owner passes it in.
         public void Initialize(Camera sceneCamera)

@@ -27,6 +27,7 @@ namespace FishSort
         // x, y, collider radius of bubbles already placed in this build.
         private readonly List<Vector3> placed = new List<Vector3>();
         private ContactFilter2D pickFilter;
+        private float nextSettleTime;
 
         public int TotalFish => allFish.Count;
         public float FieldTopY => fieldTopPoint.position.y;
@@ -69,28 +70,51 @@ namespace FishSort
                 placed.Add(new Vector3(x, y, radius));
                 bubble.TF.SetParent(bubbleRoot, true);
                 bubble.Setup(new Vector2(x, y), diameter, data[i].iceTaps);
-                bool frozen = data[i].iceTaps > 0;
-                for (int k = 0; k < fishInBubble; k++)
-                {
-                    int typeId = data[i].fishTypes[k];
-                    Fish fish = HBPool.Spawn<Fish>(PoolType.Fish, bubble.TF.position, Quaternion.identity);
-                    fish.Setup(typeId, catalog.GetSprite(typeId), bubble, frozen);
-                    bubble.AddFish(fish, k, fishInBubble, RandomRange(rng, config.fishRotationRange));
-                    allFish.Add(fish);
-                    fishByCollider[fish.HitCollider] = fish;
-                }
-
+                FillBubble(bubble, data[i].fishTypes, data[i].iceTaps > 0, rng);
                 bubbles.Add(bubble);
             }
 
             // Let the real simulation play the opening fall while the level is visible.
             for (int i = 0; i < bubbles.Count; i++)
             {
-                bubbles[i].SetSettleTarget(floorPoint.position);
                 bubbles[i].BeginEntryDrop();
             }
 
             Physics2D.SyncTransforms();
+        }
+
+        // Puts one fish of each given type inside the bubble (fish sprites come from the catalog).
+        private void FillBubble(Bubble bubble, IReadOnlyList<int> fishTypes, bool frozen, System.Random rng)
+        {
+            for (int k = 0; k < fishTypes.Count; k++)
+            {
+                int typeId = fishTypes[k];
+                Fish fish = HBPool.Spawn<Fish>(PoolType.Fish, bubble.TF.position, Quaternion.identity);
+                fish.Setup(typeId, catalog.GetSprite(typeId), bubble, frozen);
+                bubble.AddFish(fish, k, fishTypes.Count, RandomRange(rng, config.fishRotationRange));
+                allFish.Add(fish);
+                fishByCollider[fish.HitCollider] = fish;
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            if (bubbles.Count == 0 || Time.fixedTime < nextSettleTime) return;
+            nextSettleTime = Time.fixedTime + config.bubbleSettleRefreshInterval;
+            placed.Clear();
+            for (int i = 0; i < bubbles.Count; i++)
+            {
+                Bounds bounds = bubbles[i].BodyCollider.bounds;
+                placed.Add(new Vector3(bounds.center.x, bounds.center.y, Mathf.Max(bounds.extents.x, bounds.extents.y)));
+            }
+            for (int i = 0; i < bubbles.Count; i++)
+            {
+                Bubble bubble = bubbles[i];
+                if (!bubble.CanSettle) continue;
+                bubble.SetSettleTarget(BubbleSettlePlanner.FindTarget(placed, i, floorPoint.position.y,
+                    config.fieldHalfWidth, config.bubbleSettleSearchDistance, config.bubbleSettleMinDrop,
+                    bubble.SettleTargetX));
+            }
         }
 
         public void Clear()
@@ -98,6 +122,8 @@ namespace FishSort
             bubbles.Clear();
             allFish.Clear();
             fishByCollider.Clear();
+            placed.Clear();
+            nextSettleTime = 0f;
         }
 
         // Nearest selectable fish centre to the point, among fish whose hit circle covers it.
@@ -134,11 +160,22 @@ namespace FishSort
         // Called when the player picks a fish: shrink its bubble or pop it.
         public void RemoveFish(Fish fish)
         {
+            RemoveFish(fish, true);
+        }
+
+        // crackNeighbourIce = false when the fish was not picked by the player (the jar sending its fish to a tank).
+        public void RemoveFish(Fish fish, bool crackNeighbourIce)
+        {
             Bubble bubble = fish.Owner;
-            CrackIce(bubble);
+            if (crackNeighbourIce)
+            {
+                CrackIce(bubble);
+            }
+
             fishByCollider.Remove(fish.HitCollider);
             allFish.Remove(fish);
             bubble.RemoveFish(fish);
+            nextSettleTime = 0f;
             if (bubble.FishCount == 0)
             {
                 bubbles.Remove(bubble);
@@ -161,10 +198,47 @@ namespace FishSort
                 // Resting physics contacts can retain a tiny positive separation.
                 if (distance.isValid && distance.distance <= contactTolerance)
                 {
-                    bubble.CrackIce();
+                    // Every tap sparkles with a few shards; the last one shatters the ice with a shockwave.
+                    // Bubble root scale = its diameter, so the effect fits the bubble.
+                    bool melted = bubble.CrackIce();
+                    ParticlePool.Play(melted ? ParticleType.IceBreak : ParticleType.IceCrack,
+                        bubble.TF.position, Quaternion.identity, bubble.TF.localScale.x);
                     SoundManager.Ins.PlayFx(FxID.IceCrack);
                 }
             }
+        }
+
+        // A selectable fish of the type that is not in the skip list, the one lowest in the field
+        // (bubbles are fished bottom to top, visible or not), or null if none.
+        public Fish FindLowestFish(int typeId, IReadOnlyList<Fish> skip)
+        {
+            Fish best = null;
+            for (int i = 0; i < bubbles.Count; i++)
+            {
+                IReadOnlyList<Fish> fishes = bubbles[i].Fishes;
+                for (int k = 0; k < fishes.Count; k++)
+                {
+                    Fish fish = fishes[k];
+                    bool isBetter = best == null || fish.TF.position.y < best.TF.position.y;
+                    if (fish.TypeId == typeId && fish.IsSelectable && isBetter && !Contains(skip, fish))
+                    {
+                        best = fish;
+                    }
+                }
+            }
+
+            return best;
+        }
+
+        private static bool Contains(IReadOnlyList<Fish> list, Fish fish)
+        {
+            bool found = false;
+            for (int i = 0; i < list.Count && !found; i++)
+            {
+                found = list[i] == fish;
+            }
+
+            return found;
         }
 
         public Fish FirstSelectableFish()

@@ -48,10 +48,13 @@ namespace FishSort
         public float bubbleGravityScale = 1f;
         public float bubbleWaterDamping = 0.5f;
         [Header("Settling (bubbles slide into gaps after landing)")]
-        [Tooltip("Acceleration towards the bottom centre while nearly at rest. Keep small (gravity is 9.81).")]
-        public float bubbleSettlePull = 0.6f;
-        [Tooltip("The pull only acts while the bubble moves slower than this.")]
-        public float bubbleSettleMaxSpeed = 0.5f;
+        [Tooltip("Maximum sideways acceleration when steering into a reachable lower gap.")]
+        public float bubbleSettlePull = 1.8f;
+        [Tooltip("Maximum assisted sideways speed; gravity still controls falling.")]
+        public float bubbleSettleMaxSpeed = 0.65f;
+        public float bubbleSettleSearchDistance = 1.4f;
+        public float bubbleSettleMinDrop = 0.08f;
+        public float bubbleSettleRefreshInterval = 0.16f;
         public Color frozenFishTint = new Color(0.8f, 0.9f, 1f, 1f);
 
         [Header("Underwater idle motion")]
@@ -98,6 +101,41 @@ namespace FishSort
         public float tankDropDuration = 0.3f;
         public float badgePunchScale = 1.18f;
         public float badgePunchDuration = 0.22f;
+
+        [Header("Fishing rod booster")]
+        [Tooltip("The hook comes straight down to the gathering point.")]
+        public float rodDropDuration = 0.45f;
+        [Tooltip("Time for each fish to fly from its bubble to the hook.")]
+        public float rodGatherDuration = 0.5f;
+        [Tooltip("Delay between one fish and the next leaving for the hook.")]
+        public float rodGatherStagger = 0.08f;
+        public float rodHookPause = 0.15f;
+        [Tooltip("Lifting the hook with the fish up to the tank.")]
+        public float rodPullDuration = 0.4f;
+        [Tooltip("The fish dangle above the tank this long before dropping in.")]
+        public float rodHoverDuration = 0.5f;
+        public float rodRetractDuration = 0.3f;
+        [Tooltip("How high above the water the fish hang before they drop into the tank.")]
+        public float rodReleaseHeight = 0.9f;
+        [Tooltip("The line is tied this far above the top of the screen.")]
+        public float rodAnchorMargin = 0.6f;
+
+        [Header("Cannon booster")]
+        [Tooltip("The cannon rests this far to the left of the first tray slot.")]
+        public float cannonRestOffset = 1f;
+        public float cannonEnterDuration = 0.35f;
+        [Tooltip("Time the blast takes to sweep along the tray.")]
+        public float cannonBlastDuration = 0.3f;
+        public float cannonRetreatDuration = 0.3f;
+        [Tooltip("Width of the glass dome. Where it stands is the FishJar object in GameplayWorld.prefab: drag it.")]
+        public float cannonJarDiameter = 0.8f;
+        [Tooltip("The cannon body rests this far below the tray row so its muzzle lines up with the tray.")]
+        public float cannonRestDrop = 0.17f;
+        [Tooltip("Time between one fish and the next entering the jar (the counter ticks up).")]
+        public float cannonJarTick = 0.09f;
+        [Tooltip("Camera shake when the cannon fires.")]
+        public float cannonShakeAmount = 0.08f;
+        public float cannonShakeDuration = 0.18f;
 
         [Header("Ice")]
         public float icePunchScale = 1.3f;

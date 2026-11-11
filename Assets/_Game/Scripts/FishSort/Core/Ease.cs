@@ -14,6 +14,18 @@ namespace FishSort
             return t < HALF ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) * HALF;
         }
 
+        // Gentle start and finish with no flat spot in between.
+        public static float InOutSine(float t)
+        {
+            return (1f - Mathf.Cos(t * Mathf.PI)) * HALF;
+        }
+
+        public static float OutCubic(float t)
+        {
+            float u = 1f - t;
+            return 1f - u * u * u;
+        }
+
         public static float OutQuad(float t)
         {
             return 1f - (1f - t) * (1f - t);

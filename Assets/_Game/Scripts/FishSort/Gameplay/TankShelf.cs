@@ -80,6 +80,14 @@ namespace FishSort
             }
         }
 
+        public int SlotCount => currentGoals.Length;
+
+        // The goal currently open in a slot (null when empty); it may be full or still animating.
+        public TankGoal GoalAt(int slot)
+        {
+            return currentGoals[slot];
+        }
+
         public TankGoal FindGoal(int typeId)
         {
             TankGoal result = null;

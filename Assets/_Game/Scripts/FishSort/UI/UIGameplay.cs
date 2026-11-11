@@ -22,8 +22,14 @@ namespace FishSort
         [SerializeField] private Button[] boosterButtons;
         [SerializeField] private GameObject toastRoot;
         [SerializeField] private TextMeshProUGUI fishProgressText;
+        [Tooltip("The fish-count board left of the tray; hidden while the cannon takes its place.")]
+        [SerializeField] private GameObject fishCounterRoot;
 
         private const float TOAST_DURATION = 1.4f;
+        // The first booster button (rod icon) is the fishing rod.
+        private const int ROD_BUTTON_INDEX = 0;
+        // The second booster button (cannon icon) is the cannon.
+        private const int CANNON_BUTTON_INDEX = 1;
 
         private bool isWarningOn;
         private Coroutine toastRoutine;
@@ -33,7 +39,7 @@ namespace FishSort
             settingsButton.onClick.AddListener(OnSettingsClicked);
             for (int i = 0; i < boosterButtons.Length; i++)
             {
-                boosterButtons[i].onClick.AddListener(OnBoosterClicked);
+                boosterButtons[i].onClick.AddListener(BoosterListener(i));
             }
         }
 
@@ -63,6 +69,11 @@ namespace FishSort
         public void SetFishProgress(int placed, int total)
         {
             fishProgressText.text = string.Format(FishSortConst.FORMAT_PROGRESS, placed, total);
+        }
+
+        public void SetFishCounterVisible(bool isVisible)
+        {
+            fishCounterRoot.SetActive(isVisible);
         }
 
         public void SetWarning(bool isOn)
@@ -101,7 +112,36 @@ namespace FishSort
             UIManager.Ins.OpenUI<UISettings>().SetInGame(true);
         }
 
-        //TODO: replace with real booster logic once boosters are designed.
+        private UnityEngine.Events.UnityAction BoosterListener(int index)
+        {
+            UnityEngine.Events.UnityAction listener = OnBoosterClicked;
+            if (index == ROD_BUTTON_INDEX)
+            {
+                listener = OnRodClicked;
+            }
+            else if (index == CANNON_BUTTON_INDEX)
+            {
+                listener = OnCannonClicked;
+            }
+
+            return listener;
+        }
+
+        //TODO: the cannon is free for now; add stock / the 600-coin purchase popup once a coin system exists.
+        private void OnCannonClicked()
+        {
+            SoundManager.Ins.PlayFx(FxID.Button);
+            GameplayController.Ins.TryUseCannon();
+        }
+
+        //TODO: the rod is free for now; add stock / the 500-coin purchase popup once a coin system exists.
+        private void OnRodClicked()
+        {
+            SoundManager.Ins.PlayFx(FxID.Button);
+            GameplayController.Ins.TryUseRod();
+        }
+
+        //TODO: replace with real booster logic for the other boosters once they are designed.
         private void OnBoosterClicked()
         {
             SoundManager.Ins.PlayFx(FxID.Button);

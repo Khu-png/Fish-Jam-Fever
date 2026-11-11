@@ -29,7 +29,10 @@ namespace FishSort
         [Tooltip("Small twinkling stars while the fish is held/selected (child HoldSparkles).")]
         [SerializeField] private ParticleSystem holdSparkles;
         [SerializeField] private CircleCollider2D hitCollider;
+        [Tooltip("Bubble stream left behind while flying.")]
         [SerializeField] private ParticleSystem flightTrail;
+        [Tooltip("Twinkling stars left behind while flying (child TrailSparkles).")]
+        [SerializeField] private ParticleSystem trailSparkles;
         [SerializeField] private FishSortConfig config;
 
         private Coroutine scaleRoutine;
@@ -49,7 +52,7 @@ namespace FishSort
         public Bubble Owner { get; private set; }
         public bool IsFrozen { get; private set; }
         public bool IsFlying { get; private set; }
-        public bool IsSelectable => Owner != null && !IsFrozen;
+        public bool IsSelectable => (Owner != null || IsInJar) && !IsFrozen;
         public Collider2D HitCollider => hitCollider;
 
         private void Awake()
@@ -70,7 +73,7 @@ namespace FishSort
                 {
                     BobInContainer();
                 }
-                else if (idleInBubble && Owner != null && !IsFrozen)
+                else if (idleInBubble && (Owner != null || IsInJar) && !IsFrozen)
                 {
                     SwimInBubble();
                 }
@@ -111,8 +114,11 @@ namespace FishSort
             StopIdleMotion();
             TypeId = typeId;
             Owner = owner;
+            IsInJar = false;
             IsFlying = false;
             bodyRenderer.sprite = sprite;
+            bodyRenderer.flipX = false;
+            bodyRenderer.enabled = true;
             bodyRenderer.sharedMaterial = bubbleMaterial;
             glowRenderer.sharedMaterial = outlineBubbleMaterial;
             holdSparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -157,7 +163,7 @@ namespace FishSort
                 holdSparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             }
 
-            bodyRenderer.sortingOrder = isOn ? FishSortConst.SORT_FISH_HIGHLIGHT : FishSortConst.SORT_FISH_IN_BUBBLE;
+            bodyRenderer.sortingOrder = isOn ? LitOrder : RestOrder;
             glowRenderer.sortingOrder = bodyRenderer.sortingOrder + FishSortConst.SORT_GLOW_OFFSET;
             float targetWidth = restWidth * (isOn ? config.highlightScale : 1f);
             StopScale();
@@ -169,6 +175,7 @@ namespace FishSort
         private void ShowOutline(Color color)
         {
             glowRenderer.sprite = bodyRenderer.sprite;
+            glowRenderer.flipX = bodyRenderer.flipX;
             glowTransform.localPosition = bodyRestPosition;
             glowTransform.localScale = bodyRestScale;
             glowRenderer.color = color;
@@ -181,6 +188,7 @@ namespace FishSort
             StopScale();
             StopIdleMotion();
             Owner = null;
+            IsInJar = false;
             hitCollider.enabled = false;
             glowRenderer.enabled = false;
             TF.SetParent(flightRoot, true);
@@ -251,10 +259,13 @@ namespace FishSort
             scaleRoutine = null;
         }
 
+        // The trail is a stream of bubbles plus small twinkling stars, both emitting by distance travelled.
         private void SetTrail(bool isOn)
         {
-            ParticleSystem.EmissionModule emission = flightTrail.emission;
-            emission.enabled = isOn;
+            ParticleSystem.EmissionModule bubbleEmission = flightTrail.emission;
+            bubbleEmission.enabled = isOn;
+            ParticleSystem.EmissionModule sparkleEmission = trailSparkles.emission;
+            sparkleEmission.enabled = isOn;
         }
 
         private Color HighlightColor(FishHighlight highlight)

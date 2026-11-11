@@ -5,7 +5,7 @@ using UnityEngine;
 namespace FishSort
 {
     // Core rules: each pick goes to a matching tank or to the tray; full tray = lose, all fish placed = win.
-    public sealed class GameplayController : Singleton<GameplayController>
+    public sealed partial class GameplayController : Singleton<GameplayController>
     {
         [SerializeField] private FishSortConfig config;
         [SerializeField] private Camera gameCamera;
@@ -26,7 +26,7 @@ namespace FishSort
         private bool hasPickedOnce;
         private bool isResolvingTray;
 
-        public bool IsInputEnabled => !isOver && !isResolvingTray && GameManager.IsState(GameState.GamePlay);
+        public bool IsInputEnabled => !isOver && !isResolvingTray && !isBoosterBusy && GameManager.IsState(GameState.GamePlay);
         public float Progress => totalFish > 0 ? (float)collectedFish / totalFish : 0f;
 
         void Awake()
@@ -44,6 +44,9 @@ namespace FishSort
             shelf = world.Shelf;
             tray = world.Tray;
             combo = world.Combo;
+            rod = world.Rod;
+            cannon = world.Cannon;
+            fishJar = world.Jar;
             shelf.GoalCreated += HandleGoalCreated;
             shelf.FishPlaced += HandleFishPlaced;
         }
@@ -88,6 +91,8 @@ namespace FishSort
             StopAllCoroutines();
             isOver = true;
             isResolvingTray = false;
+            StopRod();
+            StopCannon();
             SetTrayWarning(false);
             HBPool.CollectAll();
             field.Clear();
@@ -98,7 +103,7 @@ namespace FishSort
 
         public void PickFish(Fish fish)
         {
-            if (isOver || isResolvingTray || !fish.IsSelectable)
+            if (isOver || isResolvingTray || isBoosterBusy || !fish.IsSelectable)
             {
                 return;
             }
@@ -106,7 +111,7 @@ namespace FishSort
             hasPickedOnce = true;
             ParticlePool.Play(ParticleType.FishPick, fish.TF.position, Quaternion.identity);
             int typeId = fish.TypeId;
-            field.RemoveFish(fish);
+            TakeFishOut(fish);
             fish.Detach(flightRoot);
 
             TankGoal goal = shelf.FindGoal(typeId);
@@ -126,8 +131,13 @@ namespace FishSort
 
         private void SendToTank(Fish fish, TankGoal goal)
         {
+            FlyToTank(fish, goal, shelf.Reserve(goal));
+        }
+
+        // The icon spot must already be reserved (a goal can fill up while a fish is still on its way).
+        private void FlyToTank(Fish fish, TankGoal goal, int iconIndex)
+        {
             collectedFish++;
-            int iconIndex = shelf.Reserve(goal);
             fish.FlyIntoTank(() => shelf.GetIconPosition(goal, iconIndex),
                 () => shelf.GetWaterPosition(goal, iconIndex), config.flyToTankDuration,
                 fish.ScaleToFit(config.tankIconWidth, config.tankFishHeight),
@@ -153,6 +163,8 @@ namespace FishSort
         // Replacement tank finished entering: matching tray fish can now fly up.
         private void HandleGoalCreated(TankGoal goal)
         {
+            // The jar has priority over the tray: its fish fill the new tank first, the tray gets what is left.
+            PullJarFish(goal);
             List<Fish> spilled = new List<Fish>(config.tankCapacity);
             tray.TakeMatching(goal.TypeId, config.tankCapacity - goal.Reserved, spilled);
             for (int i = 0; i < spilled.Count; i++)

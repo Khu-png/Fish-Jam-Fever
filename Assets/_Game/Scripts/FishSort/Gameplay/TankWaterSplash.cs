@@ -8,6 +8,7 @@ namespace FishSort
         [SerializeField] private Texture2D splashSheet;
         [SerializeField] private Texture2D dropletTexture;
         [SerializeField] private Sprite bubbleSprite;
+        [SerializeField] private WaterSurface waterSurface;
         [SerializeField] private float surfaceHeight = 0.35f;
         [SerializeField] private float duration = 0.48f;
         [SerializeField] private float splashWidth = 0.62f;
@@ -76,6 +77,7 @@ namespace FishSort
 
         public void Play(Vector3 waterPosition)
         {
+            waterSurface.React(waterPosition);
             ParticlePool.Play(ParticleType.TankWaterBubbles, waterPosition, Quaternion.identity);
             Burst burst = bursts[nextBurst];
             nextBurst = (nextBurst + 1) % bursts.Length;

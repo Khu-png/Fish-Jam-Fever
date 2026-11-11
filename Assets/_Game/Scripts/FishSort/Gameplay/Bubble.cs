@@ -35,6 +35,7 @@ namespace FishSort
         private bool isPopping;
         private bool isSettled;
         private Vector2 settleTarget;
+        private bool hasSettleTarget;
         private Vector3 shellRestScale;
         private Quaternion shellRestRotation;
 
@@ -45,16 +46,13 @@ namespace FishSort
             waterPhase = Mathf.Repeat(GetInstanceID() * 0.754878f, Mathf.PI * 2f);
         }
 
-        // A very gentle pull towards the bottom centre while the bubble is nearly at rest, so the pile
-        // keeps sliding into gaps. Only after the opening fall, and it fades out as the bubble moves.
+        // The field selects a real downhill gap. Apply only a bounded horizontal force to reach it.
         private void FixedUpdate()
         {
-            float maxSpeedSqr = config.bubbleSettleMaxSpeed * config.bubbleSettleMaxSpeed;
-            if (isSettled && !isPopping && body.simulated && body.linearVelocity.sqrMagnitude < maxSpeedSqr)
-            {
-                Vector2 towardTarget = settleTarget - body.position;
-                body.AddForce(towardTarget.normalized * (config.bubbleSettlePull * body.mass));
-            }
+            if (!CanSettle || !hasSettleTarget) return;
+            float acceleration = BubbleSettlePlanner.SteeringAcceleration(settleTarget.x - body.position.x,
+                body.linearVelocity.x, body.linearVelocity.y, config.bubbleSettleMaxSpeed, config.bubbleSettlePull);
+            body.AddForce(Vector2.right * (acceleration * body.mass));
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -82,6 +80,8 @@ namespace FishSort
 
         public bool IsFrozen => ice.IsActive;
         public Collider2D BodyCollider => bodyCollider;
+        public bool CanSettle => isSettled && !isPopping && body.simulated;
+        public float SettleTargetX => hasSettleTarget ? settleTarget.x : body.position.x;
         // Collider radius for a bubble of diameter 1 (the root scale equals the diameter).
         public float UnitColliderRadius => bodyCollider.radius;
         public int FishCount => fishes.Count;
@@ -94,6 +94,7 @@ namespace FishSort
             initialCount = 0;
             isPopping = false;
             isSettled = false;
+            hasSettleTarget = false;
             lastDisturbance = float.NegativeInfinity;
             shellRenderer.transform.localScale = shellRestScale;
             shellRenderer.transform.localRotation = shellRestRotation;
@@ -121,6 +122,8 @@ namespace FishSort
         public void SetSettleTarget(Vector2 target)
         {
             settleTarget = target;
+            hasSettleTarget = body.position.y - target.y >= config.bubbleSettleMinDrop;
+            if (CanSettle && hasSettleTarget) body.WakeUp();
         }
 
         public void BeginEntryDrop()
@@ -151,6 +154,7 @@ namespace FishSort
         public void RemoveFish(Fish fish)
         {
             fishes.Remove(fish);
+            body.WakeUp();
             lastDisturbance = Time.time;
             float fill = initialCount > 0 ? (float)fishes.Count / initialCount : 0f;
             targetDiameter = fullDiameter * Mathf.Lerp(config.bubbleMinScale, 1f, fill);

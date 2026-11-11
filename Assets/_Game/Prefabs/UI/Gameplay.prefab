@@ -2310,6 +2310,7 @@ MonoBehaviour:
   - {fileID: 4202134772879304192}
   toastRoot: {fileID: 6181197213907521536}
   fishProgressText: {fileID: 9100000000000000024}
+  fishCounterRoot: {fileID: 9100000000000000001}
 --- !u!1 &7398152579062858752
 GameObject:
   m_ObjectHideFlags: 0

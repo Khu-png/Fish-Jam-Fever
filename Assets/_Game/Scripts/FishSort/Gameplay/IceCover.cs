@@ -10,6 +10,8 @@ namespace FishSort
         [SerializeField] private SpriteRenderer numberRenderer;
         [SerializeField] private Transform numberTransform;
         [SerializeField] private Sprite[] numberSprites;
+        [Tooltip("Twinkling stars on the ice (child IceSparkles); they stop when the ice melts.")]
+        [SerializeField] private ParticleSystem sparkles;
         [SerializeField] private FishSortConfig config;
 
         private Transform cachedTransform;
@@ -41,6 +43,10 @@ namespace FishSort
             numberRenderer.color = Color.white;
             numberTransform.localScale = Vector3.one;
             RefreshNumber();
+            if (taps > 0)
+            {
+                sparkles.Play();
+            }
         }
 
         // Returns true when this tap melted the ice.
@@ -53,6 +59,7 @@ namespace FishSort
                 melted = remainingTaps == 0;
                 if (melted)
                 {
+                    sparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                     StartCoroutine(MeltRoutine());
                 }
                 else
