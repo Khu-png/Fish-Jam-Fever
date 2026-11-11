@@ -1,0 +1,182 @@
+[
+{
+"name": "kelp_L_back",
+"file": "plant_41.png",
+"x": 200,
+"y": 711,
+"w": 120,
+"h": 349,
+"kind": "w"
+},
+{
+"name": "kelp_L1",
+"file": "plant_41.png",
+"x": 255,
+"y": 649,
+"w": 150,
+"h": 436,
+"kind": "w"
+},
+{
+"name": "kelp_L2",
+"file": "plant_35.png",
+"x": 335,
+"y": 812,
+"w": 130,
+"h": 268,
+"kind": "w"
+},
+{
+"name": "kelp_L3",
+"file": "plant_45.png",
+"x": 165,
+"y": 911,
+"w": 130,
+"h": 164,
+"kind": "w"
+},
+{
+"name": "kelp_R_back",
+"file": "plant_41.png",
+"x": 765,
+"y": 710,
+"w": 110,
+"h": 320,
+"kind": "w"
+},
+{
+"name": "kelp_R1",
+"file": "plant_41.png",
+"x": 690,
+"y": 648,
+"w": 140,
+"h": 407,
+"kind": "w"
+},
+{
+"name": "kelp_R2",
+"file": "plant_35.png",
+"x": 790,
+"y": 808,
+"w": 120,
+"h": 247,
+"kind": "w"
+},
+{
+"name": "kelp_far_L",
+"file": "plant_35.png",
+"x": 25,
+"y": 676,
+"w": 70,
+"h": 144,
+"kind": "w"
+},
+{
+"name": "kelp_mid_L",
+"file": "plant_41.png",
+"x": 118,
+"y": 788,
+"w": 85,
+"h": 247,
+"kind": "w"
+},
+{
+"name": "kelp_mid_R",
+"file": "plant_35.png",
+"x": 940,
+"y": 861,
+"w": 70,
+"h": 144,
+"kind": "w"
+},
+{
+"name": "kelp_mid_R2",
+"file": "plant_41.png",
+"x": 890,
+"y": 867,
+"w": 80,
+"h": 233,
+"kind": "w"
+},
+{
+"name": "kelp_low_L",
+"file": "plant_41.png",
+"x": 140,
+"y": 1020,
+"w": 110,
+"h": 320,
+"kind": "w"
+},
+{
+"name": "kelp_edge_L",
+"file": "plant_41.png",
+"x": -20,
+"y": 1382,
+"w": 80,
+"h": 233,
+"kind": "w"
+},
+{
+"name": "kelp_edge_R",
+"file": "plant_45.png",
+"x": 1015,
+"y": 1819,
+"w": 80,
+"h": 101,
+"kind": "w"
+},
+{
+"name": "coral_edge_L",
+"file": "plant_72.png",
+"x": -10,
+"y": 810,
+"w": 110,
+"h": 120,
+"kind": "c"
+},
+{
+"name": "coral_L1",
+"file": "plant_19.png",
+"x": 75,
+"y": 895,
+"w": 230,
+"h": 230,
+"kind": "c"
+},
+{
+"name": "coral_L2",
+"file": "plant_28.png",
+"x": 215,
+"y": 954,
+"w": 150,
+"h": 161,
+"kind": "c"
+},
+{
+"name": "coral_R1",
+"file": "plant_68.png",
+"x": 625,
+"y": 963,
+"w": 150,
+"h": 137,
+"kind": "c"
+},
+{
+"name": "coral_R2",
+"file": "plant_28.png",
+"x": 795,
+"y": 983,
+"w": 170,
+"h": 182,
+"kind": "c"
+},
+{
+"name": "coral_R_bottom",
+"file": "plant_19.png",
+"x": 945,
+"y": 1650,
+"w": 180,
+"h": 180,
+"kind": "c"
+}
+]

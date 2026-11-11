@@ -73,3 +73,14 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# ---- Fish Jam Fever: file tam / tai lieu khong can dua len git ----
+# Anh chup man hinh luc test (Unity MCP)
+/[Aa]ssets/[Ss]creenshots/
+/[Aa]ssets/[Ss]creenshots.meta
+# Anh chup Unity va bang tong hop asset dung de chon hinh
+/Docs/unity_shots/
+/Docs/asset_sheets/
+# Anh kiem tra tam trong mockup (bat dau bang dau gach duoi)
+/Docs/mockups/_*
+/Docs/mockups/__pycache__/
