@@ -43,6 +43,11 @@ namespace FishSort
             Relayout();
         }
 
+        public void OnWaterEntry(Fish fish)
+        {
+            ParticlePool.Play(ParticleType.TrayWaterBubbles, fish.TF.position, Quaternion.identity);
+        }
+
         // Removes up to maxCount fish of the type (in tray order) into output.
         public void TakeMatching(int typeId, int maxCount, List<Fish> output)
         {

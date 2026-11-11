@@ -76,6 +76,7 @@ namespace FishSort
 
         public void Play(Vector3 waterPosition)
         {
+            ParticlePool.Play(ParticleType.TankWaterBubbles, waterPosition, Quaternion.identity);
             Burst burst = bursts[nextBurst];
             nextBurst = (nextBurst + 1) % bursts.Length;
             burst.root.position = waterPosition;

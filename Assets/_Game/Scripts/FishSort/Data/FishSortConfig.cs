@@ -29,11 +29,29 @@ namespace FishSort
         public float bubbleMinScale = 0.85f;
         public float bubbleShrinkSpeed = 10f;
         public float bubblePopScale = 1.3f;
-        public float bubblePopDuration = 0.25f;
+        public float bubblePopDuration = 0.34f;
         public float fieldHalfWidth = 2.7f;
         public float spawnJitter = 0.12f;
         public float fishRotationRange = 9f;
-        public int presettleSteps = 360;
+        [Header("Opening bubble fall (gentle glide down, soft landing)")]
+        public float bubbleEntryDropHeight = 4f;
+        public float bubbleEntryGravityScale = 0.5f;
+        [Tooltip("Higher = slower, steadier fall. Max fall speed ~ 9.81 * gravityScale / damping.")]
+        public float bubbleEntryDamping = 2f;
+        [Tooltip("Earliest time the bubble may switch to normal physics.")]
+        public float bubbleEntryDuration = 1.5f;
+        [Tooltip("Normal physics starts once the bubble moves slower than this (it has landed).")]
+        public float bubbleEntrySettleSpeed = 0.2f;
+        [Tooltip("Safety limit so a bubble never stays in the gentle fall forever.")]
+        public float bubbleEntryMaxDuration = 6f;
+        [Header("Bubble physics after the opening fall (normal physics)")]
+        public float bubbleGravityScale = 1f;
+        public float bubbleWaterDamping = 0.5f;
+        [Header("Settling (bubbles slide into gaps after landing)")]
+        [Tooltip("Acceleration towards the bottom centre while nearly at rest. Keep small (gravity is 9.81).")]
+        public float bubbleSettlePull = 0.6f;
+        [Tooltip("The pull only acts while the bubble moves slower than this.")]
+        public float bubbleSettleMaxSpeed = 0.5f;
         public Color frozenFishTint = new Color(0.8f, 0.9f, 1f, 1f);
 
         [Header("Underwater idle motion")]
@@ -43,9 +61,6 @@ namespace FishSort
         public float fishSwimSpeed = 1.6f;
         public float fishIdleTilt = 3f;
         public float fishBreathing = 0.018f;
-        public float bubbleGravityScale = 0.25f;
-        public float bubbleWaterDamping = 0.9f;
-        public float bubbleCurrentForce = 0.12f;
         public float bubbleIdleStretch = 0.012f;
         public float bubbleReactionStretch = 0.045f;
 
@@ -55,18 +70,21 @@ namespace FishSort
         public float probeOffset = 0.5f;
         public float highlightScale = 1.18f;
         public float highlightTweenDuration = 0.08f;
-        public Color highlightColor = new Color(1f, 0.82f, 0f, 1f);
+        public Color highlightColor = Color.white;
         public Color goodHintColor = new Color(0.24f, 0.81f, 0.35f, 1f);
         public Color badHintColor = new Color(1f, 0.54f, 0.16f, 1f);
 
         [Header("Flight")]
-        public float flyToTankDuration = 0.48f;
-        public float flyToTrayDuration = 0.42f;
+        public float pickAnticipationDuration = 0.1f;
+        public float pickPopScale = 1.16f;
+        public float flyToTankDuration = 0.68f;
+        public float flyToTrayDuration = 0.56f;
         public float flySideOffset = 0.5f;
         public float flyArcRatio = 0.55f;
         public float flyArcLift = 0.3f;
         public float flyTiltDegrees = 12f;
-        public float tankIconWidth = 0.39f;
+        public float tankIconWidth = 0.54f;
+        public float tankFishHeight = 0.4f;
         public float trayFishWidth = 0.32f;
         public float trayFishHeight = 0.25f;
         public float traySlideDuration = 0.2f;
@@ -78,8 +96,8 @@ namespace FishSort
         public float tankLeaveScale = 0.15f;
         public float tankDropHeight = 1.3f;
         public float tankDropDuration = 0.3f;
-        public float badgePunchScale = 1.25f;
-        public float badgePunchDuration = 0.3f;
+        public float badgePunchScale = 1.18f;
+        public float badgePunchDuration = 0.22f;
 
         [Header("Ice")]
         public float icePunchScale = 1.3f;

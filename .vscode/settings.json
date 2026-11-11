@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Fish-Jam-Fever.slnx"
+    "dotnet.defaultSolution": "Fish Jam Fever.slnx"
 }

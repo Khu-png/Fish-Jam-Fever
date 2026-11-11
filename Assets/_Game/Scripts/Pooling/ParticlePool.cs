@@ -1,4 +1,4 @@
-﻿
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -94,7 +94,7 @@ public static class ParticlePool
         }
 
         // Spawn an object from our pool
-        public void Play(Vector3 pos, Quaternion rot)
+        public void Play(Vector3 pos, Quaternion rot, float scale)
         {
             index = index + 1 < inactive.Count ? index + 1 : 0;
 
@@ -108,6 +108,8 @@ public static class ParticlePool
             }
 
             obj.transform.SetPositionAndRotation( pos, rot);
+            // Pooled instances are reused, so the scale is always written (1 = prefab size).
+            obj.transform.localScale = Vector3.one * scale;
             obj.Play();
         }
 
@@ -144,6 +146,12 @@ public static class ParticlePool
 
     static public void Play(ParticleSystem prefab, Vector3 pos, Quaternion rot)
     {
+        Play(prefab, pos, rot, 1f);
+    }
+
+    // scale: uniform size multiplier (the prefab must use Scaling Mode = Hierarchy to follow it).
+    static public void Play(ParticleSystem prefab, Vector3 pos, Quaternion rot, float scale)
+    {
         if (!pools.ContainsKey(prefab.GetInstanceID()))
         {
             Transform newRoot = new GameObject("VFX_" + prefab.name).transform;
@@ -151,12 +159,17 @@ public static class ParticlePool
             pools[prefab.GetInstanceID()] = new Pool(prefab, 10, newRoot);
         }
 
-        pools[prefab.GetInstanceID()].Play(pos, rot);
+        pools[prefab.GetInstanceID()].Play(pos, rot, scale);
     }
 
     static public void Play(ParticleType particleType, Vector3 pos, Quaternion rot)
     {
-        Play(shortcuts[particleType], pos, rot);
+        Play(shortcuts[particleType], pos, rot, 1f);
+    }
+
+    static public void Play(ParticleType particleType, Vector3 pos, Quaternion rot, float scale)
+    {
+        Play(shortcuts[particleType], pos, rot, scale);
     }
 
     static public void Release(ParticleSystem prefab)

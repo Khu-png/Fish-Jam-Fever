@@ -40,12 +40,21 @@ Kéo vào script `Fish`: Body Renderer, Glow Renderer, Hit Collider, Flight Trai
 | └ Ice | `IceCover` + SpriteRenderer | `ice`, Order 30, Mask **Visible Inside Mask**. **Giữ object Active trong prefab** |
 | &nbsp;&nbsp;└ Number | SpriteRenderer | `ice_num_3`, Order 31, Mask **Visible Inside Mask** |
 
-Kéo vào `Bubble`: Body, Shell Renderer, Ice, Config.
+
+Kéo vào `Bubble`: Body, Body Collider = CircleCollider2D trên root, Shell Renderer, Ice, Config.
 Kéo vào `IceCover`: Ice Renderer, Number Renderer, Number Transform, Number Sprites = [`ice_num_1`, `ice_num_2`, `ice_num_3`], Config.
 
-### Particle (3 prefab nhỏ)
-Mỗi prefab là ParticleSystem bắn 1 lần (Burst 8–12, không Loop, Stop Action = Disable), Renderer Order 65:
-`FX_BubblePop`, `FX_TankBurst`, `FX_FishLand`.
+Mỗi lần lấy một cá, các bong bóng băng đang chạm collider của bong bóng chứa cá đó giảm một lượt. Không xét loại cá; lấy con cuối cùng vẫn có tác dụng trước khi bong bóng nổ.
+
+### Particle
+Hiệu ứng bắn 1 lần đi qua `ParticlePool` (không Loop, Stop Action = None):
+`FX_BubblePop` (giọt nước + con `Sparkles`), `FX_TankBurst`, `FX_FishLand`, `FX_WaterBubbles_Tank`, `FX_WaterBubbles_Tray`.
+
+Bong bóng nhỏ nổi liên tục là ParticleSystem **Loop** (mỗi chỗ 1 component, không tạo GameObject cho từng hạt):
+`FX_AmbientBubbles_Background` (con của `Background`), `FX_AmbientBubbles_Tank` (con của mỗi `TankRoot`),
+`FX_AmbientBubbles_Tray` (con của mỗi `Tray/SlotN`). Ảnh dùng chung: material `FX_AmbientBubble` (texture `bubble_soap`).
+
+Muốn chỉnh số lượng / kích thước / tốc độ / độ đậm: sửa trực tiếp trên các prefab trong `Prefabs/FX`.
 
 ---
 
@@ -64,7 +73,8 @@ Manager
   UIManager            UIManager → Ui Resources = 5 prefab UI; Canvas Parent TF = Canvas
   PoolManager          PoolControler
                          Pool With Root: [Fish prefab, 130, root = FishPool], [Bubble prefab, 40, root = BubblePool]
-                         Particle: [BubblePop, FX_BubblePop, 10], [TankBurst, FX_TankBurst, 4], [FishLand, FX_FishLand, 6]
+                         Particle: [BubblePop, FX_BubblePop, 10], [TankBurst, FX_TankBurst, 4], [FishLand, FX_FishLand, 6],
+                                   [TankWaterBubbles, FX_WaterBubbles_Tank, 4], [TrayWaterBubbles, FX_WaterBubbles_Tray, 4]
   FishPool / BubblePool  (Empty)
 FlightRoot             (Empty, Position 0,0,0)
 TopHUD                 + ScreenEdgeAnchor (Camera, Edge Top, Offset 0)
@@ -72,7 +82,7 @@ TopHUD                 + ScreenEdgeAnchor (Camera, Edge Top, Offset 0)
   TankSlot0            TankSlotView, Local (-1.89, -1.28)
     TankRoot           (Empty)
       Glass            SpriteRenderer `tank_open`, Order 2
-      Flash            SpriteRenderer `square`, Order 4, Scale (1.08, 0.96), Color trắng alpha 0
+      Flash            SpriteRenderer `Tank_Empty`, material `TankCompletion`, Order 42, Scale (1, 1), Color trắng alpha 0
       IconPoint0/1/2   (Empty) Local (-0.30,-0.14) / (0,-0.14) / (0.30,-0.14)
     Badge              SpriteRenderer `badge`, Order 5, Local (0, -0.96)
       BadgeFish        SpriteRenderer, Order 6, Local (-0.2, 0), Scale 0.38

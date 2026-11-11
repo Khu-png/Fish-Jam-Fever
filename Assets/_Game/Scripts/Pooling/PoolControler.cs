@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -71,6 +71,9 @@ public enum ParticleType
     BubblePop = 20,
     TankBurst = 21,
     FishLand = 22,
+    TankWaterBubbles = 23,
+    TrayWaterBubbles = 24,
+    FishPick = 25,
 }
 
 public enum PoolType

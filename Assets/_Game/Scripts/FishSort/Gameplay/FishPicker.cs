@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace FishSort
 {
-    // Tap = pick immediately. Hold + drag = the fish nearest the finger glows yellow; release picks it.
+    // Tap = pick immediately. Hold + drag = the fish nearest the finger gets a white outline; release picks it.
     // Data only changes on release; while holding only visuals change (design doc 4.3).
     public sealed class FishPicker : MonoBehaviour
     {

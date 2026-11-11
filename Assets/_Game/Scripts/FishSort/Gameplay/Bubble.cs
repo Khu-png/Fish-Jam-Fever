@@ -18,8 +18,10 @@ namespace FishSort
         };
 
         private const float SCALE_EPSILON = 0.001f;
+        private const float SHELL_FADE_END = 0.65f;
 
         [SerializeField] private Rigidbody2D body;
+        [SerializeField] private CircleCollider2D bodyCollider;
         [SerializeField] private SpriteRenderer shellRenderer;
         [SerializeField] private IceCover ice;
         [SerializeField] private FishSortConfig config;
@@ -31,6 +33,8 @@ namespace FishSort
         private float waterPhase;
         private float lastDisturbance = float.NegativeInfinity;
         private bool isPopping;
+        private bool isSettled;
+        private Vector2 settleTarget;
         private Vector3 shellRestScale;
         private Quaternion shellRestRotation;
 
@@ -41,12 +45,16 @@ namespace FishSort
             waterPhase = Mathf.Repeat(GetInstanceID() * 0.754878f, Mathf.PI * 2f);
         }
 
+        // A very gentle pull towards the bottom centre while the bubble is nearly at rest, so the pile
+        // keeps sliding into gaps. Only after the opening fall, and it fades out as the bubble moves.
         private void FixedUpdate()
         {
-            if (!config.animateUnderwater || isPopping || FishCount == 0 || IsFrozen || !body.simulated) return;
-            float t = Time.time * 0.65f + waterPhase;
-            Vector2 current = new Vector2(Mathf.Sin(t), Mathf.Cos(t * 0.8f) * 0.25f);
-            body.AddForce(current * (config.bubbleCurrentForce * body.mass));
+            float maxSpeedSqr = config.bubbleSettleMaxSpeed * config.bubbleSettleMaxSpeed;
+            if (isSettled && !isPopping && body.simulated && body.linearVelocity.sqrMagnitude < maxSpeedSqr)
+            {
+                Vector2 towardTarget = settleTarget - body.position;
+                body.AddForce(towardTarget.normalized * (config.bubbleSettlePull * body.mass));
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -73,6 +81,9 @@ namespace FishSort
         }
 
         public bool IsFrozen => ice.IsActive;
+        public Collider2D BodyCollider => bodyCollider;
+        // Collider radius for a bubble of diameter 1 (the root scale equals the diameter).
+        public float UnitColliderRadius => bodyCollider.radius;
         public int FishCount => fishes.Count;
         public IReadOnlyList<Fish> Fishes => fishes;
 
@@ -82,6 +93,7 @@ namespace FishSort
             fishes.Clear();
             initialCount = 0;
             isPopping = false;
+            isSettled = false;
             lastDisturbance = float.NegativeInfinity;
             shellRenderer.transform.localScale = shellRestScale;
             shellRenderer.transform.localRotation = shellRestRotation;
@@ -106,6 +118,36 @@ namespace FishSort
             initialCount++;
         }
 
+        public void SetSettleTarget(Vector2 target)
+        {
+            settleTarget = target;
+        }
+
+        public void BeginEntryDrop()
+        {
+            body.gravityScale = config.bubbleEntryGravityScale;
+            body.linearDamping = config.bubbleEntryDamping;
+            body.WakeUp();
+            StartCoroutine(EntryDropRoutine());
+        }
+
+        // Keep the gentle fall until the bubble has actually landed, so full gravity never kicks in mid-air.
+        private IEnumerator EntryDropRoutine()
+        {
+            yield return new WaitForSeconds(config.bubbleEntryDuration);
+            float settleSpeedSqr = config.bubbleEntrySettleSpeed * config.bubbleEntrySettleSpeed;
+            float elapsed = config.bubbleEntryDuration;
+            while (elapsed < config.bubbleEntryMaxDuration && body.linearVelocity.sqrMagnitude > settleSpeedSqr)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            body.gravityScale = config.bubbleGravityScale;
+            body.linearDamping = config.bubbleWaterDamping;
+            isSettled = true;
+        }
+
         public void RemoveFish(Fish fish)
         {
             fishes.Remove(fish);
@@ -125,7 +167,7 @@ namespace FishSort
             return found;
         }
 
-        // One matching pick elsewhere. Returns true when the ice melted and fish became selectable.
+        // One fish picked from a touching bubble. Returns true when the ice melts.
         public bool CrackIce()
         {
             bool melted = ice.Crack();
@@ -158,6 +200,7 @@ namespace FishSort
             }
         }
 
+        // Shell swells and fades; the droplet burst is the pooled FX_BubblePop played by BubbleField.
         private IEnumerator PopRoutine()
         {
             float startDiameter = TF.localScale.x;
@@ -169,8 +212,10 @@ namespace FishSort
             {
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsed / config.bubblePopDuration);
-                TF.localScale = Vector3.one * Mathf.Lerp(startDiameter, endDiameter, t);
-                shellRenderer.color = Color.Lerp(Color.white, clear, t);
+                float spread = Ease.OutQuad(t);
+                TF.localScale = Vector3.one * Mathf.Lerp(startDiameter, endDiameter, spread);
+                shellRenderer.color = Color.Lerp(Color.white, clear,
+                    Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0f, SHELL_FADE_END, t)));
                 yield return null;
             }
 

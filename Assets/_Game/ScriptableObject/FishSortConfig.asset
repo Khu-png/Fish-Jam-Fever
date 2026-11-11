@@ -35,11 +35,16 @@ MonoBehaviour:
   bubbleMinScale: 0.85
   bubbleShrinkSpeed: 10
   bubblePopScale: 1.3
-  bubblePopDuration: 0.25
+  bubblePopDuration: 0.34
   fieldHalfWidth: 2.7
   spawnJitter: 0.06
   fishRotationRange: 5
-  presettleSteps: 360
+  bubbleEntryDropHeight: 4
+  bubbleEntryGravityScale: 0.5
+  bubbleEntryDamping: 2
+  bubbleEntryDuration: 1.5
+  bubbleEntrySettleSpeed: 0.2
+  bubbleEntryMaxDuration: 6
   frozenFishTint: {r: 0.8, g: 0.9, b: 1, a: 1}
   animateUnderwater: 1
   fishSwimRadius: 0.018
@@ -47,36 +52,40 @@ MonoBehaviour:
   fishSwimSpeed: 1.6
   fishIdleTilt: 3
   fishBreathing: 0.018
-  bubbleGravityScale: 0.25
-  bubbleWaterDamping: 0.9
-  bubbleCurrentForce: 0.12
+  bubbleGravityScale: 1
+  bubbleWaterDamping: 0.5
+  bubbleSettlePull: 0.6
+  bubbleSettleMaxSpeed: 0.5
   bubbleIdleStretch: 0.012
   bubbleReactionStretch: 0.045
   pickRadius: 0.12
   probeOffset: 0.5
   highlightScale: 1.18
   highlightTweenDuration: 0.08
-  highlightColor: {r: 1, g: 0.82, b: 0, a: 1}
+  highlightColor: {r: 1, g: 1, b: 1, a: 1}
   goodHintColor: {r: 0.24, g: 0.81, b: 0.35, a: 1}
   badHintColor: {r: 1, g: 0.54, b: 0.16, a: 1}
-  flyToTankDuration: 0.48
-  flyToTrayDuration: 0.42
+  pickAnticipationDuration: 0.1
+  pickPopScale: 1.16
+  flyToTankDuration: 0.68
+  flyToTrayDuration: 0.56
   flySideOffset: 0.5
   flyArcRatio: 0.55
   flyArcLift: 0.3
   flyTiltDegrees: 12
-  tankIconWidth: 0.39
+  tankIconWidth: 0.54
+  tankFishHeight: 0.4
   trayFishWidth: 0.32
   trayFishHeight: 0.25
   traySlideDuration: 0.2
-  tankFlashDuration: 0.18
+  tankFlashDuration: 0.26
   tankLeaveDuration: 0.38
   tankLeaveRise: 0.6
   tankLeaveScale: 0.15
   tankDropHeight: 1.3
   tankDropDuration: 0.3
-  badgePunchScale: 1.25
-  badgePunchDuration: 0.3
+  badgePunchScale: 1.18
+  badgePunchDuration: 0.22
   icePunchScale: 1.3
   icePunchDuration: 0.25
   iceMeltDuration: 0.35

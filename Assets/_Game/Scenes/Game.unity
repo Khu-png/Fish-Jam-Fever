@@ -218,6 +218,18 @@ MonoBehaviour:
     particleType: 22
     prefab: {fileID: 1502315300002457623, guid: a716931f645810148b582e76b9354534, type: 3}
     amount: 6
+  - root: {fileID: 1767928496}
+    particleType: 23
+    prefab: {fileID: 9069425268189461118, guid: 959be0c301c7ab7418cc4640c06976e0, type: 3}
+    amount: 4
+  - root: {fileID: 1767928496}
+    particleType: 24
+    prefab: {fileID: 6020417090335102078, guid: 3ab08d6ebe05e454882b9eb1871f727f, type: 3}
+    amount: 4
+  - root: {fileID: 1767928496}
+    particleType: 25
+    prefab: {fileID: 1901262206721708116, guid: 125e25965c300494e847e774f1c1d078, type: 3}
+    amount: 4
 --- !u!114 &148661163
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,8 +24,9 @@ namespace FishSort
         private bool isOver = true;
         private bool isTrayWarningOn;
         private bool hasPickedOnce;
+        private bool isResolvingTray;
 
-        public bool IsInputEnabled => !isOver && GameManager.IsState(GameState.GamePlay);
+        public bool IsInputEnabled => !isOver && !isResolvingTray && GameManager.IsState(GameState.GamePlay);
         public float Progress => totalFish > 0 ? (float)collectedFish / totalFish : 0f;
 
         void Awake()
@@ -67,6 +68,7 @@ namespace FishSort
         {
             StopLevel();
             levelNumber = number;
+            field.ShuffleSpecies();
             shelf.Setup(level.TankSequence);
             field.Build(level, number);
             totalFish = field.TotalFish;
@@ -85,6 +87,7 @@ namespace FishSort
         {
             StopAllCoroutines();
             isOver = true;
+            isResolvingTray = false;
             SetTrayWarning(false);
             HBPool.CollectAll();
             field.Clear();
@@ -95,16 +98,16 @@ namespace FishSort
 
         public void PickFish(Fish fish)
         {
-            if (isOver || !fish.IsSelectable)
+            if (isOver || isResolvingTray || !fish.IsSelectable)
             {
                 return;
             }
 
             hasPickedOnce = true;
+            ParticlePool.Play(ParticleType.FishPick, fish.TF.position, Quaternion.identity);
             int typeId = fish.TypeId;
             field.RemoveFish(fish);
             fish.Detach(flightRoot);
-            field.CrackIce(typeId);
 
             TankGoal goal = shelf.FindGoal(typeId);
             if (goal != null)
@@ -127,15 +130,16 @@ namespace FishSort
             int iconIndex = shelf.Reserve(goal);
             fish.FlyIntoTank(() => shelf.GetIconPosition(goal, iconIndex),
                 () => shelf.GetWaterPosition(goal, iconIndex), config.flyToTankDuration,
-                config.tankIconWidth,
+                fish.ScaleToFit(config.tankIconWidth, config.tankFishHeight),
                 () => shelf.Splash(goal, iconIndex), arrived => shelf.Land(goal, arrived, iconIndex));
         }
 
         private void SendToTray(Fish fish)
         {
             tray.Add(fish);
-            fish.FlyTo(() => tray.GetTargetFor(fish), config.flyToTrayDuration,
-                fish.ScaleToFit(config.trayFishWidth, config.trayFishHeight), tray.OnFishArrived, FishSortConst.SORT_FISH_IN_TRAY);
+            fish.FlyIntoTray(() => tray.GetTargetFor(fish), config.flyToTrayDuration,
+                fish.ScaleToFit(config.trayFishWidth, config.trayFishHeight),
+                () => tray.OnWaterEntry(fish), tray.OnFishArrived);
             if (tray.IsFull)
             {
                 StartCoroutine(LoseRoutine());
@@ -146,7 +150,7 @@ namespace FishSort
             }
         }
 
-        // New goal opened: matching fish in the tray fly up on their own (domino if it fills again).
+        // Replacement tank finished entering: matching tray fish can now fly up.
         private void HandleGoalCreated(TankGoal goal)
         {
             List<Fish> spilled = new List<Fish>(config.tankCapacity);
@@ -184,9 +188,23 @@ namespace FishSort
 
         private IEnumerator LoseRoutine()
         {
-            isOver = true;
+            isResolvingTray = true;
             SetTrayWarning(false);
             yield return new WaitForSeconds(config.loseDelay);
+            // A tank that is being replaced may still free space in the full tray.
+            while (tray.IsFull && !shelf.IsIdle)
+            {
+                yield return null;
+            }
+
+            isResolvingTray = false;
+            if (!tray.IsFull)
+            {
+                SetTrayWarning(!isOver && tray.IsOneLeft);
+                yield break;
+            }
+
+            isOver = true;
             GameManager.Ins.OnLose(Progress);
         }
 

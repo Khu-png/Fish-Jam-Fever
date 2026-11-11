@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FishSort
 {
-    // Frozen layer on a bubble. Each matching pick elsewhere removes one tap; at 0 it melts.
+    // Frozen layer on a bubble. Each fish picked from a touching bubble removes one tap.
     public sealed class IceCover : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer iceRenderer;

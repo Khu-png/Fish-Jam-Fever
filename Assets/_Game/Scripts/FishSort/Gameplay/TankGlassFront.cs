@@ -38,7 +38,9 @@ namespace FishSort
             interior.sprite = glassSprite;
             interior.alphaCutoff = 0.05f;
             interior.isCustomRangeActive = true;
-            interior.frontSortingOrder = FishSortConst.SORT_TANK_GLASS + 1;
+            // Include the glass, but not the bubble shell at order 5: overlapping masks
+            // would otherwise reveal bubble outlines inside the tanks.
+            interior.frontSortingOrder = FishSortConst.SORT_TANK_GLASS;
             interior.backSortingOrder = FishSortConst.SORT_FISH_IN_TANK - 1;
             Vector3 maskBounds = glassSprite.bounds.size;
             interior.transform.localPosition = new Vector3(0f, -0.025f, 0f);

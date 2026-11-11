@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace FishSort
 {
-    // Owns the open tank goals. Data changes instantly; each slot plays its animations in order.
+    // Owns the open tank goals. Replacement goals open after their tanks finish entering.
     public sealed class TankShelf : MonoBehaviour
     {
         private const int BURST_ICON_INDEX = 1;
@@ -20,7 +20,7 @@ namespace FishSort
         private int[] sequence;
         private int nextSequenceIndex;
 
-        // Raised when a new goal opens (used to pull matching fish out of the tray).
+        // Raised when a replacement tank is ready to receive fish from the tray.
         public event Action<TankGoal> GoalCreated;
         // Raised every time a fish is placed in a tank.
         public event Action FishPlaced;
@@ -86,7 +86,7 @@ namespace FishSort
             for (int i = 0; i < currentGoals.Length && result == null; i++)
             {
                 TankGoal goal = currentGoals[i];
-                if (goal != null && goal.TypeId == typeId && goal.Reserved < config.tankCapacity)
+                if (goal != null && goal.IsShown && goal.TypeId == typeId && goal.Reserved < config.tankCapacity)
                 {
                     result = goal;
                 }
@@ -95,7 +95,7 @@ namespace FishSort
             return result;
         }
 
-        // Claims the next icon spot of the goal. Completing the goal opens the next one immediately.
+        // Claims the next icon spot. A full goal stays visible until its completion animation ends.
         public int Reserve(TankGoal goal)
         {
             int iconIndex = goal.Reserved;
@@ -154,18 +154,10 @@ namespace FishSort
             int slot = goal.SlotIndex;
             TankGoal next = TakeNextGoal(slot);
             goal.Next = next;
-            currentGoals[slot] = next;
-            // Badge shows the goal the next tap will feed, not the tank still animating out.
-            RefreshBadge(slot, true);
             completed[slot].Enqueue(goal);
             if (!isSlotBusy[slot])
             {
                 StartCoroutine(RunSlot(slot));
-            }
-
-            if (next != null)
-            {
-                GoalCreated?.Invoke(next);
             }
         }
 
@@ -183,6 +175,9 @@ namespace FishSort
                 SoundManager.Ins.PlayFx(FxID.TankComplete);
                 ParticlePool.Play(ParticleType.TankBurst, slots[slot].GetIconPosition(BURST_ICON_INDEX), Quaternion.identity);
                 yield return slots[slot].PlayComplete();
+                goal.IsShown = false;
+                currentGoals[slot] = goal.Next;
+                RefreshBadge(slot, false);
                 if (goal.Next != null)
                 {
                     yield return slots[slot].PlayEnter();
@@ -204,6 +199,7 @@ namespace FishSort
             }
 
             goal.Pending.Clear();
+            GoalCreated?.Invoke(goal);
         }
 
         private TankGoal TakeNextGoal(int slot)

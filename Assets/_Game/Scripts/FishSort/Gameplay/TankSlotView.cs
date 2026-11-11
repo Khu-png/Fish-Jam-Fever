@@ -8,6 +8,11 @@ namespace FishSort
     // Visuals of one open tank slot: glass, 3 fish icon points, goal badge, complete/enter animations.
     public sealed class TankSlotView : MonoBehaviour
     {
+        private const float BADGE_FISH_MAX_WIDTH = 0.54f;
+        private const float BADGE_FISH_MAX_HEIGHT = 0.40f;
+        // The hanging loops sit above the plate, so its visual center is below the sprite pivot.
+        private static readonly Vector3 BadgeFishCenter = new Vector3(0f, -0.065f, 0f);
+
         [SerializeField] private Transform tankRoot;
         [SerializeField] private SpriteRenderer flashRenderer;
         [SerializeField] private Transform[] iconPoints;
@@ -21,6 +26,7 @@ namespace FishSort
         private readonly List<Fish> heldFish = new List<Fish>();
         private Vector3 tankRestPosition;
         private Vector3 badgeRestScale = Vector3.one;
+        private Vector3 countRestScale = Vector3.one;
         private Coroutine badgeRoutine;
         private bool isInitialized;
 
@@ -55,12 +61,13 @@ namespace FishSort
             tankRoot.localPosition = tankRestPosition;
             tankRoot.localScale = Vector3.one;
             badgeTransform.localScale = badgeRestScale;
+            badgeCountText.transform.localScale = countRestScale;
             SetFlash(0f);
         }
 
         public void PlaceFish(Fish fish, int iconIndex)
         {
-            fish.AttachToTank(iconPoints[iconIndex], config.tankIconWidth);
+            fish.AttachToTank(iconPoints[iconIndex], config.tankIconWidth, config.tankFishHeight);
             heldFish.Add(fish);
         }
 
@@ -68,18 +75,24 @@ namespace FishSort
         {
             badgeRoot.SetActive(true);
             badgeFishRenderer.sprite = fishSprite;
-            // Catalog sprites have different native widths; keep every goal inside its badge.
-            float spriteWidth = fishSprite.bounds.size.x;
-            badgeFishRenderer.transform.localScale = Vector3.one * (0.62f / spriteWidth);
+            // Fit both dimensions, including tall species, and compensate for each sprite's pivot.
+            Bounds fishBounds = fishSprite.bounds;
+            float fishScale = Mathf.Min(BADGE_FISH_MAX_WIDTH / fishBounds.size.x,
+                BADGE_FISH_MAX_HEIGHT / fishBounds.size.y);
+            Transform fishTransform = badgeFishRenderer.transform;
+            fishTransform.localScale = Vector3.one * fishScale;
+            fishTransform.localRotation = Quaternion.identity;
+            fishTransform.localPosition = BadgeFishCenter - fishBounds.center * fishScale;
             badgeCountText.text = string.Format(FishSortConst.FORMAT_PROGRESS, landed, capacity);
+            if (badgeRoutine != null)
+            {
+                StopCoroutine(badgeRoutine);
+                badgeRoutine = null;
+            }
+            badgeCountText.transform.localScale = countRestScale;
             if (punch)
             {
-                if (badgeRoutine != null)
-                {
-                    StopCoroutine(badgeRoutine);
-                }
-
-                badgeRoutine = StartCoroutine(PunchBadge());
+                badgeRoutine = StartCoroutine(PunchCount());
             }
         }
 
@@ -96,19 +109,22 @@ namespace FishSort
             while (elapsed < config.tankFlashDuration)
             {
                 elapsed += Time.deltaTime;
-                SetFlash(Mathf.Clamp01(elapsed / config.tankFlashDuration));
+                float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / config.tankFlashDuration));
+                SetFlash(t);
+                tankRoot.localScale = Vector3.one * Mathf.Lerp(1f, 1.04f, t);
                 yield return null;
             }
 
             elapsed = 0f;
             Vector3 risePosition = tankRestPosition + Vector3.up * config.tankLeaveRise;
+            Vector3 leaveStartScale = tankRoot.localScale;
             while (elapsed < config.tankLeaveDuration)
             {
                 elapsed += Time.deltaTime;
                 float t = Ease.InQuad(Mathf.Clamp01(elapsed / config.tankLeaveDuration));
                 tankRoot.localPosition = Vector3.Lerp(tankRestPosition, risePosition, t);
-                tankRoot.localScale = Vector3.one * Mathf.Lerp(1f, config.tankLeaveScale, t);
-                SetFlash(1f - t);
+                tankRoot.localScale = Vector3.Lerp(leaveStartScale, Vector3.one * config.tankLeaveScale, t);
+                SetFlash(1f - Mathf.SmoothStep(0f, 1f, t));
                 yield return null;
             }
 
@@ -146,6 +162,7 @@ namespace FishSort
             {
                 tankRestPosition = tankRoot.localPosition;
                 badgeRestScale = badgeTransform.localScale;
+                countRestScale = badgeCountText.transform.localScale;
                 isInitialized = true;
             }
         }
@@ -155,18 +172,18 @@ namespace FishSort
             flashRenderer.color = new Color(1f, 1f, 1f, alpha);
         }
 
-        private IEnumerator PunchBadge()
+        private IEnumerator PunchCount()
         {
             float elapsed = 0f;
             while (elapsed < config.badgePunchDuration)
             {
                 elapsed += Time.deltaTime;
                 float bump = Ease.Punch(Mathf.Clamp01(elapsed / config.badgePunchDuration));
-                badgeTransform.localScale = badgeRestScale * Mathf.Lerp(1f, config.badgePunchScale, bump);
+                badgeCountText.transform.localScale = countRestScale * Mathf.Lerp(1f, config.badgePunchScale, bump);
                 yield return null;
             }
 
-            badgeTransform.localScale = badgeRestScale;
+            badgeCountText.transform.localScale = countRestScale;
             badgeRoutine = null;
         }
     }
