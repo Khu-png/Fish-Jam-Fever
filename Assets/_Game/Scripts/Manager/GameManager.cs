@@ -15,17 +15,29 @@ public class GameManager : Singleton<GameManager>
 
     public static bool IsState(GameState state) => gameState == state;
 
+    // Revives used in the current level (reset when the level starts). The popup price is multiplied by (ReviveCount + 1).
+    public int ReviveCount { get; set; }
+
     // Win/lose are decided here: gameplay reports the result, GameManager moves the game to Finish and opens the result UI.
     public void OnWin()
     {
         LevelManager.Ins.CompleteLevel();
         ChangeState(GameState.Finish);
+        SoundManager.Ins.PlayFx(FxID.Win);
         UIManager.Ins.OpenUI<FishJam.UI.Win>();
+    }
+
+    // Tray full: offer a revive first. Declining it (the X button) ends the level through OnLose.
+    public void OnAlmostLose(float progress)
+    {
+        ChangeState(GameState.Revive);
+        UIManager.Ins.OpenUI<FishJam.UI.Revive>().SetProgress(progress);
     }
 
     public void OnLose(float progress)
     {
         ChangeState(GameState.Finish);
+        SoundManager.Ins.PlayFx(FxID.Lose);
         UIManager.Ins.OpenUI<FishJam.UI.Lose>();
     }
 

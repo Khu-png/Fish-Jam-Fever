@@ -54,11 +54,11 @@ namespace FishJam.UI
         {
             base.Awake();
             if (closeButton) closeButton.onClick.AddListener(CloseButton);
-            if (music?.button) music.button.onClick.AddListener(() => { GameSettings.Music = !GameSettings.Music; Tap(music.button); });
-            if (sound?.button) sound.button.onClick.AddListener(() => { GameSettings.Sound = !GameSettings.Sound; Tap(sound.button); });
-            if (vibration?.button) vibration.button.onClick.AddListener(() => { GameSettings.Vibration = !GameSettings.Vibration; GameSettings.Vibrate(); Tap(vibration.button); });
-            if (languageButton) languageButton.onClick.AddListener(() => onLanguage.Invoke());
-            if (supportButton) supportButton.onClick.AddListener(() => onSupport.Invoke());
+            if (music?.button) music.button.onClick.AddListener(() => { GameSettings.Music = !GameSettings.Music; SoundManager.Ins.PlayFx(FxID.ButtonSwitch); Tap(music.button); });
+            if (sound?.button) sound.button.onClick.AddListener(() => { GameSettings.Sound = !GameSettings.Sound; SoundManager.Ins.PlayFx(FxID.ButtonSwitch); Tap(sound.button); });
+            if (vibration?.button) vibration.button.onClick.AddListener(() => { GameSettings.Vibration = !GameSettings.Vibration; GameSettings.Vibrate(); SoundManager.Ins.PlayFx(FxID.ButtonSwitch); Tap(vibration.button); });
+            if (languageButton) languageButton.onClick.AddListener(() => { SoundManager.Ins.PlayFx(FxID.Button); onLanguage.Invoke(); });
+            if (supportButton) supportButton.onClick.AddListener(() => { SoundManager.Ins.PlayFx(FxID.Button); onSupport.Invoke(); });
             if (homeButton) homeButton.onClick.AddListener(HomeButton);
             if (retryButton) retryButton.onClick.AddListener(RetryButton);
             if (versionLabel) versionLabel.text = "Version " + Application.version;
@@ -91,12 +91,13 @@ namespace FishJam.UI
         }
 
         /// <summary>Nut X: dong co hieu ung, choi tiep.</summary>
-        public void CloseButton() { if (!isClicked) CloseAnimated(); }
+        public void CloseButton() { if (isClicked) return; SoundManager.Ins.PlayFx(FxID.Button); CloseAnimated(); }
 
         /// <summary>Nut Home: ve Main Menu.</summary>
         public void HomeButton()
         {
             if (isClicked) return; isClicked = true;
+            SoundManager.Ins.PlayFx(FxID.Button);
             CloseDirectly();
             LevelManager.Ins.OnHome();
         }
@@ -105,6 +106,7 @@ namespace FishJam.UI
         public void RetryButton()
         {
             if (isClicked) return; isClicked = true;
+            SoundManager.Ins.PlayFx(FxID.Button);
             CloseDirectly();
             LevelManager.Ins.OnRetry();
         }

@@ -1108,6 +1108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishJam.UI.Revive
   isDestroyOnClose: 0
   cost: 600
+  costLabel: {fileID: 7011504024493462562}
   progressLabel: {fileID: 7124768688781905816}
   closeButton: {fileID: 6106802622739561115}
   coinButton: {fileID: 4277922390117956690}

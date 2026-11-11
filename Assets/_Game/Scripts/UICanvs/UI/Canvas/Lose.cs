@@ -16,11 +16,12 @@ namespace FishJam.UI
             homeButton.onClick.AddListener(HomeButton);
         }
 
-        public override void Setup() { base.Setup(); isClicked = false; Time.timeScale = 0f; }
+        public override void Setup() { base.Setup(); isClicked = false; Time.timeScale = 0f; SoundManager.Ins.PlayFx(FxID.Whoosh); }
 
         public void RetryButton()
         {
             if (isClicked) return; isClicked = true;
+            SoundManager.Ins.PlayFx(FxID.Button);
             CloseDirectly();
             LevelManager.Ins.OnRetry();
         }
@@ -28,6 +29,7 @@ namespace FishJam.UI
         public void HomeButton()
         {
             if (isClicked) return; isClicked = true;
+            SoundManager.Ins.PlayFx(FxID.Button);
             CloseDirectly();
             LevelManager.Ins.OnHome();
         }

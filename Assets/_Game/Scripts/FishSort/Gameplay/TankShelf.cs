@@ -13,12 +13,17 @@ namespace FishSort
         [SerializeField] private TankSlotView[] slots;
         [SerializeField] private FishSortConfig config;
         [SerializeField] private FishCatalog catalog;
+        // Slots open at the start of a level; the rest stay locked until a revive opens them, one at a time.
+        [SerializeField] private int startSlots = 2;
+        // The grey tank with a plus drawn over each locked slot: the first entry covers slot startSlots.
+        [SerializeField] private GameObject[] lockedViews;
 
         private TankGoal[] currentGoals;
         private Queue<TankGoal>[] completed;
         private bool[] isSlotBusy;
         private int[] sequence;
         private int nextSequenceIndex;
+        private int openSlots;
 
         // Raised when a replacement tank is ready to receive fish from the tray.
         public event Action<TankGoal> GoalCreated;
@@ -53,9 +58,10 @@ namespace FishSort
         public void Setup(int[] tankSequence)
         {
             ResetAll();
-            sequence = tankSequence;
+            // A copy: a revive may pull a tank forward, and the level asset must not change.
+            sequence = (int[])tankSequence.Clone();
             nextSequenceIndex = 0;
-            for (int i = 0; i < slots.Length; i++)
+            for (int i = 0; i < openSlots; i++)
             {
                 TankGoal goal = TakeNextGoal(i);
                 if (goal != null)
@@ -71,12 +77,79 @@ namespace FishSort
         public void ResetAll()
         {
             StopAllCoroutines();
+            openSlots = Mathf.Min(startSlots, slots.Length);
             for (int i = 0; i < slots.Length; i++)
             {
+                // A slot hidden by the last level must be awake to reset.
+                slots[i].gameObject.SetActive(true);
                 slots[i].ResetView();
                 completed[i].Clear();
                 isSlotBusy[i] = false;
                 currentGoals[i] = null;
+                ApplyLock(i);
+            }
+        }
+
+        // True while a locked slot is left and the sequence still has a tank for it.
+        public bool CanUnlock => openSlots < slots.Length && sequence != null && nextSequenceIndex < sequence.Length;
+
+        // Revive: opens the next locked slot with the next tank of the sequence. preferredType (-1 for none) pulls
+        // the first remaining tank of that type forward, so the new tank can take fish that are stuck in the tray.
+        public bool UnlockSlot(int preferredType)
+        {
+            if (!CanUnlock)
+            {
+                return false;
+            }
+
+            PullForward(preferredType);
+            int slot = openSlots;
+            openSlots++;
+            ApplyLock(slot);
+            slots[slot].ResetView();
+            TankGoal goal = TakeNextGoal(slot);
+            currentGoals[slot] = goal;
+            RefreshBadge(slot, false);
+            StartCoroutine(OpenSlot(slot, goal));
+            return true;
+        }
+
+        private IEnumerator OpenSlot(int slot, TankGoal goal)
+        {
+            isSlotBusy[slot] = true;
+            yield return slots[slot].PlayEnter();
+            ShowGoal(goal);
+            isSlotBusy[slot] = false;
+        }
+
+        // Moves the first remaining tank of the type to the front of what is left. The tank counts do not change.
+        private void PullForward(int typeId)
+        {
+            if (typeId < 0)
+            {
+                return;
+            }
+
+            for (int i = nextSequenceIndex; i < sequence.Length; i++)
+            {
+                if (sequence[i] == typeId)
+                {
+                    sequence[i] = sequence[nextSequenceIndex];
+                    sequence[nextSequenceIndex] = typeId;
+                    return;
+                }
+            }
+        }
+
+        // Open slots show their tank; locked ones show the grey cover instead.
+        private void ApplyLock(int slot)
+        {
+            bool isOpen = slot < openSlots;
+            slots[slot].gameObject.SetActive(isOpen);
+            int cover = slot - startSlots;
+            if (cover >= 0 && cover < lockedViews.Length && lockedViews[cover] != null)
+            {
+                lockedViews[cover].SetActive(!isOpen);
             }
         }
 

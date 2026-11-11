@@ -14,8 +14,10 @@ namespace FishJam.UI
     /// </summary>
     public class Revive : SkinCanvas
     {
+        [Tooltip("Base price. Each revive in the same level multiplies it: x1, x2, x3...")]
         public int cost = 600;
         public TMP_Text progressLabel;
+        public TMP_Text costLabel;
         public Button closeButton, coinButton, adButton;
         public CoinBar coinBar;
 
@@ -23,6 +25,8 @@ namespace FishJam.UI
         public static event Action Revived;
 
         bool isClicked;
+        int price;
+        float progress;
 
         protected override void Awake()
         {
@@ -37,18 +41,23 @@ namespace FishJam.UI
             base.Setup();
             isClicked = false;
             Time.timeScale = 0f;
+            SoundManager.Ins.PlayFx(FxID.Whoosh);
+            price = cost * (GameManager.Ins.ReviveCount + 1);
+            if (costLabel) costLabel.text = price.ToString();
         }
 
         /// <summary>Tien do man choi 0..1 (hien "Progress: 37%").</summary>
         public void SetProgress(float p)
         {
+            progress = p;
             if (progressLabel) progressLabel.text = "Progress: <color=#E8262B>" + Mathf.RoundToInt(Mathf.Clamp01(p) * 100) + "%</color>";
         }
 
         public void CoinButton()
         {
             if (isClicked) return;
-            if (!Wallet.Spend(cost)) 
+            SoundManager.Ins.PlayFx(FxID.Button);
+            if (!Wallet.Spend(price)) 
             {
                 //if (coinBar) coinBar.Bump();
                 if (coinBar) coinBar.Bump(); StartCoroutine(Shake(coinButton.transform)); 
@@ -57,13 +66,14 @@ namespace FishJam.UI
             DoRevive();
         }
 
-        public void AdButton() { if (!isClicked) DoRevive(); } 
+        public void AdButton() { if (isClicked) return; SoundManager.Ins.PlayFx(FxID.Button); DoRevive(); } 
 
         public void CloseButton()
         {
             if (isClicked) return; isClicked = true;
+            SoundManager.Ins.PlayFx(FxID.Button);
             CloseDirectly();
-            UIManager.Ins.OpenUI<Lose>();
+            GameManager.Ins.OnLose(progress);
         }
 
         void DoRevive()

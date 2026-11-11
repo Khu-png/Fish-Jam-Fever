@@ -49,6 +49,7 @@ namespace FishSort
             fishJar = world.Jar;
             shelf.GoalCreated += HandleGoalCreated;
             shelf.FishPlaced += HandleFishPlaced;
+            FishJam.UI.Revive.Revived += HandleRevived;
         }
 
         protected override void OnDestroy()
@@ -59,6 +60,7 @@ namespace FishSort
 
         private void Unbind()
         {
+            FishJam.UI.Revive.Revived -= HandleRevived;
             // shelf is null until the first Bind(); that is the unbound state, not a missing reference.
             if (shelf != null)
             {
@@ -79,6 +81,7 @@ namespace FishSort
             placedFish = 0;
             hasPickedOnce = false;
             isOver = false;
+            GameManager.Ins.ReviveCount = 0;
             UpdateProgress();
             if (number == FishSortConst.TUTORIAL_LEVEL)
             {
@@ -217,7 +220,32 @@ namespace FishSort
             }
 
             isOver = true;
-            GameManager.Ins.OnLose(Progress);
+            // A revive needs both a locked tank left to open (at most 2 revives) and a free cannon (it cannot fire
+            // while the jar of an earlier shot is still open). Otherwise the player could not recover: lose.
+            if (shelf.CanUnlock && !fishJar.IsOpen)
+            {
+                GameManager.Ins.OnAlmostLose(Progress);
+            }
+            else
+            {
+                GameManager.Ins.OnLose(Progress);
+            }
+        }
+
+        // Revive accepted: a locked tank opens (of the type most common in the tray) and the cannon clears the full
+        // tray for free.
+        private void HandleRevived()
+        {
+            GameManager.Ins.ReviveCount++;
+            GameManager.ChangeState(GameState.GamePlay);
+            isOver = false;
+            bool opened = shelf.UnlockSlot(tray.MostCommonType());
+            bool fired = TryUseCannon();
+            if (!opened || !fired)
+            {
+                isOver = true;
+                GameManager.Ins.OnLose(Progress);
+            }
         }
 
         private void SetTrayWarning(bool isOn)

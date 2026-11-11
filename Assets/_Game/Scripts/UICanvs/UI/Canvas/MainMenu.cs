@@ -32,6 +32,6 @@ namespace FishJam.UI
         }
 
         /// <summary>Nut banh rang: mo popup Cai dat (che do Menu).</summary>
-        public void SettingButton() { UIManager.Ins.OpenUI<Setting>(); }
+        public void SettingButton() { SoundManager.Ins.PlayFx(FxID.Button); UIManager.Ins.OpenUI<Setting>(); }
     }
 }

@@ -20,6 +20,14 @@ public enum FxID
     Warning = 7,
     Win = 8,
     Lose = 9,
+    // Win screen. Append only: the value is the index into SoundManager.fxAus.
+    ChestOpen = 10,
+    RewardPop = 11,
+    Claim = 12,
+    CoinCollect = 13,
+    // Popups. Append only.
+    Whoosh = 14,
+    ButtonSwitch = 15,
 }
 
 
@@ -30,8 +38,11 @@ public class SoundManager : Singleton<SoundManager>
 
     [SerializeField] private AudioClip[] soundAus;
     [SerializeField] private AudioClip[] fxAus;
+    // Praise voices in the order of GamePlay.praises: nice, cool, good, great, excellent, amazing, fantastic, perfect.
+    [SerializeField] private AudioClip[] praiseAus;
 
     private AudioSource soundSource;
+    private AudioSource praiseSource;
     private AudioSource[] fxSource = new AudioSource[Utilities.GetEnumCount<FxID>()];
 
     void Awake()
@@ -39,6 +50,9 @@ public class SoundManager : Singleton<SoundManager>
         RegisterSingleton(this);
         soundSource = gameObject.AddComponent<AudioSource>();
         soundSource.loop = true;
+        praiseSource = new GameObject("Praise").AddComponent<AudioSource>();
+        praiseSource.playOnAwake = false;
+        praiseSource.transform.SetParent(transform);
         CreateFxSources();
     }
 
@@ -85,6 +99,24 @@ public class SoundManager : Singleton<SoundManager>
 
         fxSource[index].pitch = pitch;
         fxSource[index].PlayOneShot(fxAus[index]);
+    }
+
+    // Praise voice by index (same order as praiseAus). One voice at a time: a new one replaces the old.
+    public void PlayPraise(int index)
+    {
+        if (!FishSort.PlayerData.SoundOn || praiseAus == null || praiseAus.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = praiseAus[Mathf.Clamp(index, 0, praiseAus.Length - 1)];
+        if (clip == null)
+        {
+            return;
+        }
+
+        praiseSource.Stop();
+        praiseSource.PlayOneShot(clip);
     }
 
     private IEnumerator PlayMusicAfterDelay()

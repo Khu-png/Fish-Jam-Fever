@@ -90,6 +90,7 @@ namespace FishJam.UI
         void ShowReward()
         {
             if (rewardShown) return; rewardShown = true;
+            SoundManager.Ins.PlayFx(FxID.ChestOpen);
             Unhook();
             StartCoroutine(RewardJump());
         }
@@ -97,6 +98,7 @@ namespace FishJam.UI
         /// <summary>Phan thuong nhay ra tu mieng ruong: bay vong len roi roi xuong vi tri cua no, phong to dan.</summary>
         IEnumerator RewardJump()
         {
+            SoundManager.Ins.PlayFx(FxID.RewardPop);
             // tinh bang toa do the gioi (vi tri that tren man) -> khong phu thuoc anchor/pivot
             rewardGroup.anchoredPosition = rewardRestPos;
             Vector3 to = rewardGroup.position;
@@ -126,6 +128,7 @@ namespace FishJam.UI
         public void ClaimButton()
         {
             if (isClicked) return; isClicked = true;
+            SoundManager.Ins.PlayFx(FxID.Claim);
             claimButton.gameObject.SetActive(false);
             StartCoroutine(Claim());
         }
@@ -164,6 +167,7 @@ namespace FishJam.UI
                 yield return null;
             }
             Destroy(rt.gameObject);
+            SoundManager.Ins.PlayFx(FxID.CoinCollect);
             if (coinBar) coinBar.Show(showValue);
         }
 
@@ -171,6 +175,7 @@ namespace FishJam.UI
         public void ContinueButton()
         {
             if (isClicked) return; isClicked = true;
+            SoundManager.Ins.PlayFx(FxID.Button);
             CloseDirectly();
             // the level was already advanced when the win was reported
             LevelManager.Ins.OnNextLevel();

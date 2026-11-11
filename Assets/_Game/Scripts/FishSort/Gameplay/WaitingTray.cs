@@ -71,6 +71,32 @@ namespace FishSort
             Relayout();
         }
 
+        // The fish type with most fish in the tray (-1 when it is empty): the best type for a revive tank to take.
+        public int MostCommonType()
+        {
+            int best = -1;
+            int bestCount = 0;
+            for (int i = 0; i < items.Count; i++)
+            {
+                int count = 0;
+                for (int j = 0; j < items.Count; j++)
+                {
+                    if (items[j].TypeId == items[i].TypeId)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count > bestCount)
+                {
+                    best = items[i].TypeId;
+                    bestCount = count;
+                }
+            }
+
+            return best;
+        }
+
         public int SlotCount => slotPoints.Length;
 
         public Vector3 GetSlotPosition(int slot)

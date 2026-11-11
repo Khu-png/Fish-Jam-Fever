@@ -64,7 +64,7 @@ namespace FishJam.UI
         }
 
         /// <summary>Nut banh rang: mo popup Cai dat (che do InGame, game dung).</summary>
-        public void SettingButton() { UIManager.Ins.OpenUI<Setting>(); }
+        public void SettingButton() { SoundManager.Ins.PlayFx(FxID.Button); UIManager.Ins.OpenUI<Setting>(); }
 
         void ResetVisuals()
         {
@@ -94,6 +94,7 @@ namespace FishJam.UI
         {
             if (praises == null || praises.Length == 0) return;
             tier = Mathf.Clamp(tier, 0, praises.Length - 1);
+            SoundManager.Ins.PlayPraise(tier);
             if (praiseCo != null) StopCoroutine(praiseCo);
             praiseCo = StartCoroutine(Praise(praises[tier]));
         }
