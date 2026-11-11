@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e04ac77ba53951140a5556f428926dd3, type: 3}
+  m_Name: FishSortConfig
+  m_EditorClassIdentifier: Assembly-CSharp::FishSort.FishSortConfig
+  trayCapacity: 5
+  tankCapacity: 3
+  bubbleDiameterByFishCount:
+  - 0
+  - 1
+  - 1.24
+  - 1.5
+  - 1.75
+  - 1.9
+  fishWidthByFishCount:
+  - 0
+  - 0.46
+  - 0.46
+  - 0.42
+  - 0.38
+  - 0.35
+  smallLevelFishCount: 12
+  smallLevelBubbleScale: 1.12
+  mediumLevelFishCount: 60
+  mediumLevelBubbleScale: 1
+  bubbleMinScale: 0.85
+  bubbleShrinkSpeed: 10
+  bubblePopScale: 1.3
+  bubblePopDuration: 0.34
+  fieldHalfWidth: 2.7
+  spawnJitter: 0.06
+  fishRotationRange: 5
+  bubbleEntryDropHeight: 4
+  bubbleEntryGravityScale: 0.5
+  bubbleEntryDamping: 2
+  bubbleEntryDuration: 1.5
+  bubbleEntrySettleSpeed: 0.2
+  bubbleEntryMaxDuration: 6
+  frozenFishTint: {r: 0.8, g: 0.9, b: 1, a: 1}
+  animateUnderwater: 0
+  fishSwimRadius: 0.018
+  fishBobHeight: 0.014
+  fishSwimSpeed: 1.6
+  fishIdleTilt: 3
+  fishBreathing: 0.018
+  bubbleGravityScale: 1
+  bubbleWaterDamping: 0.5
+  bubbleSettlePull: 1.8
+  bubbleSettleMaxSpeed: 0.65
+  bubbleSettleSearchDistance: 1.4
+  bubbleSettleMinDrop: 0.08
+  bubbleSettleRefreshInterval: 0.16
+  bubbleIdleStretch: 0.012
+  bubbleReactionStretch: 0.045
+  pickRadius: 0.12
+  probeOffset: 0.5
+  highlightScale: 1.18
+  highlightTweenDuration: 0.08
+  highlightColor: {r: 1, g: 1, b: 1, a: 1}
+  goodHintColor: {r: 0.24, g: 0.81, b: 0.35, a: 1}
+  badHintColor: {r: 1, g: 0.54, b: 0.16, a: 1}
+  pickAnticipationDuration: 0.1
+  pickPopScale: 1.16
+  flyToTankDuration: 0.68
+  flyToTrayDuration: 0.56
+  flySideOffset: 0.5
+  flyArcRatio: 0.55
+  flyArcLift: 0.3
+  flyTiltDegrees: 12
+  tankIconWidth: 0.54
+  tankFishHeight: 0.4
+  trayFishWidth: 0.32
+  trayFishHeight: 0.25
+  traySlideDuration: 0.2
+  tankFlashDuration: 0.26
+  tankLeaveDuration: 0.38
+  tankLeaveRise: 0.6
+  tankLeaveScale: 0.15
+  tankDropHeight: 1.3
+  tankDropDuration: 0.3
+  badgePunchScale: 1.18
+  badgePunchDuration: 0.22
+  icePunchScale: 1.3
+  icePunchDuration: 0.25
+  iceMeltDuration: 0.35
+  comboWindow: 1.5
+  perfectRepeat: 3
+  comboPopDuration: 0.3
+  comboHoldDuration: 0.4
+  comboFadeDuration: 0.35
+  comboRise: 0.3
+  comboSteps:
+  - streak: 2
+    text: Nice!
+    color: {r: 0.49, g: 1, b: 0.42, a: 1}
+    scale: 1
+  - streak: 3
+    text: Good!
+    color: {r: 0.37, g: 0.89, b: 1, a: 1}
+    scale: 1.1
+  - streak: 5
+    text: Great!
+    color: {r: 1, g: 0.82, b: 0.25, a: 1}
+    scale: 1.2
+  - streak: 7
+    text: Excellent!
+    color: {r: 1, g: 0.6, b: 0.23, a: 1}
+    scale: 1.3
+  - streak: 9
+    text: Amazing!
+    color: {r: 1, g: 0.35, b: 0.71, a: 1}
+    scale: 1.4
+  - streak: 12
+    text: Perfect!
+    color: {r: 0.77, g: 0.55, b: 1, a: 1}
+    scale: 1.5
+  winDelay: 0.35
+  loseDelay: 0.77
+  pickPitchStep: 0.06
+  maxPitchSteps: 20
+  tipStepDelay: 1.6

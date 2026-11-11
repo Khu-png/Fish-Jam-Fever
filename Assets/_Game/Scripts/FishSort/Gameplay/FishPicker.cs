@@ -1,0 +1,132 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+
+namespace FishSort
+{
+    // Tap = pick immediately. Hold + drag = the fish nearest the finger gets a white outline; release picks it.
+    // Data only changes on release; while holding only visuals change (design doc 4.3).
+    public sealed class FishPicker : MonoBehaviour
+    {
+        [SerializeField] private Camera gameCamera;
+        [SerializeField] private FishSortConfig config;
+
+        // Filled by Bind() once the GameplayWorld prefab has been spawned.
+        private BubbleField field;
+        private FishJar jar;
+        private TankShelf shelf;
+
+        private Fish highlighted;
+        private bool isHolding;
+
+        public void Bind(GameplayWorld world)
+        {
+            field = world.Field;
+            jar = world.Jar;
+            shelf = world.Shelf;
+        }
+
+        // The jar is drawn above the field, so its fish win when both are under the finger.
+        private Fish FindFishNear(Vector2 worldPoint)
+        {
+            Fish found = jar.IsOpen ? jar.FindFishNear(worldPoint) : null;
+            return found != null ? found : field.FindFishNear(worldPoint);
+        }
+
+        private void Update()
+        {
+            Pointer pointer = Pointer.current;
+            if (pointer == null)
+            {
+                return;
+            }
+
+            if (!GameplayController.Ins.IsInputEnabled)
+            {
+                CancelHold();
+                return;
+            }
+
+            if (pointer.press.wasPressedThisFrame)
+            {
+                isHolding = !IsOverUI();
+            }
+
+            if (!isHolding)
+            {
+                return;
+            }
+
+            Vector2 worldPoint = ToWorld(pointer.position.ReadValue());
+            if (pointer.press.isPressed)
+            {
+                SetHighlight(FindFishNear(worldPoint));
+            }
+
+            if (pointer.press.wasReleasedThisFrame)
+            {
+                // A very fast tap can press and release in one frame: look up the fish at release.
+                Fish chosen = highlighted != null ? highlighted : FindFishNear(worldPoint);
+                CancelHold();
+                if (chosen != null)
+                {
+                    GameplayController.Ins.PickFish(chosen);
+                }
+            }
+        }
+
+        private void CancelHold()
+        {
+            isHolding = false;
+            SetHighlight(null);
+        }
+
+        private void SetHighlight(Fish fish)
+        {
+            if (fish == highlighted)
+            {
+                return;
+            }
+
+            if (highlighted != null && highlighted.IsSelectable)
+            {
+                highlighted.SetHighlight(FishHighlight.None);
+            }
+
+            highlighted = fish;
+            if (fish != null)
+            {
+                fish.SetHighlight(HighlightFor(fish));
+                //TODO: light haptic tick when the highlighted fish changes (needs a haptics plugin).
+            }
+        }
+
+        private FishHighlight HighlightFor(Fish fish)
+        {
+            FishHighlight result = FishHighlight.Select;
+            if (PlayerData.HintColors)
+            {
+                result = shelf.FindGoal(fish.TypeId) != null ? FishHighlight.Good : FishHighlight.Bad;
+            }
+
+            return result;
+        }
+
+        private Vector2 ToWorld(Vector2 screenPoint)
+        {
+            Vector2 world = gameCamera.ScreenToWorldPoint(screenPoint);
+            if (PlayerData.ProbeOffset)
+            {
+                world.y += config.probeOffset;
+            }
+
+            return world;
+        }
+
+        private static bool IsOverUI()
+        {
+            EventSystem eventSystem = EventSystem.current;
+            return eventSystem != null && eventSystem.IsPointerOverGameObject();
+        }
+    }
+}

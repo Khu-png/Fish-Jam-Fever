@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09189b5190aa1741b994c2a6e0bca1b, type: 3}
+  m_Name: Level_04
+  m_EditorClassIdentifier: Assembly-CSharp::FishSort.LevelData
+  columns: 5
+  bubbles:
+  - column: 0
+    fishTypes: 040000000b0000000700000001000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 0b00000004000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 0700000006000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 09000000010000000b00000000000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 09000000010000000500000002000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 090000000b0000000800000003000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 020000000700000004000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 05000000070000000a00000004000000
+    iceTaps: 3
+  - column: 3
+    fishTypes: 07000000080000000000000004000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 090000000b0000000000000008000000
+    iceTaps: 3
+  - column: 0
+    fishTypes: 0200000000000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 02000000030000000600000004000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 0900000001000000040000000b000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 09000000010000000000000005000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 090000000a00000004000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 040000000b000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 06000000040000000300000002000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 090000000b0000000a00000007000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 0b00000007000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 0b00000002000000090000000300000007000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 0200000006000000000000000800000001000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 0000000008000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 0400000003000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 0400000003000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 0400000006000000090000000000000003000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 0900000006000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 03000000060000000900000008000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 060000000b0000000500000000000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 0000000004000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 000000000a00000007000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 0b000000070000000a00000005000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 0a0000000700000003000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 0700000003000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 000000000b000000020000000600000004000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 0b00000002000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 05000000030000000b00000003000000
+    iceTaps: 0
+  tankSequence: 0b0000000100000004000000090000000700000000000000020000000400000009000000070000000b0000000a00000008000000030000000b00000005000000060000000400000009000000020000000400000001000000000000000300000006000000000000000700000008000000090000000b0000000300000006000000020000000000000007000000040000000a0000000b0000000300000005000000

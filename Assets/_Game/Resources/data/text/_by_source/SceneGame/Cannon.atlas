@@ -1,0 +1,10 @@
+Cannon.png
+size:1016,1016
+filter:Linear,Linear
+Body_Gun
+bounds:0,161,609,192
+Body_Gun_1
+bounds:610,65,406,288
+Gun
+bounds:0,354,959,662
+offsets:1,1,961,665

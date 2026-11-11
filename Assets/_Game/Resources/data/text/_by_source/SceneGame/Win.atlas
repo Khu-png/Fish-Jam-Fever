@@ -1,0 +1,152 @@
+Win.png
+size:1012,900
+filter:Linear,Linear
+booster
+bounds:570,90,153,146
+offsets:1,1,155,148
+buc
+bounds:0,87,811,363
+offsets:1,56,826,486
+rotate:90
+coin1
+bounds:0,3,107,83
+offsets:1,1,109,85
+coin10
+bounds:808,0,95,54
+offsets:1,1,97,56
+rotate:90
+coin11
+bounds:217,5,81,48
+offsets:1,1,83,50
+rotate:90
+coin2
+bounds:752,0,95,55
+offsets:1,1,97,57
+rotate:90
+coin3
+bounds:108,5,108,81
+offsets:1,1,110,83
+coin4
+bounds:884,697,107,105
+offsets:1,1,109,107
+coin5
+bounds:724,260,103,64
+offsets:2,1,106,67
+coin6
+bounds:625,258,97,66
+offsets:1,1,100,68
+coin7
+bounds:405,0,89,52
+offsets:1,1,91,55
+rotate:90
+coin8
+bounds:313,8,78,45
+offsets:1,1,80,47
+rotate:90
+coin9
+bounds:359,8,78,45
+offsets:1,1,80,47
+rotate:90
+nap
+bounds:405,487,426,282
+nap_shadow
+bounds:724,192,100,67
+ngoc1
+bounds:832,535,48,48
+offsets:1,1,50,50
+ngoc2
+bounds:615,20,69,68
+offsets:1,1,71,70
+rotate:90
+ngoc3
+bounds:932,149,59,58
+offsets:1,1,61,60
+ngoc5
+bounds:684,21,68,67
+offsets:1,1,70,69
+rotate:90
+ngọc 4
+bounds:863,27,68,67
+rotate:90
+shadow
+bounds:405,770,478,128
+offsets:7,1,492,138
+shadow booster
+bounds:364,90,234,205
+offsets:16,11,262,226
+rotate:90
+shadow coin
+bounds:832,237,297,47
+offsets:3,2,303,52
+rotate:90
+shadow coin10
+bounds:570,253,71,54
+offsets:5,1,77,56
+rotate:90
+shadow coin11
+bounds:266,6,80,46
+offsets:1,2,82,50
+rotate:90
+shadow coin2
+bounds:364,697,104,33
+offsets:3,1,109,38
+rotate:90
+shadow coin3
+bounds:832,584,141,49
+offsets:2,3,146,55
+rotate:90
+shadow coin4
+bounds:364,802,96,37
+offsets:1,1,99,42
+rotate:90
+shadow coin6
+bounds:549,12,77,65
+offsets:4,2,82,68
+rotate:90
+shadow coin7
+bounds:832,726,43,50
+offsets:1,1,49,53
+rotate:90
+shadow coin8
+bounds:458,11,78,45
+offsets:1,1,80,47
+rotate:90
+shadow coin9
+bounds:504,11,78,44
+offsets:1,2,80,47
+rotate:90
+shadow ngoc2
+bounds:884,803,118,95
+offsets:5,3,142,106
+shadow ngoc3
+bounds:932,94,54,58
+offsets:1,1,59,60
+rotate:90
+shadow ngoc4
+bounds:867,101,68,64
+offsets:1,1,70,67
+rotate:90
+shadow ngoc5
+bounds:931,208,68,66
+offsets:1,1,70,69
+shadow ngoc6
+bounds:931,40,54,53
+offsets:1,1,56,56
+shadow ngoc7
+bounds:992,737,65,13
+offsets:4,2,74,15
+rotate:90
+shadowcoin1
+bounds:724,96,142,95
+offsets:9,2,157,101
+shadowngoc1
+bounds:867,170,66,63
+offsets:3,2,72,68
+rotate:90
+tahn
+bounds:405,325,424,161
+offsets:7,1,432,163
+voso trc
+bounds:882,275,421,130
+offsets:2,1,424,132
+rotate:90

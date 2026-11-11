@@ -1,0 +1,13 @@
+heart.png
+size:1364,364
+filter:Linear,Linear
+heart2
+bounds:420,1,243,363
+heart3
+bounds:665,0,237,364
+shadowleft
+bounds:1136,32,227,332
+shadowright
+bounds:904,34,230,330
+traitim
+bounds:0,0,418,364
