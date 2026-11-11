@@ -1,0 +1,71 @@
+fish_error.png
+size:804,524
+filter:Linear,Linear
+Layer 11
+bounds:747,176,53,46
+offsets:1,1,55,48
+Layer 12
+bounds:524,95,48,23
+offsets:1,1,50,25
+Layer 13
+bounds:0,89,371,435
+Layer 18
+bounds:249,14,74,96
+offsets:10,0,85,101
+rotate:90
+Layer 20
+bounds:637,175,109,116
+offsets:2,1,113,119
+Layer 21
+bounds:143,7,105,81
+offsets:1,1,108,83
+Layer 25
+bounds:372,0,99,94
+offsets:1,1,102,96
+Layer 31
+bounds:568,268,23,48
+rotate:90
+Layer 32
+bounds:601,4,63,79
+offsets:1,1,65,81
+rotate:90
+Layer 33
+bounds:568,292,228,232
+Layer 34
+bounds:545,0,67,55
+offsets:1,1,69,57
+rotate:90
+Layer 35
+bounds:346,42,25,46
+offsets:1,1,28,48
+Layer 36
+bounds:751,123,52,43
+offsets:1,2,54,46
+rotate:90
+Layer 37
+bounds:751,68,36,54
+offsets:1,1,38,56
+Layer 4
+bounds:637,68,106,113
+offsets:2,2,110,116
+rotate:90
+Layer 5 copy
+bounds:472,3,72,91
+offsets:2,1,75,94
+Layer 6
+bounds:747,223,54,68
+offsets:1,1,56,71
+Layer 7
+bounds:681,7,39,60
+offsets:1,1,41,62
+duoi
+bounds:372,256,195,268
+error
+bounds:0,20,68,142
+offsets:3,2,74,144
+rotate:90
+vai trai
+bounds:372,95,151,160
+vay phai
+bounds:524,119,112,136
+offsets:2,1,116,139

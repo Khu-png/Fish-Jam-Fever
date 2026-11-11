@@ -1,0 +1,65 @@
+Well_Done.png
+size:788,480
+filter:Linear,Linear
+1
+bounds:0,111,178,170
+offsets:1,2,180,173
+rotate:90
+2
+bounds:166,6,104,154
+offsets:1,1,106,157
+rotate:90
+3
+bounds:604,12,94,152
+offsets:1,1,96,155
+4
+bounds:699,12,88,152
+offsets:1,1,90,154
+5
+bounds:486,0,117,150
+offsets:1,1,119,152
+6
+bounds:556,165,123,152
+offsets:3,1,127,154
+rotate:90
+7
+bounds:501,322,125,158
+offsets:1,1,127,160
+8
+bounds:627,289,113,156
+offsets:1,1,115,158
+rotate:90
+9
+bounds:627,403,77,157
+offsets:1,1,79,160
+rotate:90
+Layer 10
+bounds:183,310,89,170
+offsets:1,1,91,172
+Layer 2
+bounds:0,290,190,182
+offsets:2,2,194,185
+rotate:90
+Layer 3
+bounds:309,144,116,167
+offsets:1,1,119,169
+Layer 4
+bounds:0,5,105,165
+offsets:1,1,107,168
+rotate:90
+Layer 5
+bounds:399,315,101,165
+offsets:1,1,103,167
+Layer 6
+bounds:426,151,129,163
+offsets:1,1,131,165
+Layer 7
+bounds:321,7,136,164
+offsets:2,1,139,167
+rotate:90
+Layer 8
+bounds:171,119,137,170
+offsets:1,1,139,173
+Layer 9
+bounds:273,312,125,168
+offsets:2,2,128,171
