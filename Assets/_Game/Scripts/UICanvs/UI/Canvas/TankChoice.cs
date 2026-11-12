@@ -23,6 +23,7 @@ namespace FishJam.UI
             Shader.PropertyToID("_Hole0"), Shader.PropertyToID("_Hole1"), Shader.PropertyToID("_Hole2"), Shader.PropertyToID("_Hole3")
         };
         private static readonly int HoleCountId = Shader.PropertyToID("_HoleCount");
+        private static readonly int AspectId = Shader.PropertyToID("_Aspect");
 
         [Tooltip("Full-screen image that uses the FishSort/UISpotlight material.")]
         [SerializeField] private RawImage dim;
@@ -53,13 +54,17 @@ namespace FishJam.UI
             tankSlots = slots;
             onChosen = chosen;
             onCancelled = cancelled;
+            // The dark layer covers the area the game is drawn in (the whole screen, or less with side bars).
+            Camera uiCamera = dim.canvas.worldCamera;
+            Rect area = uiCamera != null ? uiCamera.pixelRect : new Rect(0f, 0f, Screen.width, Screen.height);
+            material.SetFloat(AspectId, area.width / area.height);
             int count = Mathf.Min(screenRects.Length, MAX_TANKS);
             material.SetFloat(HoleCountId, count);
             for (int i = 0; i < count; i++)
             {
                 Rect rect = screenRects[i];
-                material.SetVector(HoleIds[i], new Vector4(rect.center.x / Screen.width, rect.center.y / Screen.height,
-                    (rect.width * HALF + PADDING) / Screen.width, (rect.height * HALF + PADDING) / Screen.height));
+                material.SetVector(HoleIds[i], new Vector4((rect.center.x - area.x) / area.width, (rect.center.y - area.y) / area.height,
+                    (rect.width * HALF + PADDING) / area.width, (rect.height * HALF + PADDING) / area.height));
             }
 
             gameObject.SetActive(true);

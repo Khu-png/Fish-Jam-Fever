@@ -14,6 +14,7 @@ Shader "FishSort/UISpotlight"
         _HoleCount ("Window Count", Float) = 0
         _Feather ("Soft Edge", Float) = 0.015
         _Corner ("Corner Radius", Float) = 0.015
+        _Aspect ("Width / Height of the layer", Float) = 0.5625
     }
 
     SubShader
@@ -41,6 +42,7 @@ Shader "FishSort/UISpotlight"
             float _HoleCount;
             float _Feather;
             float _Corner;
+            float _Aspect;
 
             struct VertexInput
             {
@@ -76,7 +78,7 @@ Shader "FishSort/UISpotlight"
 
             fixed4 frag(VertexOutput i) : SV_Target
             {
-                float aspect = _ScreenParams.x / _ScreenParams.y;
+                float aspect = _Aspect;
                 float2 p = float2(i.uv.x * aspect, i.uv.y);
                 float nearest = 1000.0;
                 float4 holes[4] = { _Hole0, _Hole1, _Hole2, _Hole3 };

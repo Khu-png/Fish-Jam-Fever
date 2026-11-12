@@ -14,7 +14,13 @@ namespace FishSort
 
         private void Awake()
         {
-            float aspect = (float)Screen.width / Screen.height;
+            Refit();
+        }
+
+        // Also called when the screen changes shape. The aspect is that of the area the camera draws into.
+        public void Refit()
+        {
+            float aspect = (float)targetCamera.pixelWidth / targetCamera.pixelHeight;
             targetCamera.orthographicSize = Mathf.Max(minOrthographicSize, designWidth * HALF / aspect);
         }
     }

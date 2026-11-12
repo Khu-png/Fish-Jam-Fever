@@ -84,3 +84,10 @@ crashlytics-build.properties
 # Anh kiem tra tam trong mockup (bat dau bang dau gach duoi)
 /Docs/mockups/_*
 /Docs/mockups/__pycache__/
+
+# Build output and Unity build by-products (can be hundreds of MB)
+/Builds/
+*_BackUpThisFolder_ButDontShipItWithYourGame/
+*_BurstDebugInformation_DoNotShip/
+# Original imported reference data kept outside Assets (see SourceAssets/README.txt)
+/SourceAssets/
