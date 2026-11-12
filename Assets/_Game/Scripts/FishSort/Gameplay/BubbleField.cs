@@ -140,8 +140,10 @@ namespace FishSort
                     continue;
                 }
 
+                // The fish fades out towards the top of the field; it can still be picked while any of it shows,
+                // and only when it is hidden completely (its lowest point is above the fade) it cannot.
                 Vector2 center = fish.TF.position;
-                if (center.y > fieldTop)
+                if (fish.HitCollider.bounds.min.y > fieldTop)
                 {
                     continue;
                 }
@@ -155,6 +157,18 @@ namespace FishSort
             }
 
             return best;
+        }
+
+        // True when the point is inside a frozen bubble (its fish cannot be picked until the ice melts).
+        public bool IsFrozenBubbleAt(Vector2 point)
+        {
+            bool isInside = false;
+            for (int i = 0; i < bubbles.Count && !isInside; i++)
+            {
+                isInside = bubbles[i].IsFrozen && bubbles[i].BodyCollider.OverlapPoint(point);
+            }
+
+            return isInside;
         }
 
         // Called when the player picks a fish: shrink its bubble or pop it.

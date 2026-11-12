@@ -72,7 +72,7 @@ namespace FishJam.UI
             bowl.AnimationState.SetAnimation(0, BOWL_ANIMATION, false);
         }
 
-        public IEnumerator Open()
+        public IEnumerator Reveal()
         {
             float elapsed = 0f;
             while (elapsed < OPEN_TIME)

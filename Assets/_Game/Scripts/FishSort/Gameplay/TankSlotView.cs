@@ -12,6 +12,7 @@ namespace FishSort
         private const float TANK_POP_SCALE = 1.2f;
         private const float BADGE_FISH_MAX_WIDTH = 0.54f;
         private const float BADGE_FISH_MAX_HEIGHT = 0.40f;
+        private const float BADGE_FADE_TIME = 0.4f;
         // The hanging loops sit above the plate, so its visual center is below the sprite pivot.
         private static readonly Vector3 BadgeFishCenter = new Vector3(0f, -0.065f, 0f);
 
@@ -30,11 +31,54 @@ namespace FishSort
         private Vector3 badgeRestScale = Vector3.one;
         private Vector3 countRestScale = Vector3.one;
         private Coroutine badgeRoutine;
+        private Coroutine badgeFadeRoutine;
+        private SpriteRenderer[] fadeSprites;
+        private float[] fadeAlpha;
+        private SpriteRenderer[] badgeSprites;
+        private TextMeshPro[] badgeTexts;
+        private float[] badgeSpriteAlpha;
+        private float[] badgeTextAlpha;
         private bool isInitialized;
 
         private void Awake()
         {
             CacheRest();
+        }
+
+        // Fades the whole tank (its sprites and its badge) in or out: 0 = invisible, 1 = as drawn.
+        public void SetFade(float factor)
+        {
+            if (fadeSprites == null)
+            {
+                fadeSprites = tankRoot.GetComponentsInChildren<SpriteRenderer>(true);
+                fadeAlpha = new float[fadeSprites.Length];
+                for (int i = 0; i < fadeSprites.Length; i++)
+                {
+                    fadeAlpha[i] = fadeSprites[i].color.a;
+                }
+            }
+
+            for (int i = 0; i < fadeSprites.Length; i++)
+            {
+                Color color = fadeSprites[i].color;
+                color.a = fadeAlpha[i] * factor;
+                fadeSprites[i].color = color;
+            }
+
+            SetBadgeAlpha(factor);
+        }
+
+        // The area the tank covers in the world (all its sprites together).
+        public Bounds GetTankBounds()
+        {
+            SpriteRenderer[] renderers = tankRoot.GetComponentsInChildren<SpriteRenderer>();
+            Bounds bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+
+            return bounds;
         }
 
         public Vector3 GetIconPosition(int iconIndex)
@@ -58,6 +102,8 @@ namespace FishSort
             CacheRest();
             StopAllCoroutines();
             badgeRoutine = null;
+            badgeFadeRoutine = null;
+            SetBadgeAlpha(1f);
             heldFish.Clear();
             waterSplash.Clear();
             tankRoot.localPosition = tankRestPosition;
@@ -75,6 +121,8 @@ namespace FishSort
 
         public void ShowBadge(Sprite fishSprite, int landed, int capacity, bool punch)
         {
+            StopBadgeFade();
+            SetBadgeAlpha(1f);
             badgeRoot.SetActive(true);
             badgeFishRenderer.sprite = fishSprite;
             // Fit both dimensions, including tall species, and compensate for each sprite's pivot.
@@ -100,7 +148,76 @@ namespace FishSort
 
         public void HideBadge()
         {
+            StopBadgeFade();
+            SetBadgeAlpha(1f);
             badgeRoot.SetActive(false);
+        }
+
+        // The last goal of the level is done: the badge fades away instead of vanishing at once.
+        public void FadeOutBadge()
+        {
+            if (badgeRoot.activeSelf)
+            {
+                StopBadgeFade();
+                badgeFadeRoutine = StartCoroutine(FadeBadgeRoutine());
+            }
+        }
+
+        private void StopBadgeFade()
+        {
+            if (badgeFadeRoutine != null)
+            {
+                StopCoroutine(badgeFadeRoutine);
+                badgeFadeRoutine = null;
+            }
+        }
+
+        private IEnumerator FadeBadgeRoutine()
+        {
+            float elapsed = 0f;
+            while (elapsed < BADGE_FADE_TIME)
+            {
+                elapsed += Time.deltaTime;
+                SetBadgeAlpha(1f - Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / BADGE_FADE_TIME)));
+                yield return null;
+            }
+
+            badgeRoot.SetActive(false);
+            SetBadgeAlpha(1f);
+            badgeFadeRoutine = null;
+        }
+
+        // Every sprite and text of the badge, each keeping its own original opacity.
+        private void SetBadgeAlpha(float factor)
+        {
+            if (badgeSprites == null)
+            {
+                badgeSprites = badgeRoot.GetComponentsInChildren<SpriteRenderer>(true);
+                badgeTexts = badgeRoot.GetComponentsInChildren<TextMeshPro>(true);
+                badgeSpriteAlpha = new float[badgeSprites.Length];
+                badgeTextAlpha = new float[badgeTexts.Length];
+                for (int i = 0; i < badgeSprites.Length; i++)
+                {
+                    badgeSpriteAlpha[i] = badgeSprites[i].color.a;
+                }
+
+                for (int i = 0; i < badgeTexts.Length; i++)
+                {
+                    badgeTextAlpha[i] = badgeTexts[i].alpha;
+                }
+            }
+
+            for (int i = 0; i < badgeSprites.Length; i++)
+            {
+                Color color = badgeSprites[i].color;
+                color.a = badgeSpriteAlpha[i] * factor;
+                badgeSprites[i].color = color;
+            }
+
+            for (int i = 0; i < badgeTexts.Length; i++)
+            {
+                badgeTexts[i].alpha = badgeTextAlpha[i] * factor;
+            }
         }
 
         // Flash, then shrink + rise out. Held fish are returned to the pool.

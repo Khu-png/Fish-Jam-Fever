@@ -3,15 +3,16 @@ using UnityEngine;
 
 namespace FishSort
 {
-    // The animated look of a fish (Spine rig, "standby_1": tail, eyes). It is a child of the fish body, shown only while
-    // the fish is resting; it copies sorting order, mask and flip from the still sprite, which stays the look for
-    // flying, selecting and ice. Size and position are fitted to that sprite so swapping the two is not noticeable.
+    // Fits one animated rig to its static species image, then follows the gameplay renderer state.
+    [DefaultExecutionOrder(100)]
     public sealed class FishSpine : MonoBehaviour
     {
         private const string ANIMATION = "standby_1";
         private const int TRACK = 0;
         private const float MIN_SIZE = 0.0001f;
         private static readonly int FadeOnId = Shader.PropertyToID("_FadeOn");
+        private static readonly int TintId = Shader.PropertyToID("_Tint");
+        private static readonly int SilhouetteId = Shader.PropertyToID("_Silhouette");
 
         [SerializeField] private SkeletonAnimation skeleton;
         [SerializeField] private MeshRenderer meshRenderer;
@@ -25,6 +26,13 @@ namespace FishSort
         private bool hasFlip;
         private bool isFading;
         private bool hasFade;
+        private MeshRenderer outline;
+        private MeshFilter outlineFilter;
+        private MeshFilter bodyFilter;
+        private SpriteRenderer glow;
+        private MaterialPropertyBlock outlineBlock;
+        private SpriteMaskInteraction outlineMask;
+        private bool hasOutlineMaterials;
 
         public bool IsReady { get; private set; }
 
@@ -46,12 +54,13 @@ namespace FishSort
             skeleton.Update(0f);
             float width = Mathf.Max(MIN_SIZE, data.Width * asset.scale);
             float height = Mathf.Max(MIN_SIZE, data.Height * asset.scale);
-            fitScale = (reference.bounds.size.x / width + reference.bounds.size.y / height) * 0.5f;
+            fitScale = Mathf.Min(reference.bounds.size.x / width, reference.bounds.size.y / height);
             spriteCenter = reference.bounds.center;
             rigCenter = new Vector2(data.X + data.Width * 0.5f, data.Y + data.Height * 0.5f) * asset.scale;
             rigFacesRight = facesRight;
             hasFlip = false;
             hasFade = false;
+            hasOutlineMaterials = false;
             IsReady = true;
             return true;
         }
@@ -60,16 +69,59 @@ namespace FishSort
         {
             skeleton.enabled = isVisible;
             meshRenderer.enabled = isVisible;
+            if (!isVisible && outline != null) outline.enabled = false;
         }
 
         // Called every frame while shown. spriteFlipped = the still sprite is mirrored (the fish faces right).
-        public void Sync(int sortingOrder, SpriteMaskInteraction mask, bool fadeAtTop, bool spriteFlipped, bool isPlaying)
+        public void Sync(int sortingOrder, SpriteMaskInteraction mask, bool fadeAtTop, bool spriteFlipped,
+            float animationSpeed, Color tint, SpriteRenderer glowRenderer)
         {
             meshRenderer.sortingOrder = sortingOrder;
             skeleton.maskInteraction = mask;
-            skeleton.timeScale = isPlaying ? 1f : 0f;
+            skeleton.timeScale = animationSpeed;
             ApplyFade(fadeAtTop);
             ApplyFlip(spriteFlipped);
+            glow = glowRenderer;
+            meshRenderer.GetPropertyBlock(block);
+            block.SetColor(TintId, tint);
+            meshRenderer.SetPropertyBlock(block);
+        }
+
+        private void LateUpdate()
+        {
+            bool showOutline = IsReady && meshRenderer.enabled && glow != null && glow.enabled;
+            if (!showOutline)
+            {
+                if (outline != null) outline.enabled = false;
+                return;
+            }
+            if (outline == null)
+            {
+                var visual = new GameObject("AnimatedOutline", typeof(MeshFilter), typeof(MeshRenderer));
+                visual.transform.SetParent(transform, false);
+                visual.transform.localScale = Vector3.one * 1.08f;
+                outline = visual.GetComponent<MeshRenderer>();
+                outlineFilter = visual.GetComponent<MeshFilter>();
+                bodyFilter = skeleton.GetComponent<MeshFilter>();
+            }
+            // Reuse the current pose mesh, so selection never needs a second animated skeleton.
+            outlineFilter.sharedMesh = bodyFilter.sharedMesh;
+            if (!hasOutlineMaterials || outlineMask != skeleton.maskInteraction)
+            {
+                outline.sharedMaterials = meshRenderer.sharedMaterials;
+                outlineMask = skeleton.maskInteraction;
+                hasOutlineMaterials = true;
+            }
+            outline.enabled = true;
+            outline.sortingLayerID = meshRenderer.sortingLayerID;
+            outline.sortingOrder = meshRenderer.sortingOrder - 1;
+            float sign = isFlipped != rigFacesRight ? -1f : 1f;
+            outline.transform.localPosition = new Vector3(-sign * rigCenter.x * .08f, -rigCenter.y * .08f, 0f);
+            if (outlineBlock == null) outlineBlock = new MaterialPropertyBlock();
+            outlineBlock.SetFloat(FadeOnId, isFading ? 1f : 0f);
+            outlineBlock.SetFloat(SilhouetteId, 1f);
+            outlineBlock.SetColor(TintId, glow.color);
+            outline.SetPropertyBlock(outlineBlock);
         }
 
         private void ApplyFlip(bool spriteFlipped)

@@ -104,6 +104,19 @@ namespace FishSort
             return slotPoints[slot].position;
         }
 
+        // Removes the first maxCount fish (the ones nearest the cannon) into output; the others slide up to fill the gaps.
+        public void TakeFirst(int maxCount, List<Fish> output)
+        {
+            int count = Mathf.Min(maxCount, items.Count);
+            for (int i = 0; i < count; i++)
+            {
+                output.Add(items[i]);
+            }
+
+            items.RemoveRange(0, count);
+            Relayout();
+        }
+
         // Empties the tray: every fish goes to output (they stay where they are for the caller to animate).
         public void TakeAll(List<Fish> output)
         {

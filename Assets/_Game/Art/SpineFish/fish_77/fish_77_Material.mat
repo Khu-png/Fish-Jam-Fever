@@ -38,6 +38,7 @@ Material:
     - _OutlineReferenceTexWidth: 1024
     - _OutlineSmoothness: 1
     - _OutlineWidth: 3
+    - _Silhouette: 0
     - _StencilComp: 8
     - _StencilRef: 1
     - _StraightAlphaInput: 1
@@ -45,5 +46,6 @@ Material:
     - _Use8Neighbourhood: 1
     m_Colors:
     - _OutlineColor: {r: 1, g: 1, b: 0, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

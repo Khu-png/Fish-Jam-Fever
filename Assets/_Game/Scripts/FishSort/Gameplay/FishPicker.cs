@@ -50,6 +50,19 @@ namespace FishSort
             if (pointer.press.wasPressedThisFrame)
             {
                 isHolding = !IsOverUI();
+                // Touching a locked tank (the grey one with the plus) offers to buy it.
+                int lockedSlot = isHolding ? shelf.FindLockedSlotAt(gameCamera.ScreenToWorldPoint(pointer.position.ReadValue())) : -1;
+                if (lockedSlot >= 0)
+                {
+                    isHolding = false;
+                    GameplayController.Ins.OfferTankPurchase(lockedSlot);
+                }
+
+                // Touching a frozen bubble explains how to melt the ice.
+                if (isHolding && field.IsFrozenBubbleAt(ToWorld(pointer.position.ReadValue())))
+                {
+                    UIManager.Ins.GetUI<FishJam.UI.GamePlay>().ShowIceTip();
+                }
             }
 
             if (!isHolding)

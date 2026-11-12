@@ -43,7 +43,7 @@ public class TransitionManager : Singleton<TransitionManager>
 
         onReveal?.Invoke();
         yield return null;
-        yield return transition.Open();
+        yield return transition.Reveal();
         IsPlaying = false;
     }
 }

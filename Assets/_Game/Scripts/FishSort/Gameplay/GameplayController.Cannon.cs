@@ -25,10 +25,16 @@ namespace FishSort
         private Vector3 shakeRest;
         private bool isShaking;
 
-        // Returns false when the tray is empty or the jar from an earlier shot is still there.
+        // The cannon has nothing to shoot when the tray is empty.
+        public bool IsTrayEmpty => tray.Count == 0;
+
+        // An open jar that already holds as many fish as it can.
+        public bool IsJarFull => fishJar.IsOpen && fishJar.Count >= fishJar.Capacity;
+
+        // Returns false when the tray is empty or the jar from an earlier shot is already full.
         public bool TryUseCannon()
         {
-            bool canUse = !isOver && !isResolvingTray && !isBoosterBusy && tray.Count > 0 && !fishJar.IsOpen
+            bool canUse = !isOver && !isResolvingTray && !isBoosterBusy && tray.Count > 0 && !IsJarFull
                 && GameManager.IsState(GameState.GamePlay);
             if (canUse)
             {
@@ -56,8 +62,10 @@ namespace FishSort
             isBoosterBusy = true;
             hasPickedOnce = true;
             cannonFish.Clear();
-            tray.TakeAll(cannonFish);
-            SetTrayWarning(false);
+            // A jar that is already there takes more fish, up to its capacity; the rest stay in the tray.
+            int room = fishJar.Capacity - (fishJar.IsOpen ? fishJar.Count : 0);
+            tray.TakeFirst(room, cannonFish);
+            SetTrayWarning(tray.IsOneLeft);
             UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetFishCounterVisible(false);
             Vector3 first = tray.GetSlotPosition(0);
             yield return cannon.Enter(first + Vector3.left * config.cannonRestOffset + Vector3.down * config.cannonRestDrop);
@@ -77,8 +85,16 @@ namespace FishSort
             yield return cannon.Fire(jarPosition, orbPoint => followers = Follow(orbPoint, rank, followers));
 
             // The bullet is in: the jar appears, the cannon leaves, and the fish dive into the jar one by one.
-            fishJar.Open(cannonFish.Count);
-            ParticlePool.Play(ParticleType.TankBubblePop, jarPosition, Quaternion.identity, JAR_POP_SCALE);
+            if (fishJar.IsOpen)
+            {
+                fishJar.Expect(cannonFish.Count);
+            }
+            else
+            {
+                fishJar.Open(cannonFish.Count);
+                ParticlePool.Play(ParticleType.TankBubblePop, jarPosition, Quaternion.identity, JAR_POP_SCALE);
+            }
+
             StartCoroutine(CannonLeaves());
             yield return FillJar(jarPosition);
             // Any open tank that wants a fish from the jar gets it straight away.

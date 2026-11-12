@@ -29,7 +29,7 @@ public static class LevelDataGenerator
 
     private static readonly Recipe[] Recipes =
     {
-        new Recipe(7, 33, 4, 0, 21),
+        new Recipe(7, 33, 4, 1, 21),
         new Recipe(9, 54, 4, 1, 33),
         new Recipe(12, 120, 5, 2, 57)
     };
@@ -37,18 +37,20 @@ public static class LevelDataGenerator
     // Ten gentle levels (few types, few fish, hardly any ice) that are played before the first sample level.
     private const string EASY_MENU_PATH = "Tools/FishSort/Generate Easy Levels";
     private const int FIRST_EASY_NUMBER = 5;
+    // In-game levels 2 and 3 are tiny; from level 4 there are more bubbles and fish, but few types. Ice bubbles come in from
+    // level 3 on (one at first, up to three).
     private static readonly Recipe[] EasyRecipes =
     {
         new Recipe(3, 12, 3, 0, 101),
-        new Recipe(4, 15, 3, 0, 102),
-        new Recipe(4, 18, 4, 0, 103),
-        new Recipe(5, 18, 4, 0, 104),
-        new Recipe(5, 21, 4, 0, 105),
-        new Recipe(6, 24, 4, 0, 106),
-        new Recipe(6, 27, 4, 0, 107),
-        new Recipe(6, 27, 4, 1, 108),
-        new Recipe(7, 30, 4, 0, 109),
-        new Recipe(7, 30, 4, 1, 110)
+        new Recipe(4, 15, 3, 1, 102),
+        new Recipe(5, 24, 4, 1, 103),
+        new Recipe(5, 27, 4, 1, 104),
+        new Recipe(6, 30, 4, 2, 105),
+        new Recipe(6, 33, 4, 2, 106),
+        new Recipe(6, 36, 5, 2, 107),
+        new Recipe(7, 39, 5, 2, 108),
+        new Recipe(7, 42, 5, 3, 109),
+        new Recipe(7, 45, 5, 3, 110)
     };
 
     public static int EasyLevelCount => EasyRecipes.Length;
@@ -67,6 +69,36 @@ public static class LevelDataGenerator
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         Debug.Log("FishSort: easy levels written to " + OUTPUT_FOLDER);
+    }
+
+    // Rewrites Level_02 .. Level_04 (the sample levels after the easy ones) and keeps the tutorial level as it is.
+    public static void GenerateSampleLevelsOnly()
+    {
+        Directory.CreateDirectory(OUTPUT_FOLDER);
+        for (int i = 0; i < Recipes.Length; i++)
+        {
+            Generate(Recipes[i], out BubbleData[] bubbles, out int[] sequence);
+            SaveLevel(i + 2, Recipes[i].columns, bubbles, sequence);
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }
+
+    // Logs how many ice bubbles each easy level really got (a recipe asks for some, the layout may allow fewer).
+    public static void LogIceCounts()
+    {
+        for (int i = 0; i < EasyRecipes.Length; i++)
+        {
+            LevelData level = AssetDatabase.LoadAssetAtPath<LevelData>(EasyLevelPath(i));
+            int ice = 0;
+            for (int k = 0; k < level.Bubbles.Length; k++)
+            {
+                ice += level.Bubbles[k].iceTaps > 0 ? 1 : 0;
+            }
+
+            Debug.Log("FishSort: level " + (i + 2) + " has " + level.Bubbles.Length + " bubbles, " + level.TotalFish + " fish, " + ice + " ice");
+        }
     }
 
     public static string EasyLevelPath(int index)

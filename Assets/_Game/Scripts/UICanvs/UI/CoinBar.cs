@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace FishJam.UI
 {
-    /// <summary>O hien so xu (doc Wallet), nay nhe khi so thay doi. 'icon' la dich cho xu bay toi.</summary>
+    /// <summary>O hien so xu (doc PlayerData), nay nhe khi so thay doi. 'icon' la dich cho xu bay toi.</summary>
     public class CoinBar : MonoBehaviour
     {
         public TMP_Text label;
         public RectTransform icon;
         int shown; Coroutine co;
 
-        void OnEnable() { Wallet.Changed += OnChanged; Set(Wallet.Coins); }
+        void OnEnable() { FishSort.PlayerData.CoinsChanged += OnChanged; Set(FishSort.PlayerData.Coins); }
         void OnDisable()
         {
-            Wallet.Changed -= OnChanged;
+            FishSort.PlayerData.CoinsChanged -= OnChanged;
             if (co != null) StopCoroutine(co);
             co = null;
             transform.localScale = Vector3.one;

@@ -39,6 +39,8 @@ namespace FishSort
 
         public bool IsOpen { get; private set; }
         public int Count => fishes.Count;
+        // The jar holds as many fish as its layouts cover.
+        public int Capacity => Layouts.Length;
 
         private Transform TF
         {
@@ -65,6 +67,18 @@ namespace FishSort
             gameObject.SetActive(true);
             IsOpen = true;
             SetCount(0);
+        }
+
+        // More fish are coming into a jar that is already open: the fish inside make room by moving to the new layout.
+        public void Expect(int extraCount)
+        {
+            expectedFish = fishes.Count + extraCount;
+            Vector2[] layout = Layouts[Mathf.Clamp(expectedFish, 1, Layouts.Length) - 1];
+            for (int i = 0; i < fishes.Count; i++)
+            {
+                float tilt = i % 2 == 0 ? FISH_TILT : -FISH_TILT;
+                fishes[i].EnterJar(TF, layout[i % layout.Length], FISH_WIDTH, tilt, i);
+            }
         }
 
         public bool Owns(Fish fish)

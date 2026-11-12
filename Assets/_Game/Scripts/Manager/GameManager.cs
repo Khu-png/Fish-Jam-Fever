@@ -15,7 +15,7 @@ public class GameManager : Singleton<GameManager>
 
     public static bool IsState(GameState state) => gameState == state;
 
-    // Revives used in the current level (reset when the level starts). The popup price is multiplied by (ReviveCount + 1).
+    // Revives used in the current level (reset when the level starts).
     public int ReviveCount { get; set; }
 
     // Win/lose are decided here: gameplay reports the result, GameManager moves the game to Finish and opens the result UI.
@@ -24,6 +24,8 @@ public class GameManager : Singleton<GameManager>
         LevelManager.Ins.CompleteLevel();
         ChangeState(GameState.Finish);
         SoundManager.Ins.PlayFx(FxID.Win);
+        // The gameplay HUD (level, fish count, boosters...) goes away behind the win screen.
+        UIManager.Ins.CloseUI<FishJam.UI.GamePlay>();
         UIManager.Ins.OpenUI<FishJam.UI.Win>();
     }
 

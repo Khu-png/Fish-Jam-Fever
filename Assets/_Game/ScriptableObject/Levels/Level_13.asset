@@ -12,33 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09189b5190aa1741b994c2a6e0bca1b, type: 3}
   m_Name: Level_13
   m_EditorClassIdentifier: Assembly-CSharp::FishSort.LevelData
-  columns: 4
+  columns: 5
   bubbles:
   - column: 0
-    fishTypes: 0000000004000000
+    fishTypes: 0500000003000000060000000000000002000000
     iceTaps: 0
   - column: 1
-    fishTypes: 00000000020000000400000003000000
+    fishTypes: 05000000060000000000000002000000
     iceTaps: 0
   - column: 2
-    fishTypes: 02000000050000000400000001000000
+    fishTypes: 0500000006000000
     iceTaps: 0
   - column: 3
-    fishTypes: 050000000600000002000000
+    fishTypes: 0500000006000000040000000300000001000000
+    iceTaps: 0
+  - column: 4
+    fishTypes: 0500000003000000000000000200000004000000
     iceTaps: 0
   - column: 0
-    fishTypes: 050000000400000003000000
+    fishTypes: 05000000020000000400000006000000
+    iceTaps: 3
+  - column: 1
+    fishTypes: 0500000004000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 0500000001000000
+    iceTaps: 3
+  - column: 3
+    fishTypes: 050000000200000004000000
+    iceTaps: 3
+  - column: 4
+    fishTypes: 0500000002000000060000000400000001000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 050000000500000005000000
     iceTaps: 0
   - column: 1
-    fishTypes: 06000000000000000100000005000000
+    fishTypes: 0500000005000000
     iceTaps: 0
-  - column: 2
-    fishTypes: 0600000004000000
-    iceTaps: 0
-  - column: 3
-    fishTypes: 0600000003000000010000000500000004000000
-    iceTaps: 0
-  - column: 0
-    fishTypes: 060000000500000006000000
-    iceTaps: 0
-  tankSequence: 02000000040000000500000003000000000000000600000001000000040000000600000005000000
+  tankSequence: 0500000006000000000000000300000002000000040000000500000005000000050000000600000001000000020000000400000005000000

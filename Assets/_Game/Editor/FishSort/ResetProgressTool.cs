@@ -9,8 +9,17 @@ namespace FishSort.Editor
     public static class ResetProgressTool
     {
         private const string MENU_RESET_LEVEL = "Tools/FishSort/Reset Level To 1";
+        private const string MENU_RESET_COINS = "Tools/FishSort/Reset Coins To 0";
+        private const string LOG_COINS = "[FishSort] Coins reset to 0.";
         private const string LOG_DONE = "[FishSort] Saved level reset to {0}.";
         private const string LOG_PLAYING = "[FishSort] Saved level reset to {0}. Go back to Home to see it on the Play button.";
+
+        [MenuItem(MENU_RESET_COINS)]
+        private static void ResetCoinsToZero()
+        {
+            PlayerData.AddCoins(-PlayerData.Coins);
+            Debug.Log(LOG_COINS);
+        }
 
         [MenuItem(MENU_RESET_LEVEL)]
         private static void ResetLevelToFirst()

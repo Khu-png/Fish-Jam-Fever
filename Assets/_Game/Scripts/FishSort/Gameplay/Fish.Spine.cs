@@ -2,8 +2,7 @@ using UnityEngine;
 
 namespace FishSort
 {
-    // The animated (Spine) look of a fish: used only while it rests and is not selected or frozen. While flying,
-    // sliding the tray or held under a finger the plain sprite is shown (no animation, outline works on it).
+    // Keep one rig through selection, flight and arrival; the sprite remains the fallback and size reference.
     public sealed partial class Fish
     {
         private const float SPINE_PHASE_SCALE = 3.7f;
@@ -34,24 +33,23 @@ namespace FishSort
             }
         }
 
-        private bool IsResting => !IsFlying && !isHighlighted && !IsFrozen
-            && (idleInContainer || (idleInBubble && (Owner != null || IsInJar)));
-
-        // Every frame: swap between the sprite and the animated rig, and keep the rig in step with the sprite.
+        // Frozen fish retain the existing ice sprite. All other states share the same animated appearance.
         private void UpdateSpine()
         {
-            bool showSpine = spine != null && spine.IsReady && IsResting;
+            bool showSpine = spine != null && spine.IsReady && !IsFrozen;
             if (showSpine != isSpineShown)
             {
                 isSpineShown = showSpine;
                 spine.Show(showSpine);
                 bodyRenderer.enabled = !showSpine;
             }
+            glowRenderer.forceRenderingOff = showSpine;
 
             if (isSpineShown)
             {
                 spine.Sync(bodyRenderer.sortingOrder, bodyRenderer.maskInteraction,
-                    bodyRenderer.sharedMaterial == bubbleMaterial, bodyRenderer.flipX, moveRoutine == null);
+                    bodyRenderer.sharedMaterial == bubbleMaterial, bodyRenderer.flipX,
+                    idleInContainer ? .45f : IsFlying ? .8f : 1f, bodyRenderer.color, glowRenderer);
             }
         }
     }

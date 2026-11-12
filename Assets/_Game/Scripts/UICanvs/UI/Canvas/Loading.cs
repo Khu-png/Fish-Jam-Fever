@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace FishJam.UI
 {
@@ -33,6 +34,8 @@ namespace FishJam.UI
 
         private float target;
         private float shown;
+        private Graphic[] graphics;
+        private Color[] baseColors;
 
         // How much of the bar is drawn right now (it eases towards the real progress).
         public float Shown => shown;
@@ -45,6 +48,7 @@ namespace FishJam.UI
             shown = 0f;
             group.alpha = 1f;
             group.blocksRaycasts = true;
+            SetFade(1f);
             Apply();
         }
 
@@ -63,11 +67,33 @@ namespace FishJam.UI
             while (elapsed < FADE_TIME)
             {
                 elapsed += Time.unscaledDeltaTime;
-                group.alpha = 1f - Mathf.Clamp01(elapsed / FADE_TIME);
+                SetFade(1f - Mathf.Clamp01(elapsed / FADE_TIME));
                 yield return null;
             }
 
             CloseDirectly();
+        }
+
+        // Fades every graphic by its own colour. A CanvasGroup would only lower the alpha of the Spine drawings (their
+        // colours are premultiplied), which makes them glow white while they fade.
+        private void SetFade(float factor)
+        {
+            if (graphics == null)
+            {
+                graphics = GetComponentsInChildren<Graphic>(true);
+                baseColors = new Color[graphics.Length];
+                for (int i = 0; i < graphics.Length; i++)
+                {
+                    baseColors[i] = graphics[i].color;
+                }
+            }
+
+            for (int i = 0; i < graphics.Length; i++)
+            {
+                Color color = baseColors[i];
+                color.a *= factor;
+                graphics[i].color = color;
+            }
         }
 
         private void Update()

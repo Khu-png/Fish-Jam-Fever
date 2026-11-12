@@ -25,8 +25,8 @@ MonoBehaviour:
     iceTaps: 0
   - column: 0
     fishTypes: 010000000000000002000000
-    iceTaps: 0
+    iceTaps: 3
   - column: 1
     fishTypes: 0000000000000000
     iceTaps: 0
-  tankSequence: 0000000003000000020000000000000001000000
+  tankSequence: 0300000000000000000000000100000002000000

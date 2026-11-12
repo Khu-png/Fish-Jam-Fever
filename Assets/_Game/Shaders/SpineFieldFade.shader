@@ -11,6 +11,8 @@ Shader "FishSort/SpineFieldFade"
         [HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Float) = 8
         _FadeHeight ("Fade Height", Float) = 0.5
         _FadeOn ("Fade On", Float) = 0
+        _Tint ("Tint", Color) = (1,1,1,1)
+        _Silhouette ("Outline silhouette", Float) = 0
     }
 
     SubShader
@@ -43,6 +45,8 @@ Shader "FishSort/SpineFieldFade"
             float _FieldTopY;
             float _FadeHeight;
             float _FadeOn;
+            float4 _Tint;
+            float _Silhouette;
 
             struct VertexInput
             {
@@ -88,7 +92,10 @@ Shader "FishSort/SpineFieldFade"
             #endif
                 float fade = saturate((_FieldTopY - i.worldY) / max(_FadeHeight, 0.0001));
                 fade = lerp(1.0, smoothstep(0.0, 1.0, fade), _FadeOn);
-                return texColor * i.vertexColor * fade;
+                float4 c = texColor * i.vertexColor;
+                c.rgb = lerp(c.rgb * _Tint.rgb * _Tint.a, _Tint.rgb * c.a * _Tint.a, _Silhouette);
+                c.a *= _Tint.a;
+                return c * fade;
             }
             ENDCG
         }

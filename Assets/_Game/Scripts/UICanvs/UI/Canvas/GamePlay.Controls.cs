@@ -11,6 +11,10 @@ namespace FishJam.UI
     {
         [Header("Gameplay controls")]
         [SerializeField] private Button[] boosterButtons;
+        [Tooltip("Per power-up button: the '+' shown when none are left, and the badge with the number owned.")]
+        [SerializeField] private GameObject[] boosterPlus;
+        [SerializeField] private GameObject[] boosterBadge;
+        [SerializeField] private TMP_Text[] boosterCount;
         [SerializeField] private RectTransform tutorialArea;
         [SerializeField] private RectTransform tutorialHand;
         [SerializeField] private Graphic tutorialPulse;
@@ -18,14 +22,48 @@ namespace FishJam.UI
         [SerializeField] private GameObject tipRoot;
         [SerializeField] private TextMeshProUGUI tipText;
         [SerializeField] private GameObject toastRoot;
+        [Tooltip("The dark banner explaining ice bubbles; it shows when a frozen bubble is touched and fades away by itself.")]
+        [SerializeField] private CanvasGroup iceTip;
+        [Tooltip("The dark screen with the tanks lit up, used to choose where the fishing rod fishes.")]
+        [SerializeField] private TankChoice tankChoice;
+
+        public TankChoice TankChoice => tankChoice;
 
         private const float TOAST_DURATION = 1.4f;
+        private const float ICE_TIP_HOLD = 2f;
+        private const float ICE_TIP_FADE = 1f;
+        private const string JAR_FULL_MESSAGE = "The jar is already full of fish";
+        private const string NO_TRAY_FISH_MESSAGE = "There are no fish in the tray";
         private Coroutine toastRoutine;
+        private Coroutine iceTipRoutine;
         private Coroutine tipRoutine;
         private Transform tutorialTarget;
         private Camera tutorialCamera;
         private Vector3 tutorialWorldOffset;
         private float tutorialStarted;
+
+        private void OnEnable()
+        {
+            PlayerData.BoostersChanged += RefreshBoosterBadges;
+            RefreshBoosterBadges();
+        }
+
+        private void OnDisable()
+        {
+            PlayerData.BoostersChanged -= RefreshBoosterBadges;
+        }
+
+        // '+' while the player has none, the number owned otherwise.
+        private void RefreshBoosterBadges()
+        {
+            for (int i = 0; boosterPlus != null && i < boosterPlus.Length; i++)
+            {
+                int owned = PlayerData.GetBooster((BoosterKind)i);
+                boosterPlus[i].SetActive(owned == 0);
+                boosterBadge[i].SetActive(owned > 0);
+                boosterCount[i].text = owned.ToString();
+            }
+        }
 
         private void InitializeGameplayControls()
         {
@@ -44,6 +82,7 @@ namespace FishJam.UI
             HideTutorialHand();
             HideTip();
             toastRoot.SetActive(false);
+            HideIceTip();
         }
 
         public void ShowTutorialHand(Transform target, Camera worldCamera, Vector3 worldOffset)
@@ -118,19 +157,96 @@ namespace FishJam.UI
 
         private void OnRodClicked()
         {
-            SoundManager.Ins.PlayFx(FxID.Button);
-            GameplayController.Ins.TryUseRod();
+            UseOrBuy(BoosterKind.Rod);
         }
 
         private void OnCannonClicked()
         {
+            UseOrBuy(BoosterKind.Cannon);
+        }
+
+        // With stock the power-up is used (and one is taken); without, the shop opens to buy more.
+        private void UseOrBuy(BoosterKind kind)
+        {
             SoundManager.Ins.PlayFx(FxID.Button);
-            GameplayController.Ins.TryUseCannon();
+            if (PlayerData.GetBooster(kind) == 0)
+            {
+                UIManager.Ins.OpenUI<BoosterShop>().Show(kind);
+                return;
+            }
+
+            if (kind == BoosterKind.Cannon && GameplayController.Ins.IsJarFull)
+            {
+                ShowToast(JAR_FULL_MESSAGE);
+                return;
+            }
+
+            if (kind == BoosterKind.Cannon && GameplayController.Ins.IsTrayEmpty)
+            {
+                ShowToast(NO_TRAY_FISH_MESSAGE);
+                return;
+            }
+
+            if (kind == BoosterKind.Rod)
+            {
+                // The rod asks which tank to fish for first and takes its stock itself once it is used.
+                if (!GameplayController.Ins.BeginRodSelection(out string message) && message.Length > 0)
+                {
+                    ShowToast(message);
+                }
+
+                return;
+            }
+
+            if (GameplayController.Ins.TryUseCannon())
+            {
+                PlayerData.UseBooster(kind);
+            }
         }
 
         private void OnOtherBoosterClicked()
         {
             SoundManager.Ins.PlayFx(FxID.Button);
+            if (toastRoutine != null) StopCoroutine(toastRoutine);
+            toastRoutine = StartCoroutine(ToastRoutine());
+        }
+
+        // Touching a frozen bubble: the banner appears at once, stays a little and then fades away slowly.
+        public void ShowIceTip()
+        {
+            if (iceTip == null) return;
+            if (iceTipRoutine != null) StopCoroutine(iceTipRoutine);
+            iceTipRoutine = StartCoroutine(IceTipRoutine());
+        }
+
+        private void HideIceTip()
+        {
+            if (iceTipRoutine != null) StopCoroutine(iceTipRoutine);
+            iceTipRoutine = null;
+            if (iceTip != null)
+            {
+                iceTip.gameObject.SetActive(false);
+            }
+        }
+
+        private IEnumerator IceTipRoutine()
+        {
+            iceTip.gameObject.SetActive(true);
+            iceTip.alpha = 1f;
+            yield return new WaitForSeconds(ICE_TIP_HOLD);
+            for (float t = 0f; t < ICE_TIP_FADE; t += Time.deltaTime)
+            {
+                iceTip.alpha = 1f - t / ICE_TIP_FADE;
+                yield return null;
+            }
+
+            HideIceTip();
+        }
+
+        // A short message in the centre of the gameplay screen.
+        public void ShowToast(string message)
+        {
+            toastRoot.GetComponentInChildren<TMP_Text>(true).text = message;
             if (toastRoutine != null) StopCoroutine(toastRoutine);
             toastRoutine = StartCoroutine(ToastRoutine());
         }

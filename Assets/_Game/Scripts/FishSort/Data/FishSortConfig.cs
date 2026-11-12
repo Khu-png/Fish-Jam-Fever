@@ -88,8 +88,8 @@ namespace FishSort
         public float flyTiltDegrees = 12f;
         public float tankIconWidth = 0.54f;
         public float tankFishHeight = 0.4f;
-        public float trayFishWidth = 0.32f;
-        public float trayFishHeight = 0.25f;
+        public float trayFishWidth = 0.39f;
+        public float trayFishHeight = 0.31f;
         public float traySlideDuration = 0.2f;
 
         [Header("Tank")]

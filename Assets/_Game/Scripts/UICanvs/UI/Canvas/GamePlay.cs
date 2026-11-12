@@ -94,7 +94,7 @@ namespace FishJam.UI
                 warningFrame.alpha = Mathf.Lerp(.35f, 1f, Mathf.Sin(Time.time * Mathf.PI * 2f / .9f) * .5f + .5f);
         }
 
-        public void SetLevel(int level) { if (levelLabel) levelLabel.text = level.ToString(); }
+        public void SetLevel(int level) { if (levelLabel) levelLabel.text = string.Format(FishSort.FishSortConst.FORMAT_LEVEL, level); }
 
         public void SetFishCount(int collected, int total)
         {

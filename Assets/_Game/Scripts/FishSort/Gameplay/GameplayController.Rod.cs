@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FishSort
 {
-    // Fishing-rod booster: the hook comes down, all the fish the first open tank still needs fly to it from
+    // Fishing-rod booster: the player picks a tank (RodChoice), then the hook comes down, all the fish that tank needs fly to it from
     // their bubbles (lowest bubbles first, visible or not), then the hook lifts them over the tank and they drop in.
     public sealed partial class GameplayController
     {
@@ -22,43 +22,6 @@ namespace FishSort
         private readonly List<Fish> rodCatch = new List<Fish>();
         private FishingRod rod;
         private bool isBoosterBusy;
-
-        // Returns false when there is nothing to fish for (no open tank has a free, unfrozen matching fish).
-        public bool TryUseRod()
-        {
-            TankGoal goal = null;
-            bool canUse = !isOver && !isResolvingTray && !isBoosterBusy && GameManager.IsState(GameState.GamePlay);
-            if (canUse)
-            {
-                goal = FindRodGoal();
-                canUse = goal != null;
-            }
-
-            if (canUse)
-            {
-                StartCoroutine(RodRoutine(goal));
-            }
-
-            return canUse;
-        }
-
-        // The first open tank (in slot order) that still has a matching fish to catch.
-        private TankGoal FindRodGoal()
-        {
-            TankGoal found = null;
-            rodCatch.Clear();
-            for (int slot = 0; slot < shelf.SlotCount && found == null; slot++)
-            {
-                TankGoal goal = shelf.GoalAt(slot);
-                bool isOpen = goal != null && goal.IsShown && goal.Reserved < config.tankCapacity;
-                if (isOpen && field.FindLowestFish(goal.TypeId, rodCatch) != null)
-                {
-                    found = goal;
-                }
-            }
-
-            return found;
-        }
 
         private IEnumerator RodRoutine(TankGoal goal)
         {
@@ -139,6 +102,7 @@ namespace FishSort
 
         private void StopRod()
         {
+            CancelRodSelection();
             isBoosterBusy = false;
             rodCatch.Clear();
             if (rod != null)

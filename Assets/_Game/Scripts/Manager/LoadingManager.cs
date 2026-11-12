@@ -112,6 +112,7 @@ public class LoadingManager : Singleton<LoadingManager>
         Prewarm<Lose>();
         yield return null;
         Prewarm<Transition>();
+        Prewarm<BoosterShop>();
         Prewarm<Setting>();
         Prewarm<Revive>();
         yield return null;

@@ -9,6 +9,7 @@ namespace FishSort
     public sealed class TankShelf : MonoBehaviour
     {
         private const int BURST_ICON_INDEX = 1;
+        private const float UNLOCK_FADE_TIME = 0.5f;
 
         [SerializeField] private TankSlotView[] slots;
         [SerializeField] private FishSortConfig config;
@@ -23,7 +24,8 @@ namespace FishSort
         private bool[] isSlotBusy;
         private int[] sequence;
         private int nextSequenceIndex;
-        private int openSlots;
+        private bool[] isSlotOpen;
+        private readonly Dictionary<SpriteRenderer, float> coverBaseAlpha = new Dictionary<SpriteRenderer, float>();
 
         // Raised when a replacement tank is ready to receive fish from the tray.
         public event Action<TankGoal> GoalCreated;
@@ -47,9 +49,16 @@ namespace FishSort
 
         private void Awake()
         {
+            foreach (GameObject cover in lockedViews)
+            {
+                if (cover == null) continue;
+                foreach (SpriteRenderer sprite in cover.GetComponentsInChildren<SpriteRenderer>(true))
+                    coverBaseAlpha[sprite] = sprite.color.a;
+            }
             currentGoals = new TankGoal[slots.Length];
             completed = new Queue<TankGoal>[slots.Length];
             isSlotBusy = new bool[slots.Length];
+            isSlotOpen = new bool[slots.Length];
             for (int i = 0; i < slots.Length; i++)
             {
                 completed[i] = new Queue<TankGoal>();
@@ -62,8 +71,13 @@ namespace FishSort
             // A copy: a revive may pull a tank forward, and the level asset must not change.
             sequence = (int[])tankSequence.Clone();
             nextSequenceIndex = 0;
-            for (int i = 0; i < openSlots; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
+                if (!isSlotOpen[i])
+                {
+                    continue;
+                }
+
                 TankGoal goal = TakeNextGoal(i);
                 if (goal != null)
                 {
@@ -78,9 +92,17 @@ namespace FishSort
         public void ResetAll()
         {
             StopAllCoroutines();
-            openSlots = Mathf.Min(startSlots, slots.Length);
+            // A cancelled purchase fade must not leave the next level's plus half transparent.
+            foreach (var pair in coverBaseAlpha)
+            {
+                if (pair.Key == null) continue;
+                Color color = pair.Key.color;
+                color.a = pair.Value;
+                pair.Key.color = color;
+            }
             for (int i = 0; i < slots.Length; i++)
             {
+                isSlotOpen[i] = i < startSlots;
                 // A slot hidden by the last level must be awake to reset.
                 slots[i].gameObject.SetActive(true);
                 slots[i].ResetView();
@@ -92,27 +114,117 @@ namespace FishSort
         }
 
         // True while a locked slot is left and the sequence still has a tank for it.
-        public bool CanUnlock => openSlots < slots.Length && sequence != null && nextSequenceIndex < sequence.Length;
+        public bool CanUnlock => FirstClosedSlot() >= 0 && sequence != null && nextSequenceIndex < sequence.Length;
 
         // Revive: opens the next locked slot with the next tank of the sequence. preferredType (-1 for none) pulls
         // the first remaining tank of that type forward, so the new tank can take fish that are stuck in the tray.
         public bool UnlockSlot(int preferredType)
         {
-            if (!CanUnlock)
+            return UnlockSlot(FirstClosedSlot(), preferredType, false);
+        }
+
+        // Opens the given locked slot with the next tank of the sequence. With fade, the grey tank with the plus fades away
+        // while the new tank fades in (a bought tank); without, the new tank drops in.
+        public bool UnlockSlot(int slot, int preferredType, bool fade)
+        {
+            bool canOpen = CanUnlock && slot >= 0 && slot < slots.Length && !isSlotOpen[slot];
+            if (canOpen)
             {
-                return false;
+                PullForward(preferredType);
+                isSlotOpen[slot] = true;
+                ApplyLock(slot, fade);
+                slots[slot].ResetView();
+                TankGoal goal = TakeNextGoal(slot);
+                currentGoals[slot] = goal;
+                RefreshBadge(slot, false);
+                StartCoroutine(fade ? FadeOpenSlot(slot, goal) : OpenSlot(slot, goal));
             }
 
-            PullForward(preferredType);
-            int slot = openSlots;
-            openSlots++;
-            ApplyLock(slot);
-            slots[slot].ResetView();
-            TankGoal goal = TakeNextGoal(slot);
-            currentGoals[slot] = goal;
-            RefreshBadge(slot, false);
-            StartCoroutine(OpenSlot(slot, goal));
-            return true;
+            return canOpen;
+        }
+
+        private int FirstClosedSlot()
+        {
+            int found = -1;
+            for (int i = 0; i < isSlotOpen.Length && found < 0; i++)
+            {
+                found = isSlotOpen[i] ? -1 : i;
+            }
+
+            return found;
+        }
+
+        // The locked slot whose grey tank is under the world point, or -1.
+        public int FindLockedSlotAt(Vector2 point)
+        {
+            int found = -1;
+            for (int slot = 0; slot < slots.Length && found < 0; slot++)
+            {
+                GameObject cover = CoverOf(slot);
+                if (!isSlotOpen[slot] && cover != null && cover.activeInHierarchy)
+                {
+                    SpriteRenderer[] renderers = cover.GetComponentsInChildren<SpriteRenderer>();
+                    if (renderers.Length == 0) continue;
+                    Bounds bounds = renderers[0].bounds;
+                    for (int i = 1; i < renderers.Length; i++)
+                    {
+                        bounds.Encapsulate(renderers[i].bounds);
+                    }
+
+                    found = bounds.Contains(new Vector3(point.x, point.y, bounds.center.z)) ? slot : -1;
+                }
+            }
+
+            return found;
+        }
+
+        private GameObject CoverOf(int slot)
+        {
+            int cover = slot - startSlots;
+            bool hasCover = cover >= 0 && cover < lockedViews.Length;
+            return hasCover ? lockedViews[cover] : null;
+        }
+
+        // The new tank fades in where the grey tank with the plus fades out, then it takes its goal.
+        private IEnumerator FadeOpenSlot(int slot, TankGoal goal)
+        {
+            isSlotBusy[slot] = true;
+            GameObject cover = CoverOf(slot);
+            SpriteRenderer[] coverSprites = cover != null ? cover.GetComponentsInChildren<SpriteRenderer>(true) : new SpriteRenderer[0];
+            float[] coverAlpha = new float[coverSprites.Length];
+            for (int i = 0; i < coverSprites.Length; i++)
+            {
+                coverAlpha[i] = coverSprites[i].color.a;
+            }
+
+            slots[slot].SetFade(0f);
+            for (float elapsed = 0f; elapsed < UNLOCK_FADE_TIME; elapsed += Time.deltaTime)
+            {
+                float t = Mathf.SmoothStep(0f, 1f, elapsed / UNLOCK_FADE_TIME);
+                slots[slot].SetFade(t);
+                SetCoverAlpha(coverSprites, coverAlpha, 1f - t);
+                yield return null;
+            }
+
+            slots[slot].SetFade(1f);
+            SetCoverAlpha(coverSprites, coverAlpha, 1f);
+            if (cover != null)
+            {
+                cover.SetActive(false);
+            }
+
+            ShowGoal(goal);
+            isSlotBusy[slot] = false;
+        }
+
+        private static void SetCoverAlpha(SpriteRenderer[] sprites, float[] baseAlpha, float factor)
+        {
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                Color color = sprites[i].color;
+                color.a = baseAlpha[i] * factor;
+                sprites[i].color = color;
+            }
         }
 
         private IEnumerator OpenSlot(int slot, TankGoal goal)
@@ -143,20 +255,26 @@ namespace FishSort
         }
 
         // Open slots show their tank; locked ones show the grey cover instead.
-        private void ApplyLock(int slot)
+        // keepCover: the grey tank stays for now (it is fading out).
+        private void ApplyLock(int slot, bool keepCover = false)
         {
-            bool isOpen = slot < openSlots;
+            bool isOpen = isSlotOpen[slot];
             slots[slot].gameObject.SetActive(isOpen);
-            int cover = slot - startSlots;
-            if (cover >= 0 && cover < lockedViews.Length && lockedViews[cover] != null)
+            GameObject cover = CoverOf(slot);
+            if (cover != null)
             {
-                lockedViews[cover].SetActive(!isOpen);
+                cover.SetActive(!isOpen || keepCover);
             }
         }
 
         public int SlotCount => currentGoals.Length;
 
         // The goal currently open in a slot (null when empty); it may be full or still animating.
+        public Bounds GetTankBounds(int slot)
+        {
+            return slots[slot].GetTankBounds();
+        }
+
         public TankGoal GoalAt(int slot)
         {
             return currentGoals[slot];
@@ -260,7 +378,16 @@ namespace FishSort
                 yield return slots[slot].PlayComplete();
                 goal.IsShown = false;
                 currentGoals[slot] = goal.Next;
-                RefreshBadge(slot, false);
+                if (goal.Next == null)
+                {
+                    // No goal left on this tank (end of the level): its badge fades away.
+                    slots[slot].FadeOutBadge();
+                }
+                else
+                {
+                    RefreshBadge(slot, false);
+                }
+
                 if (goal.Next != null)
                 {
                     yield return slots[slot].PlayEnter();

@@ -65,7 +65,7 @@ namespace FishJam.UI
             claimButton.gameObject.SetActive(false);
             tapToContinue.gameObject.SetActive(false);
             SetRewardText(reward);
-            if (coinBar) coinBar.Set(Wallet.Coins);
+            if (coinBar) coinBar.Set(FishSort.PlayerData.Coins);
         }
 
         public override void Open()
@@ -135,7 +135,7 @@ namespace FishJam.UI
 
         IEnumerator Claim()
         {
-            int start = Wallet.Coins;
+            int start = FishSort.PlayerData.Coins;
             Vector3 to = coinBar && coinBar.icon ? coinBar.icon.position : transform.position;
             for (int i = 0; i < flyCount; i++)
             {
@@ -143,7 +143,7 @@ namespace FishJam.UI
                 StartCoroutine(Fly(to, i * .055f, start + given, reward - given));
             }
             yield return new WaitForSecondsRealtime(.8f + flyCount * .055f);
-            Wallet.Add(reward);
+            FishSort.PlayerData.AddCoins(reward);
             rewardGroup.gameObject.SetActive(false);
             tapToContinue.gameObject.SetActive(true);
             isClicked = false;

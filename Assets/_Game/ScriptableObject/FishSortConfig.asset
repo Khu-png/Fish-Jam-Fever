@@ -78,8 +78,8 @@ MonoBehaviour:
   flyTiltDegrees: 12
   tankIconWidth: 0.54
   tankFishHeight: 0.4
-  trayFishWidth: 0.32
-  trayFishHeight: 0.25
+  trayFishWidth: 0.39
+  trayFishHeight: 0.31
   traySlideDuration: 0.2
   tankFlashDuration: 0.26
   tankLeaveDuration: 0.38
