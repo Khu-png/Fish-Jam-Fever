@@ -58,7 +58,7 @@ namespace FishSort
             cannonFish.Clear();
             tray.TakeAll(cannonFish);
             SetTrayWarning(false);
-            UIManager.Ins.GetUI<UIGameplay>().SetFishCounterVisible(false);
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetFishCounterVisible(false);
             Vector3 first = tray.GetSlotPosition(0);
             yield return cannon.Enter(first + Vector3.left * config.cannonRestOffset + Vector3.down * config.cannonRestDrop);
 
@@ -167,7 +167,7 @@ namespace FishSort
         private IEnumerator CannonLeaves()
         {
             yield return cannon.Retreat();
-            UIManager.Ins.GetUI<UIGameplay>().SetFishCounterVisible(true);
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetFishCounterVisible(true);
         }
 
         private IEnumerator ShakeCamera()
@@ -207,9 +207,9 @@ namespace FishSort
                 fishJar.Hide();
             }
 
-            if (UIManager.Ins.IsOpened<UIGameplay>())
+            if (UIManager.Ins.IsOpened<FishJam.UI.GamePlay>())
             {
-                UIManager.Ins.GetUI<UIGameplay>().SetFishCounterVisible(true);
+                UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetFishCounterVisible(true);
             }
         }
     }

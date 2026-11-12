@@ -107,8 +107,8 @@ namespace FishSort
         }
 
         // Reference-game path: a nearly straight climb to a point above the container, one small rounded
-        // corner there, then a straight drop through the surface to the resting spot. The whole trip uses a
-        // single ease, so the fish speeds up gently, never stops on the way, and glides to a halt at the end.
+        // corner there, then a straight drop through the surface to the resting spot. Reserve time for the
+        // corner and dive, even when the climb is much longer, so braking remains visible near the water.
         private IEnumerator WaterEntryRoutine(Func<Vector3> target, Func<Vector3> surface,
             float duration, float endWidth, Action onWaterEntry, Action<Fish> onArrive,
             int arrivalSortingOrder, FlightShape shape)
@@ -123,6 +123,7 @@ namespace FishSort
             float startWidth = TF.localScale.x;
             // The apex sits on the side the fish comes from, so the climb and the drop never overlap.
             Vector3 apexOffset = new Vector3(-facing * shape.sideOffset, shape.apexHeight, 0f);
+            float approachShare = PathApproachShare(start, surface() + apexOffset, target(), shape.cornerRadius);
             bool hasEntered = false;
             float enteredAt = 0f;
             float angleVelocity = 0f;
@@ -131,7 +132,7 @@ namespace FishSort
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                float eased = Ease.InOutSine(Mathf.Clamp01(elapsed / duration));
+                float eased = FlightProgress(elapsed / duration, approachShare);
                 Vector3 position = PathPoint(start, surface() + apexOffset, target(), shape.cornerRadius, eased);
                 if (!hasEntered && position.y < previous.y && position.y <= surface().y)
                 {
@@ -140,7 +141,7 @@ namespace FishSort
                     EnterWater(arrivalSortingOrder, onWaterEntry);
                 }
 
-                float levelBlend = hasEntered ? Mathf.SmoothStep(0f, 1f, (eased - enteredAt) / (1f - enteredAt)) : 0f;
+                float levelBlend = hasEntered ? Mathf.SmoothStep(0f, 1f, (eased - enteredAt) / Mathf.Max(.0001f, 1f - enteredAt)) : 0f;
                 SteerTowards(position - previous, facing, levelBlend, ref angleVelocity);
                 TF.position = position;
                 TF.localScale = Vector3.one * Mathf.Lerp(startWidth, endWidth, eased);
@@ -158,6 +159,37 @@ namespace FishSort
             IsFlying = false;
             moveRoutine = null;
             onArrive?.Invoke(this);
+        }
+
+        private static float FlightProgress(float progress, float approachShare)
+        {
+            float t = Mathf.Clamp01(progress);
+            float split = Mathf.Min(.62f, approachShare);
+            float tail = 1f - approachShare;
+            float joinSpeed = 2f * tail / (1f - split);
+            if (t < split)
+            {
+                float u = t / split;
+                // Start with zero speed AND zero acceleration so the launch builds gradually.
+                // Match the braking phase's speed without a sudden change at the corner.
+                float tangent = joinSpeed * split;
+                float a = 10f * approachShare - 4f * tangent;
+                float b = -15f * approachShare + 7f * tangent;
+                float c = 6f * approachShare - 3f * tangent;
+                return u * u * u * (a + u * (b + u * c));
+            }
+            float landing = (t - split) / (1f - split);
+            // Continuous deceleration throughout the corner and dive, reaching zero at the resting spot.
+            return approachShare + tail * landing * (2f - landing);
+        }
+
+        private static float PathApproachShare(Vector3 start, Vector3 apex, Vector3 end, float cornerRadius)
+        {
+            float radius = Mathf.Min(cornerRadius, Vector3.Distance(start, apex) * HALF, Vector3.Distance(end, apex) * HALF);
+            float climb = Mathf.Max(0f, Vector3.Distance(start, apex) - radius);
+            float drop = Mathf.Max(0f, Vector3.Distance(end, apex) - radius);
+            float total = climb + radius * CORNER_LENGTH_RATIO + drop;
+            return Mathf.Clamp(total > .0001f ? climb / total : .5f, .001f, .999f);
         }
 
         // Point at eased progress 0..1 on: straight line start -> corner entry, rounded corner around the apex,

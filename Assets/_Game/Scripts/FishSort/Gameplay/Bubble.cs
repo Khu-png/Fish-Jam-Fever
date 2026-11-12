@@ -32,6 +32,9 @@ namespace FishSort
         private float targetDiameter;
         private float waterPhase;
         private float lastDisturbance = float.NegativeInfinity;
+        private float impactAmplitude;
+        private float fallStretch;
+        private float impactBounce;
         private bool isPopping;
         private bool isSettled;
         private Vector2 settleTarget;
@@ -57,23 +60,36 @@ namespace FishSort
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (!isPopping && collision.relativeVelocity.sqrMagnitude > 0.04f)
-                lastDisturbance = Time.time;
+            if (isPopping || IsFrozen || collision.contactCount == 0) return;
+            Vector2 normal = collision.GetContact(0).normal;
+            float speed = Mathf.Abs(Vector2.Dot(collision.relativeVelocity, normal));
+            if (speed < .3f) return;
+            float amplitude = Mathf.Clamp01(speed / 2.8f) * config.bubbleReactionStretch;
+            // Side contacts squeeze sideways; landings squeeze vertically. Ignore contact chatter.
+            if (Time.time - lastDisturbance < .12f && amplitude < Mathf.Abs(impactAmplitude)) return;
+            impactAmplitude = Mathf.Abs(normal.y) >= Mathf.Abs(normal.x) ? amplitude : -amplitude;
+            lastDisturbance = Time.time;
         }
 
         private void AnimateShell()
         {
             float stretch = 0f;
             float tilt = 0f;
+            impactBounce = 0f;
             if (config.animateUnderwater && !IsFrozen)
             {
                 float t = Time.time * 1.1f + waterPhase;
                 stretch = Mathf.Sin(t) * config.bubbleIdleStretch;
                 float reactionAge = Time.time - lastDisturbance;
-                if (reactionAge < 0.6f)
-                    stretch += Mathf.Sin(reactionAge * 25f) * (1f - reactionAge / 0.6f) * config.bubbleReactionStretch;
-                tilt = Mathf.Sin(t * 0.7f) * 1.5f;
+                if (reactionAge < .7f)
+                    impactBounce = Mathf.Cos(reactionAge * 23f) * Mathf.Exp(-reactionAge * 6f) *
+                        (1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.5f, .7f, reactionAge))) * impactAmplitude;
+                float fallTarget = -Mathf.Clamp(Mathf.Abs(body.linearVelocity.y) * .022f, 0f, .055f);
+                fallStretch = Mathf.Lerp(fallStretch, fallTarget, 1f - Mathf.Exp(-Time.deltaTime * 10f));
+                stretch += impactBounce + fallStretch;
+                tilt = Mathf.Sin(t * 0.7f) * 1.5f - Mathf.Clamp(body.linearVelocity.x * 2f, -3f, 3f);
             }
+            stretch = Mathf.Clamp(stretch, -.14f, .14f);
             shellRenderer.transform.localScale = Vector3.Scale(shellRestScale, new Vector3(1f + stretch, 1f - stretch, 1f));
             shellRenderer.transform.localRotation = shellRestRotation * Quaternion.Euler(0f, 0f, tilt);
         }
@@ -86,6 +102,7 @@ namespace FishSort
         public float UnitColliderRadius => bodyCollider.radius;
         public int FishCount => fishes.Count;
         public IReadOnlyList<Fish> Fishes => fishes;
+        public float ImpactBounce => impactBounce;
 
         public void Setup(Vector2 position, float diameter, int iceTaps)
         {
@@ -96,6 +113,7 @@ namespace FishSort
             isSettled = false;
             hasSettleTarget = false;
             lastDisturbance = float.NegativeInfinity;
+            impactAmplitude = fallStretch = impactBounce = 0f;
             shellRenderer.transform.localScale = shellRestScale;
             shellRenderer.transform.localRotation = shellRestRotation;
             body.gravityScale = config.bubbleGravityScale;
@@ -156,6 +174,7 @@ namespace FishSort
             fishes.Remove(fish);
             body.WakeUp();
             lastDisturbance = Time.time;
+            impactAmplitude = config.bubbleReactionStretch * .45f;
             float fill = initialCount > 0 ? (float)fishes.Count / initialCount : 0f;
             targetDiameter = fullDiameter * Mathf.Lerp(config.bubbleMinScale, 1f, fill);
         }

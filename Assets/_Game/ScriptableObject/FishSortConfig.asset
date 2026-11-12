@@ -40,13 +40,13 @@ MonoBehaviour:
   spawnJitter: 0.06
   fishRotationRange: 5
   bubbleEntryDropHeight: 4
-  bubbleEntryGravityScale: 0.5
-  bubbleEntryDamping: 2
-  bubbleEntryDuration: 1.5
+  bubbleEntryGravityScale: 0.7
+  bubbleEntryDamping: 1.8
+  bubbleEntryDuration: 1.2
   bubbleEntrySettleSpeed: 0.2
   bubbleEntryMaxDuration: 6
   frozenFishTint: {r: 0.8, g: 0.9, b: 1, a: 1}
-  animateUnderwater: 0
+  animateUnderwater: 1
   fishSwimRadius: 0.018
   fishBobHeight: 0.014
   fishSwimSpeed: 1.6
@@ -60,7 +60,7 @@ MonoBehaviour:
   bubbleSettleMinDrop: 0.08
   bubbleSettleRefreshInterval: 0.16
   bubbleIdleStretch: 0.012
-  bubbleReactionStretch: 0.045
+  bubbleReactionStretch: 0.095
   pickRadius: 0.12
   probeOffset: 0.5
   highlightScale: 1.18
@@ -70,8 +70,8 @@ MonoBehaviour:
   badHintColor: {r: 1, g: 0.54, b: 0.16, a: 1}
   pickAnticipationDuration: 0.1
   pickPopScale: 1.16
-  flyToTankDuration: 0.68
-  flyToTrayDuration: 0.56
+  flyToTankDuration: 1.12
+  flyToTrayDuration: 0.96
   flySideOffset: 0.5
   flyArcRatio: 0.55
   flyArcLift: 0.3

@@ -13,6 +13,7 @@ public class LevelManager : Singleton<LevelManager>
     private GameplayWorld world;
 
     public int CurrentLevelNumber => PlayerData.Level;
+    public bool IsWorldReady => world != null;
 
     void Awake()
     {
@@ -28,14 +29,26 @@ public class LevelManager : Singleton<LevelManager>
         world.gameObject.SetActive(false);
     }
 
+    // Every change between menu and game goes through the transition: the screen closes, the change happens while
+    // it is covered, and the new screen is revealed.
     public void OnPlay()
     {
-        int levelNumber = CurrentLevelNumber;
+        TransitionManager.Ins.Play(ShowGame, StartLevel);
+    }
+
+    private void ShowGame()
+    {
+        world.RandomizeBackground();
         world.gameObject.SetActive(true);
         GameManager.ChangeState(GameState.GamePlay);
         UIManager.Ins.CloseAll();
-        UIManager.Ins.OpenUI<UIGameplay>().SetLevel(levelNumber);
-        GameplayController.Ins.StartLevel(GetLevelData(levelNumber), levelNumber);
+        UIManager.Ins.OpenUI<FishJam.UI.GamePlay>().SetLevel(CurrentLevelNumber);
+    }
+
+    // Builds the level just before the screen opens, so its opening drop is seen.
+    private void StartLevel()
+    {
+        GameplayController.Ins.StartLevel(GetLevelData(CurrentLevelNumber), CurrentLevelNumber);
     }
 
     // Called by GameManager.OnWin: the saved level moves on, so "next" and "retry" both just play the current one.
@@ -55,6 +68,11 @@ public class LevelManager : Singleton<LevelManager>
     }
 
     public void OnHome()
+    {
+        TransitionManager.Ins.Play(ShowMenu, null);
+    }
+
+    private void ShowMenu()
     {
         GameplayController.Ins.StopLevel();
         world.gameObject.SetActive(false);

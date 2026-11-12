@@ -12,7 +12,13 @@ namespace FishJam.UI
         int shown; Coroutine co;
 
         void OnEnable() { Wallet.Changed += OnChanged; Set(Wallet.Coins); }
-        void OnDisable() { Wallet.Changed -= OnChanged; }
+        void OnDisable()
+        {
+            Wallet.Changed -= OnChanged;
+            if (co != null) StopCoroutine(co);
+            co = null;
+            transform.localScale = Vector3.one;
+        }
 
         public void Set(int v) { shown = v; if (label) label.text = v.ToString(); }
 

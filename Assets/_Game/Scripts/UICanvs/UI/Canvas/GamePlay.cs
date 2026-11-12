@@ -14,7 +14,7 @@ namespace FishJam.UI
     /// Lay HUD: UIManager.Instance.GetUI&lt;GamePlay&gt;(). PlayingState mo/dong HUD.
     /// Dat doi tuong gameplay (ke be, khay cho, ca) vao 'gameplayLayer' – nam giua nen va HUD.
     /// </summary>
-    public class GamePlay : SkinCanvas
+    public partial class GamePlay : SkinCanvas
     {
         [Header("HUD")]
         public TextMeshProUGUI levelLabel;
@@ -29,6 +29,7 @@ namespace FishJam.UI
         [Header("Canh bao con 1 o")]
         public CanvasGroup warningFrame;
         public RectTransform warningText;
+        [SerializeField] private CanvasGroup warningMessage;
         [Header("Lop gameplay")]
         public RectTransform gameplayLayer;
 
@@ -50,6 +51,7 @@ namespace FishJam.UI
         protected override void Awake()
         {
             base.Awake();
+            InitializeGameplayControls();
             ResetVisuals();
             if (settingsButton) settingsButton.onClick.AddListener(SettingButton);
         }
@@ -69,11 +71,21 @@ namespace FishJam.UI
         void ResetVisuals()
         {
             StopAllCoroutines(); praiseCo = bumpCo = warnCo = null; warning = false;
+            ResetGameplayOverlays();
             foreach (var p in praises) if (p) p.gameObject.SetActive(false);
             if (spark) spark.gameObject.SetActive(false);
             if (warningFrame) warningFrame.alpha = 0;
-            if (warningText) warningText.localScale = new Vector3(1, 0, 1);
-            if (countBox) countBox.localScale = Vector3.one;
+            if (warningMessage) warningMessage.alpha = 0f;
+            if (warningText)
+            {
+                warningText.localScale = Vector3.one;
+                warningText.gameObject.SetActive(false);
+            }
+            if (countBox)
+            {
+                countBox.gameObject.SetActive(true);
+                countBox.localScale = Vector3.one;
+            }
         }
 
         void Update()
@@ -90,6 +102,11 @@ namespace FishJam.UI
             if (countBox) { if (bumpCo != null) StopCoroutine(bumpCo); bumpCo = StartCoroutine(Bump()); }
         }
 
+        public void SetFishCounterVisible(bool isVisible)
+        {
+            if (countBox) countBox.gameObject.SetActive(isVisible);
+        }
+
         public void ShowPraise(int tier)
         {
             if (praises == null || praises.Length == 0) return;
@@ -97,6 +114,14 @@ namespace FishJam.UI
             SoundManager.Ins.PlayPraise(tier);
             if (praiseCo != null) StopCoroutine(praiseCo);
             praiseCo = StartCoroutine(Praise(praises[tier]));
+        }
+
+        public void HidePraise()
+        {
+            if (praiseCo != null) StopCoroutine(praiseCo);
+            praiseCo = null;
+            foreach (var praise in praises) if (praise) praise.gameObject.SetActive(false);
+            if (spark) spark.gameObject.SetActive(false);
         }
 
         public void SetWarning(bool on)
@@ -146,15 +171,39 @@ namespace FishJam.UI
 
         IEnumerator Warn(bool on)
         {
-            float from = warningText ? warningText.localScale.y : 0, to = on ? 1 : 0;
-            for (float t = 0; t < .2f; t += Time.unscaledDeltaTime)
+            if (!on)
             {
-                if (warningText) warningText.localScale = new Vector3(1, Mathf.Lerp(from, to, t / .2f), 1);
-                if (!on && warningFrame) warningFrame.alpha = Mathf.Lerp(warningFrame.alpha, 0, t / .2f);
+                if (warningMessage) warningMessage.alpha = 0f;
+                if (warningText) warningText.gameObject.SetActive(false);
+                float startAlpha = warningFrame ? warningFrame.alpha : 0f;
+                for (float t = 0; t < .2f; t += Time.unscaledDeltaTime)
+                {
+                    if (warningFrame) warningFrame.alpha = Mathf.Lerp(startAlpha, 0f, t / .2f);
+                    yield return null;
+                }
+                if (warningFrame) warningFrame.alpha = 0f;
+                warnCo = null;
+                yield break;
+            }
+
+            if (warningText)
+            {
+                warningText.localScale = Vector3.one;
+                warningText.gameObject.SetActive(true);
+            }
+            const float messageDuration = 2f;
+            for (float t = 0; t < messageDuration; t += Time.unscaledDeltaTime)
+            {
+                float blink = Mathf.Lerp(.45f, 1f, Mathf.Sin(t * Mathf.PI * 2f / .48f) * .5f + .5f);
+                float fadeIn = Mathf.Clamp01(t / .12f);
+                float fadeOut = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(1.2f, messageDuration, t));
+                if (warningMessage) warningMessage.alpha = blink * fadeIn * fadeOut;
                 yield return null;
             }
-            if (warningText) warningText.localScale = new Vector3(1, to, 1);
-            if (!on && warningFrame) warningFrame.alpha = 0;
+            if (warningMessage) warningMessage.alpha = 0f;
+            if (warningText) warningText.gameObject.SetActive(false);
+            // Update keeps the red border visible until the tray is no longer one slot from full.
+            warnCo = null;
         }
 
         static void SetA(Graphic g, float a) 

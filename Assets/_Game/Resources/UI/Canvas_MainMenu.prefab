@@ -1519,7 +1519,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1377582591727641143}
-  - component: {fileID: 995017084937293538}
+  - component: {fileID: 5721949931797270128}
+  - component: {fileID: 6003982760751003425}
+  - component: {fileID: 2367847613646125566}
   m_Layer: 0
   m_Name: ShineMask
   m_TagString: Untagged
@@ -1547,7 +1549,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 480, y: 145}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &995017084937293538
+--- !u!222 &5721949931797270128
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3713039925200636788}
+  m_CullTransparentMesh: 1
+--- !u!114 &6003982760751003425
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1556,11 +1566,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 3713039925200636788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
-  m_Padding: {x: 0, y: 0, z: 0, w: 0}
-  m_Softness: {x: 0, y: 0}
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 5ee3b470860866647984f962793836fc, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2367847613646125566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3713039925200636788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 0
 --- !u!1 &3787169141904343267
 GameObject:
   m_ObjectHideFlags: 0
@@ -3658,7 +3697,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49504875c12c764c8b91740e4602711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishJam.UI.MainMenuController
-  isDestroyOnClose: 0
+  IsDestroyOnClose: 0
+  IsHandlingRabbitEars: 0
+  IsWidescreenProcessing: 0
+  popups: []
   playButton: {fileID: 2635330273426374751}
   levelLabel: {fileID: 3536272821672994735}
   settingsButton: {fileID: 2961804909979275591}

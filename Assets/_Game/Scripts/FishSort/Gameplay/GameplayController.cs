@@ -49,6 +49,7 @@ namespace FishSort
             fishJar = world.Jar;
             shelf.GoalCreated += HandleGoalCreated;
             shelf.FishPlaced += HandleFishPlaced;
+            shelf.TankCompleted += HandleTankCompleted;
             FishJam.UI.Revive.Revived += HandleRevived;
         }
 
@@ -66,6 +67,7 @@ namespace FishSort
             {
                 shelf.GoalCreated -= HandleGoalCreated;
                 shelf.FishPlaced -= HandleFishPlaced;
+                shelf.TankCompleted -= HandleTankCompleted;
             }
         }
 
@@ -92,6 +94,12 @@ namespace FishSort
         public void StopLevel()
         {
             StopAllCoroutines();
+            if (UIManager.Ins.IsOpened<FishJam.UI.GamePlay>())
+            {
+                FishJam.UI.GamePlay ui = UIManager.Ins.GetUI<FishJam.UI.GamePlay>();
+                ui.HideTutorialHand();
+                ui.HideTip();
+            }
             isOver = true;
             isResolvingTray = false;
             StopRod();
@@ -127,6 +135,8 @@ namespace FishSort
             else
             {
                 combo.Break();
+                // A wrong pick (the fish goes to the tray) starts the tank combo again.
+                UIManager.Ins.GetUI<FishJam.UI.GamePlay>().ResetCombo();
                 SoundManager.Ins.PlayFx(FxID.PickTray);
                 SendToTray(fish);
             }
@@ -176,6 +186,12 @@ namespace FishSort
             }
 
             SetTrayWarning(!isOver && tray.IsOneLeft);
+        }
+
+        // A tank is full: the HUD counts tanks completed in a row and shows the praise (text and voice).
+        private void HandleTankCompleted()
+        {
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().OnTankCompleted();
         }
 
         private void HandleFishPlaced()
@@ -237,6 +253,7 @@ namespace FishSort
         private void HandleRevived()
         {
             GameManager.Ins.ReviveCount++;
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().ResetCombo();
             GameManager.ChangeState(GameState.GamePlay);
             isOver = false;
             bool opened = shelf.UnlockSlot(tray.MostCommonType());
@@ -261,29 +278,34 @@ namespace FishSort
                 SoundManager.Ins.PlayFx(FxID.Warning);
             }
 
-            if (UIManager.Ins.IsOpened<UIGameplay>())
+            if (UIManager.Ins.IsOpened<FishJam.UI.GamePlay>())
             {
-                UIManager.Ins.GetUI<UIGameplay>().SetWarning(isOn);
+                UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetWarning(isOn);
             }
         }
 
         private void UpdateProgress()
         {
-            UIManager.Ins.GetUI<UIGameplay>().SetFishProgress(placedFish, totalFish);
+            UIManager.Ins.GetUI<FishJam.UI.GamePlay>().SetFishCount(placedFish, totalFish);
         }
 
         private IEnumerator TutorialRoutine()
         {
-            UIGameplay ui = UIManager.Ins.GetUI<UIGameplay>();
-            Fish first = field.FirstSelectableFish();
-            if (first != null)
-            {
-                ui.ShowTutorialHand(gameCamera.WorldToScreenPoint(first.TF.position), gameCamera);
-            }
-
-            ui.ShowTip(FishSortConst.TIP_TAP_FISH);
+            FishJam.UI.GamePlay ui = UIManager.Ins.GetUI<FishJam.UI.GamePlay>();
+            Fish first = null;
+            bool shown = false;
             while (!hasPickedOnce)
             {
+                // Opening bubbles fall from above the field; wait for a visible, tappable fish.
+                if (first == null || !first.IsSelectable || first.TF.position.y > field.FieldTopY - .35f)
+                    first = field.FirstSelectableFish();
+                if (first != null)
+                {
+                    Vector3 tapOffset = PlayerData.ProbeOffset ? Vector3.down * config.probeOffset : Vector3.zero;
+                    ui.ShowTutorialHand(first.TF, gameCamera, tapOffset);
+                    if (!shown) { ui.ShowTip(FishSortConst.TIP_TAP_FISH); shown = true; }
+                }
+                else ui.HideTutorialHand();
                 yield return null;
             }
 

@@ -35,11 +35,11 @@ namespace FishSort
         public float fishRotationRange = 9f;
         [Header("Opening bubble fall (gentle glide down, soft landing)")]
         public float bubbleEntryDropHeight = 4f;
-        public float bubbleEntryGravityScale = 0.5f;
+        public float bubbleEntryGravityScale = 0.7f;
         [Tooltip("Higher = slower, steadier fall. Max fall speed ~ 9.81 * gravityScale / damping.")]
-        public float bubbleEntryDamping = 2f;
+        public float bubbleEntryDamping = 1.8f;
         [Tooltip("Earliest time the bubble may switch to normal physics.")]
-        public float bubbleEntryDuration = 1.5f;
+        public float bubbleEntryDuration = 1.2f;
         [Tooltip("Normal physics starts once the bubble moves slower than this (it has landed).")]
         public float bubbleEntrySettleSpeed = 0.2f;
         [Tooltip("Safety limit so a bubble never stays in the gentle fall forever.")]
@@ -65,7 +65,7 @@ namespace FishSort
         public float fishIdleTilt = 3f;
         public float fishBreathing = 0.018f;
         public float bubbleIdleStretch = 0.012f;
-        public float bubbleReactionStretch = 0.045f;
+        public float bubbleReactionStretch = 0.095f;
 
         [Header("Pick")]
         // Extra reach around the finger; total reach = pickRadius + fish collider radius.
@@ -80,8 +80,8 @@ namespace FishSort
         [Header("Flight")]
         public float pickAnticipationDuration = 0.1f;
         public float pickPopScale = 1.16f;
-        public float flyToTankDuration = 0.68f;
-        public float flyToTrayDuration = 0.56f;
+        public float flyToTankDuration = 1.12f;
+        public float flyToTrayDuration = 0.96f;
         public float flySideOffset = 0.5f;
         public float flyArcRatio = 0.55f;
         public float flyArcLift = 0.3f;

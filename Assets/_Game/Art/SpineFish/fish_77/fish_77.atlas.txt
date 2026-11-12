@@ -1,0 +1,15 @@
+fish_77.png
+size:300,160
+filter:Linear,Linear
+base
+bounds:0,0,246,160
+offsets:0,14,246,174
+eye
+bounds:247,13,33,39
+offsets:1,1,35,41
+eyeball
+bounds:247,53,51,51
+offsets:1,1,53,53
+fin
+bounds:247,105,51,55
+offsets:1,1,53,57

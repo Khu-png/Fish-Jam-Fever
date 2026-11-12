@@ -70,7 +70,7 @@ Manager
   GameManager          GameManager
   LevelManager         LevelManager → Levels = Level_01..Level_04 (đúng thứ tự)
   SoundManager         SoundManager → Fx Aus: theo thứ tự enum FxID (thiếu clip cũng không sao)
-  UIManager            UIManager → Ui Resources = 5 prefab UI; Canvas Parent TF = Canvas
+  UIManager            UIManager → Ui Resources = 6 prefab Canvas_* trong Resources/UI; Canvas Parent TF = Canvas
   PoolManager          PoolControler
                          Pool With Root: [Fish prefab, 130, root = FishPool], [Bubble prefab, 40, root = BubblePool]
                          Particle: [BubblePop, FX_BubblePop, 10], [TankBurst, FX_TankBurst, 4], [FishLand, FX_FishLand, 6],
@@ -114,23 +114,30 @@ EventSystem            với **Input System UI Input Module**
 Kéo vào `TankSlotView`: Tank Root, Flash Renderer, Icon Points (3), Badge Root = Badge, Badge Transform = Badge, Badge Fish Renderer, Badge Count Text, Config.
 Kéo vào `TankShelf`: gắn lên **TopHUD**, Slots = [TankSlot0, TankSlot1], Config, Catalog.
 Kéo vào `WaitingTray`: Slot Points = Slot0..Slot4, Config.
-Kéo vào `ComboCounter`: Combo Text, Combo Transform = ComboText, Config.
+Kéo vào `ComboCounter`: Config. Chữ khen được hiển thị bởi `Canvas_GamePlay`.
 Kéo vào `GameplayController`: Config, Game Camera, Field, Shelf (TopHUD), Tray, Combo, Flight Root, Progress Text.
 Kéo vào `FishPicker`: Game Camera, Field, Shelf, Config.
 
 ---
 
-## 3. Prefab UI (`Prefabs/UI/`)
-Mỗi prefab là RectTransform full-stretch, nằm dưới Canvas, có Animator tùy ý. Ô **Popups** để mảng rỗng.
-**Bỏ tick Raycast Target** ở mọi Image/Text không bấm được.
+## 3. Giao diện Canvas (`Resources/UI/`)
 
-| Prefab | Script | Nội dung | Kéo vào script |
-|---|---|---|---|
-| `MainMenu` | UIMainMenu | Nền Image #0B4A8F full, tiêu đề TMP, nút Play (Image `ui_round` Sliced, màu #8B4DFF) có TMP con, nút Settings | Play Button, Play Label, Settings Button |
-| `Gameplay` | UIGameplay | Level badge (Image + TMP) góc trên trái, nút Settings góc trên phải. **Warning** (CanvasGroup, tắt Blocks Raycasts): Image `ui_vignette` Sliced full-stretch + banner đỏ "Only one slot left!". **TutorialArea** full-stretch: Hand (Image `ui_hand`). **Tip** (Image `ui_round` + TMP) | Level Label, Settings Button, Warning Root/Group, Tutorial Area, Tutorial Hand, Tip Root, Tip Text |
-| `Win` | UIWin | Nền tối full (Raycast bật để chặn chạm), TMP "VICTORY!", Image `fish_00`, nút Next/Home, ParticleSystem Confetti (Renderer Order 110) | Next, Home, Confetti |
-| `Lose` | UILose | Nền tối, TMP "YOU LOSE", Image cá, TMP progress, Image thanh tiến độ (**Filled, Horizontal**), nút Retry/Home | Progress Label, Progress Fill, Retry, Home |
-| `Settings` | UISettings | Panel, 3 Toggle (Âm thanh / Dịch điểm dò / Viền gợi ý), nhóm InGameButtons (Home, Restart), nút Close | 3 Toggle, In Game Buttons Root, Home, Restart, Close |
+Toàn bộ màn hình dùng các prefab `Canvas_*` kế thừa `FishJam.UI.SkinCanvas` và được mở bằng `UIManager`.
+`UIManager.uiResources` chỉ đăng ký sáu màn sau:
+
+| Prefab | Script | Vai trò |
+|---|---|---|
+| `Canvas_MainMenu` | `FishJam.UI.MainMenu` | Menu chính, chơi và cài đặt |
+| `Canvas_GamePlay` | `FishJam.UI.GamePlay` | HUD, bảng đếm cá, chữ khen, cảnh báo, bảng tiền, nút hỗ trợ và tutorial |
+| `Canvas_Setting` | `FishJam.UI.Setting` | Cài đặt; tạm dừng khi mở trong màn chơi |
+| `Canvas_Win` | `FishJam.UI.Win` | Thắng, nhận thưởng, sang màn tiếp theo |
+| `Canvas_Lose` | `FishJam.UI.Lose` | Thua, chơi lại hoặc về menu |
+| `Canvas_Revive` | `FishJam.UI.Revive` | Hồi sinh khi đầy khay |
+
+`GamePlay.Controls.cs` chứa xử lý cần câu, đại bác, hướng dẫn và thông báo của `Canvas_GamePlay`.
+Các object `BottomBar`, `CoinPanel`, `TutorialArea`, `Tip`, `Toast` nằm trực tiếp trong prefab này.
+Không mở đồng thời một lớp `Gameplay.prefab` khác. Hai màn UI cũ `Gameplay` và `Settings` đã được gỡ.
+`Prefabs/UI/FlyCoin` là prefab hiệu ứng đồng xu được `Canvas_Win` sử dụng.
 
 ---
 

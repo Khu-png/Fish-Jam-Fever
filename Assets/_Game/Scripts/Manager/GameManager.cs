@@ -63,7 +63,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        ChangeState(GameState.MainMenu);
-        UIManager.Ins.OpenUI<FishJam.UI.MainMenu>();
+        // The loading screen prepares everything, then opens the main menu (see LoadingManager).
+        LoadingManager.Ins.Begin();
     }
 }

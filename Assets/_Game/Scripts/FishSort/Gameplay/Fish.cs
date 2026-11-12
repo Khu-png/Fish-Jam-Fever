@@ -78,6 +78,13 @@ namespace FishSort
                     SwimInBubble();
                 }
             }
+            if (glowRenderer.enabled && !IsFlying)
+            {
+                glowTransform.localPosition = bodyTransform.localPosition;
+                glowTransform.localScale = bodyTransform.localScale;
+            }
+
+            UpdateSpine();
         }
 
         // Gentle vertical bob for fish resting in a tank or the tray.
@@ -92,12 +99,15 @@ namespace FishSort
         {
             float t = Time.time * config.fishSwimSpeed + swimPhase;
             float strength = config.animateUnderwater ? 1f : 0f;
+            float bounce = Owner != null ? Owner.ImpactBounce * strength : 0f;
             Vector3 drift = new Vector3(Mathf.Sin(t * DRIFT_FREQUENCY) * config.fishSwimRadius,
                 Mathf.Sin(t + swimPhase) * config.fishBobHeight, 0f) * strength;
             TF.localPosition = swimCenter + drift;
-            TF.localRotation = Quaternion.Euler(0f, 0f, swimAngle + Mathf.Sin(t * TILT_FREQUENCY) * config.fishIdleTilt * strength);
+            TF.localRotation = Quaternion.Euler(0f, 0f, swimAngle + Mathf.Sin(t * TILT_FREQUENCY) * config.fishIdleTilt * strength + bounce * 18f);
             float breath = Mathf.Sin(t * BREATH_FREQUENCY) * config.fishBreathing * strength;
-            bodyTransform.localScale = Vector3.Scale(bodyRestScale, new Vector3(1f + breath, 1f - breath * BREATH_SQUASH_RATIO, 1f));
+            float squash = breath + bounce * .5f;
+            bodyTransform.localPosition = bodyRestPosition + Vector3.down * (bounce * .8f);
+            bodyTransform.localScale = Vector3.Scale(bodyRestScale, new Vector3(1f + squash, 1f - squash * BREATH_SQUASH_RATIO, 1f));
         }
 
         private void StopIdleMotion()
@@ -108,7 +118,7 @@ namespace FishSort
             bodyTransform.localPosition = bodyRestPosition;
         }
 
-        public void Setup(int typeId, Sprite sprite, Bubble owner, bool frozen)
+        public void Setup(int typeId, FishLook look, Bubble owner, bool frozen)
         {
             StopAllCoroutines();
             StopIdleMotion();
@@ -116,7 +126,7 @@ namespace FishSort
             Owner = owner;
             IsInJar = false;
             IsFlying = false;
-            bodyRenderer.sprite = sprite;
+            bodyRenderer.sprite = look.Sprite;
             bodyRenderer.flipX = false;
             bodyRenderer.enabled = true;
             bodyRenderer.sharedMaterial = bubbleMaterial;
@@ -129,6 +139,7 @@ namespace FishSort
             hitCollider.enabled = true;
             SetTrail(false);
             SetFrozen(frozen);
+            BindSpine(look);
         }
 
         public void PlaceInBubble(Transform bubbleTransform, Vector2 localPosition, float localWidth, float angle)
@@ -152,6 +163,7 @@ namespace FishSort
         public void SetHighlight(FishHighlight highlight)
         {
             bool isOn = highlight != FishHighlight.None;
+            isHighlighted = isOn;
             if (isOn)
             {
                 ShowOutline(HighlightColor(highlight));
@@ -228,6 +240,7 @@ namespace FishSort
 
         public void Despawn()
         {
+            HideSpine();
             StopIdleMotion();
             StopAllCoroutines();
             IsFlying = false;

@@ -34,6 +34,46 @@ public static class LevelDataGenerator
         new Recipe(12, 120, 5, 2, 57)
     };
 
+    // Ten gentle levels (few types, few fish, hardly any ice) that are played before the first sample level.
+    private const string EASY_MENU_PATH = "Tools/FishSort/Generate Easy Levels";
+    private const int FIRST_EASY_NUMBER = 5;
+    private static readonly Recipe[] EasyRecipes =
+    {
+        new Recipe(3, 12, 3, 0, 101),
+        new Recipe(4, 15, 3, 0, 102),
+        new Recipe(4, 18, 4, 0, 103),
+        new Recipe(5, 18, 4, 0, 104),
+        new Recipe(5, 21, 4, 0, 105),
+        new Recipe(6, 24, 4, 0, 106),
+        new Recipe(6, 27, 4, 0, 107),
+        new Recipe(6, 27, 4, 1, 108),
+        new Recipe(7, 30, 4, 0, 109),
+        new Recipe(7, 30, 4, 1, 110)
+    };
+
+    public static int EasyLevelCount => EasyRecipes.Length;
+
+    // Writes Level_05 .. Level_14 (the other level assets are not touched) and returns where Level_05 is.
+    [MenuItem(EASY_MENU_PATH)]
+    public static void GenerateEasyLevels()
+    {
+        Directory.CreateDirectory(OUTPUT_FOLDER);
+        for (int i = 0; i < EasyRecipes.Length; i++)
+        {
+            Generate(EasyRecipes[i], out BubbleData[] bubbles, out int[] sequence);
+            SaveLevel(FIRST_EASY_NUMBER + i, EasyRecipes[i].columns, bubbles, sequence);
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("FishSort: easy levels written to " + OUTPUT_FOLDER);
+    }
+
+    public static string EasyLevelPath(int index)
+    {
+        return OUTPUT_FOLDER + "/" + string.Format(FILE_FORMAT, FIRST_EASY_NUMBER + index);
+    }
+
     [MenuItem(MENU_PATH)]
     private static void GenerateAll()
     {

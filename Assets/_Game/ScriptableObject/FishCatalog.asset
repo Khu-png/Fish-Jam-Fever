@@ -27,3 +27,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d58adcdca15440049b2ccf1047d8ebb2, type: 3}
   - {fileID: 21300000, guid: 96b3806c58f224248b0a766a6a303a2e, type: 3}
   - {fileID: 21300000, guid: 7c11328eb8d342a40a3bd0f8f3fe85c1, type: 3}
+  fishSkeletons:
+  - {fileID: 11400000, guid: 962ef0b8529564f418036338848d8064, type: 2}
+  - {fileID: 11400000, guid: 3e82668bf65dc764ea4781badf21fa28, type: 2}
+  - {fileID: 11400000, guid: 113cb634834b9e04c9fed7ab151f88c8, type: 2}
+  - {fileID: 11400000, guid: 2d7ec1f91af36a64e9665105c690cd05, type: 2}
+  - {fileID: 11400000, guid: 8743237091f84f0439de70b28433aaf4, type: 2}
+  - {fileID: 11400000, guid: e04b23c1d5a99694c86b2a7f58911f78, type: 2}
+  - {fileID: 11400000, guid: 6f184f46dfec5dc4e8047ce03156f814, type: 2}
+  - {fileID: 11400000, guid: 1f85618bf9a80624787f038a89547e8e, type: 2}
+  - {fileID: 11400000, guid: d1e99bf2429abb9409c63ff6f38c9ec7, type: 2}
+  - {fileID: 11400000, guid: 4b8ced8f5c6aab449b5fcdc07854beff, type: 2}
+  - {fileID: 11400000, guid: 9227cb278ffd3e04bb58e7a6ce21b280, type: 2}
+  - {fileID: 11400000, guid: 5db5a1a8b9d3a034a9b0a6baebd822fe, type: 2}
+  - {fileID: 11400000, guid: 90643c7a14862eb488a05b3705f2e2c4, type: 2}
+  - {fileID: 11400000, guid: 83118fdc3ff69984e88fc5072c0f17d9, type: 2}
+  skeletonFacesRight: 0000000000000000000000000000

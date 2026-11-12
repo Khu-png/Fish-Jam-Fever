@@ -90,7 +90,7 @@ namespace FishSort
             {
                 int typeId = fishTypes[k];
                 Fish fish = HBPool.Spawn<Fish>(PoolType.Fish, bubble.TF.position, Quaternion.identity);
-                fish.Setup(typeId, catalog.GetSprite(typeId), bubble, frozen);
+                fish.Setup(typeId, catalog.GetLook(typeId), bubble, frozen);
                 bubble.AddFish(fish, k, fishTypes.Count, RandomRange(rng, config.fishRotationRange));
                 allFish.Add(fish);
                 fishByCollider[fish.HitCollider] = fish;
@@ -248,7 +248,9 @@ namespace FishSort
             {
                 if (!bubbles[i].IsFrozen && bubbles[i].FishCount > 0)
                 {
-                    result = bubbles[i].Fishes[FIRST_FISH_SLOT];
+                    Fish candidate = bubbles[i].Fishes[FIRST_FISH_SLOT];
+                    if (candidate.IsSelectable && candidate.TF.position.y < FieldTopY - .35f)
+                        result = candidate;
                 }
             }
 

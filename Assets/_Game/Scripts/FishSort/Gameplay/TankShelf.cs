@@ -29,6 +29,7 @@ namespace FishSort
         public event Action<TankGoal> GoalCreated;
         // Raised every time a fish is placed in a tank.
         public event Action FishPlaced;
+        public event Action TankCompleted;
 
         public bool IsIdle
         {
@@ -254,6 +255,7 @@ namespace FishSort
                 }
 
                 SoundManager.Ins.PlayFx(FxID.TankComplete);
+                TankCompleted?.Invoke();
                 ParticlePool.Play(ParticleType.TankBurst, slots[slot].GetIconPosition(BURST_ICON_INDEX), Quaternion.identity);
                 yield return slots[slot].PlayComplete();
                 goal.IsShown = false;

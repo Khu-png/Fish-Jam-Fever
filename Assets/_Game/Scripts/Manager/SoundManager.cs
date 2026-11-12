@@ -34,7 +34,6 @@ public enum FxID
 public class SoundManager : Singleton<SoundManager>
 {
     private const float DEFAULT_PITCH = 1f;
-    private const float MUSIC_START_DELAY = 1f;
 
     [SerializeField] private AudioClip[] soundAus;
     [SerializeField] private AudioClip[] fxAus;
@@ -74,7 +73,15 @@ public class SoundManager : Singleton<SoundManager>
     void Start()
     {
         ApplyMusicSetting();
-        StartCoroutine(PlayMusicAfterDelay());
+    }
+
+    // Background music is optional: no clips assigned means no music. It starts once the loading screen is done.
+    public void StartMusic()
+    {
+        if (soundAus.Length > 0 && !soundSource.isPlaying)
+        {
+            PlaySound((SoundID)Random.Range(0, soundAus.Length));
+        }
     }
 
     public void PlaySound(SoundID ID)
@@ -117,16 +124,6 @@ public class SoundManager : Singleton<SoundManager>
 
         praiseSource.Stop();
         praiseSource.PlayOneShot(clip);
-    }
-
-    private IEnumerator PlayMusicAfterDelay()
-    {
-        yield return new WaitForSeconds(MUSIC_START_DELAY);
-        // Background music is optional: no clips assigned means no music.
-        if (soundAus.Length > 0)
-        {
-            PlaySound((SoundID)Random.Range(0, soundAus.Length));
-        }
     }
 
     private void CreateFxSources()

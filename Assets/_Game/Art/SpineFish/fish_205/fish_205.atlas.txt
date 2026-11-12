@@ -1,0 +1,12 @@
+fish_205.png
+size:316,220
+filter:Linear,Linear
+1
+bounds:252,155,61,64
+offsets:1,1,63,66
+2
+bounds:252,50,41,48
+3
+bounds:0,0,251,219
+4
+bounds:252,99,57,55

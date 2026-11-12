@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09189b5190aa1741b994c2a6e0bca1b, type: 3}
+  m_Name: Level_14
+  m_EditorClassIdentifier: Assembly-CSharp::FishSort.LevelData
+  columns: 4
+  bubbles:
+  - column: 0
+    fishTypes: 06000000000000000100000004000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 01000000030000000000000005000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 0300000000000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 01000000040000000200000000000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 0100000006000000
+    iceTaps: 3
+  - column: 1
+    fishTypes: 010000000600000004000000
+    iceTaps: 0
+  - column: 2
+    fishTypes: 0200000005000000
+    iceTaps: 0
+  - column: 3
+    fishTypes: 040000000100000002000000
+    iceTaps: 0
+  - column: 0
+    fishTypes: 04000000030000000000000005000000
+    iceTaps: 0
+  - column: 1
+    fishTypes: 0400000000000000
+    iceTaps: 0
+  tankSequence: 00000000010000000400000002000000000000000500000003000000040000000100000006000000
